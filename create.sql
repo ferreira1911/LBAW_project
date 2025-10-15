@@ -46,7 +46,7 @@ CREATE TABLE category (
 );
 
 CREATE TABLE location (
-    INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     gps TEXT UNIQUE NOT NULL,
     address TEXT NOT NULL,
     url TEXT
@@ -66,7 +66,7 @@ CREATE TABLE auction (
     currentprice NUMERIC(12,2) NOT NULL CHECK (currentprice >= startingprice),
     status auction_status DEFAULT 'Pending',
     owner_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    category_id INTEGER REFERENCES category(name) ON DELETE SET NULL,
+    category INTEGER REFERENCES category(name) ON DELETE SET NULL,
     location_id INTEGER REFERENCES location(id) ON DELETE SET NULL
 );
 
@@ -89,8 +89,7 @@ CREATE TABLE transactions (
     amount NUMERIC(12,2) NOT NULL CHECK (amount > 0),
     date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     status transaction_status DEFAULT 'Pending',
-    auction_id INTEGER REFERENCES auction(id) ON DELETE CASCADE,
-    CHECK (date > CURRENT_TIMESTAMP)
+    auction_id INTEGER REFERENCES auction(id) ON DELETE CASCADE
 );
 
 ------------------------------------------------------------
