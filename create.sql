@@ -21,7 +21,7 @@ CREATE TYPE notification_type AS ENUM (
 -- USER AND ADMIN
 ------------------------------------------------------------
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     email TEXT UNIQUE NOT NULL,
     name TEXT NOT NULL,
     obs TEXT,
@@ -32,7 +32,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE admin (
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     email TEXT UNIQUE NOT NULL,
     name TEXT NOT NULL,
     password TEXT NOT NULL
@@ -42,12 +42,11 @@ CREATE TABLE admin (
 -- CATEGORY AND LOCATION
 ------------------------------------------------------------
 CREATE TABLE category (
-    id SERIAL PRIMARY KEY,
-    name TEXT UNIQUE NOT NULL
+    name TEXT PRIMARY KEY
 );
 
 CREATE TABLE location (
-    id SERIAL PRIMARY KEY,
+    INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     gps TEXT UNIQUE NOT NULL,
     address TEXT NOT NULL,
     url TEXT
@@ -57,7 +56,7 @@ CREATE TABLE location (
 -- AUCTION
 ------------------------------------------------------------
 CREATE TABLE auction (
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     title TEXT NOT NULL,
     reference INTEGER UNIQUE,
     description TEXT,
@@ -67,7 +66,7 @@ CREATE TABLE auction (
     currentprice NUMERIC(12,2) NOT NULL CHECK (currentprice >= startingprice),
     status auction_status DEFAULT 'Pending',
     owner_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    category_id INTEGER REFERENCES category(id) ON DELETE SET NULL,
+    category_id INTEGER REFERENCES category(name) ON DELETE SET NULL,
     location_id INTEGER REFERENCES location(id) ON DELETE SET NULL
 );
 
@@ -75,7 +74,7 @@ CREATE TABLE auction (
 -- BID
 ------------------------------------------------------------
 CREATE TABLE bid (
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     amount NUMERIC(12,2) NOT NULL CHECK (amount > 0),
     date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -86,31 +85,38 @@ CREATE TABLE bid (
 -- TRANSACTION
 ------------------------------------------------------------
 CREATE TABLE transactions (
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     amount NUMERIC(12,2) NOT NULL CHECK (amount > 0),
     date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     status transaction_status DEFAULT 'Pending',
-    auction_id INTEGER REFERENCES auction(id) ON DELETE CASCADE
+    auction_id INTEGER REFERENCES auction(id) ON DELETE CASCADE,
+    CHECK (date > CURRENT_TIMESTAMP)
 );
 
 ------------------------------------------------------------
 -- NOTIFICATION
 ------------------------------------------------------------
 CREATE TABLE notifications (
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     message TEXT NOT NULL,
     type notification_type NOT NULL,
     read BOOLEAN NOT NULL DEFAULT FALSE,
     createddate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    auction_id INTEGER NOT NULL REFERENCES auction(id) ON DELETE CASCADE
+    auction_id INTEGER NOT NULL REFERENCES auction(id) ON DELETE CASCADE,
+    CHECK (
+            (
+            type IN ('new-bid', 'ending', 'ended', 'winner', 'cancel')
+            AND auction_id IS NOT NULL
+        )
+    )
 );
 
 ------------------------------------------------------------
 -- REVIEW
 ------------------------------------------------------------
 CREATE TABLE review (
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     description TEXT NOT NULL,
     rating NUMERIC(3,2) NOT NULL CHECK (rating BETWEEN 0 AND 5),
     createddate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -121,7 +127,7 @@ CREATE TABLE review (
 -- REPORT 
 ------------------------------------------------------------
 CREATE TABLE report (
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     description TEXT NOT NULL,
     createddate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status report_status DEFAULT 'Pending',
