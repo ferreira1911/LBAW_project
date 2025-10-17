@@ -65,7 +65,7 @@ CREATE TABLE auction (
     current_price NUMERIC(12,2) NOT NULL CHECK (currentprice >= startingprice),
     status auction_status DEFAULT 'Pending',
     owner_id INTEGER NOT NULL REFERENCES users(id),
-    category_id INT REFERENCES category(id),
+    category_id INTEGER REFERENCES category(id),
     location_id INTEGER REFERENCES location(id)
 );
 
