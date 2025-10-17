@@ -42,7 +42,8 @@ CREATE TABLE admin (
 -- CATEGORY AND LOCATION
 ------------------------------------------------------------
 CREATE TABLE category (
-    name TEXT PRIMARY KEY
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name TEXT UNIQUE NOT NULL
 );
 
 CREATE TABLE location (
@@ -64,7 +65,7 @@ CREATE TABLE auction (
     current_price NUMERIC(12,2) NOT NULL CHECK (currentprice >= startingprice),
     status auction_status DEFAULT 'Pending',
     owner_id INTEGER NOT NULL REFERENCES users(id),
-    category TEXT REFERENCES category(name),
+    category_id INT REFERENCES category(id),
     location_id INTEGER REFERENCES location(id)
 );
 
