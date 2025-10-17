@@ -47,7 +47,7 @@ CREATE TABLE category (
 
 CREATE TABLE location (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    latitude TEXT UNIQUE NOT NULL,
+    latitude TEXT NOT NULL,
     longitude TEXT NOT NULL
 );
 
@@ -58,10 +58,10 @@ CREATE TABLE auction (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     title TEXT NOT NULL,
     description TEXT,
-    startdate TIMESTAMP NOT NULL,
-    enddate TIMESTAMP NOT NULL CHECK (enddate > startdate),
-    startingprice NUMERIC(12,2) NOT NULL CHECK (startingprice > 0),
-    currentprice NUMERIC(12,2) NOT NULL CHECK (currentprice >= startingprice),
+    start_date TIMESTAMP NOT NULL,
+    end_date TIMESTAMP NOT NULL CHECK (enddate > startdate),
+    starting_price NUMERIC(12,2) NOT NULL CHECK (startingprice > 0),
+    current_price NUMERIC(12,2) NOT NULL CHECK (currentprice >= startingprice),
     status auction_status DEFAULT 'Pending',
     owner_id INTEGER NOT NULL REFERENCES users(id),
     category TEXT REFERENCES category(name),
@@ -85,7 +85,7 @@ CREATE TABLE bid (
 CREATE TABLE transactions (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     amount NUMERIC(12,2) NOT NULL CHECK (amount > 0),
-    date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status transaction_status DEFAULT 'Pending',
     auction_id INTEGER REFERENCES auction(id) ,
     buyer_id INTEGER REFERENCES users(id),
@@ -99,7 +99,7 @@ CREATE TABLE notifications (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     type notification_type NOT NULL,
     is_read BOOLEAN DEFAULT FALSE,
-    createddate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_id INTEGER NOT NULL REFERENCES users(id),
     auction_id INTEGER REFERENCES auction(id),
     bid_id INTEGER REFERENCES bid(id)
@@ -112,7 +112,7 @@ CREATE TABLE review (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     description TEXT NOT NULL,
     rating NUMERIC(3,2) NOT NULL CHECK (rating BETWEEN 0 AND 5),
-    createddate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_id INTEGER REFERENCES users(id),
     auction_id INTEGER REFERENCES auction(id)
 );
@@ -123,7 +123,7 @@ CREATE TABLE review (
 CREATE TABLE report (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     description TEXT NOT NULL,
-    createddate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    create_ddate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status report_status DEFAULT 'Pending',
     user_id INTEGER REFERENCES users(id),
     admin_id INTEGER REFERENCES admin(id),
@@ -136,3 +136,11 @@ CREATE TABLE user_follows (
     followed_auction INTEGER REFERENCES auction(id) ON DELETE CASCADE,
     PRIMARY KEY (follower_id, followed_auction)
 );
+
+
+CREATE INDEX idx_bid_auction_id ON bid (auction_id);
+
+CREATE INDEX idx_auction_enddate ON auction (end_date);
+
+CREATE INDEX idx_user_notifications on notifications (user_id);
+
