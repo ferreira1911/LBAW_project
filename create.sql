@@ -47,9 +47,8 @@ CREATE TABLE category (
 
 CREATE TABLE location (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    gps TEXT UNIQUE NOT NULL,
-    address TEXT NOT NULL,
-    url TEXT
+    latitude TEXT UNIQUE NOT NULL,
+    longitude TEXT NOT NULL
 );
 
 ------------------------------------------------------------
@@ -58,16 +57,15 @@ CREATE TABLE location (
 CREATE TABLE auction (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     title TEXT NOT NULL,
-    reference INTEGER UNIQUE,
     description TEXT,
     startdate TIMESTAMP NOT NULL,
     enddate TIMESTAMP NOT NULL CHECK (enddate > startdate),
     startingprice NUMERIC(12,2) NOT NULL CHECK (startingprice > 0),
     currentprice NUMERIC(12,2) NOT NULL CHECK (currentprice >= startingprice),
     status auction_status DEFAULT 'Pending',
-    owner_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    category INTEGER REFERENCES category(name) ON DELETE SET NULL,
-    location_id INTEGER REFERENCES location(id) ON DELETE SET NULL
+    owner_id INTEGER NOT NULL REFERENCES users(id),
+    category TEXT REFERENCES category(name),
+    location_id INTEGER REFERENCES location(id)
 );
 
 ------------------------------------------------------------
@@ -77,8 +75,8 @@ CREATE TABLE bid (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     amount NUMERIC(12,2) NOT NULL CHECK (amount > 0),
     date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    auction_id INTEGER NOT NULL REFERENCES auction(id) ON DELETE CASCADE
+    user_id INTEGER NOT NULL REFERENCES users(id),
+    auction_id INTEGER NOT NULL REFERENCES auction(id)
 );
 
 ------------------------------------------------------------
@@ -89,7 +87,9 @@ CREATE TABLE transactions (
     amount NUMERIC(12,2) NOT NULL CHECK (amount > 0),
     date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     status transaction_status DEFAULT 'Pending',
-    auction_id INTEGER REFERENCES auction(id) ON DELETE CASCADE
+    auction_id INTEGER REFERENCES auction(id) ,
+    buyer_id INTEGER REFERENCES users(id),
+    seller_id INTEGER REFERENCES users(id)
 );
 
 ------------------------------------------------------------
@@ -97,18 +97,12 @@ CREATE TABLE transactions (
 ------------------------------------------------------------
 CREATE TABLE notifications (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    message TEXT NOT NULL,
     type notification_type NOT NULL,
-    read BOOLEAN NOT NULL DEFAULT FALSE,
+    is_read BOOLEAN DEFAULT FALSE,
     createddate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    auction_id INTEGER NOT NULL REFERENCES auction(id) ON DELETE CASCADE,
-    CHECK (
-            (
-            type IN ('new-bid', 'ending', 'ended', 'winner', 'cancel')
-            AND auction_id IS NOT NULL
-        )
-    )
+    user_id INTEGER NOT NULL REFERENCES users(id),
+    auction_id INTEGER REFERENCES auction(id),
+    bid_id INTEGER REFERENCES bid(id)
 );
 
 ------------------------------------------------------------
@@ -119,7 +113,8 @@ CREATE TABLE review (
     description TEXT NOT NULL,
     rating NUMERIC(3,2) NOT NULL CHECK (rating BETWEEN 0 AND 5),
     createddate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    user_id INTEGER REFERENCES users(id) ON DELETE SET NULL
+    user_id INTEGER REFERENCES users(id),
+    auction_id INTEGER REFERENCES auction(id)
 );
 
 ------------------------------------------------------------
@@ -130,15 +125,12 @@ CREATE TABLE report (
     description TEXT NOT NULL,
     createddate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status report_status DEFAULT 'Pending',
-    user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
-    admin_id INTEGER REFERENCES admin(id) ON DELETE SET NULL,
-    reported_user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-    auction_id INTEGER REFERENCES auction(id) ON DELETE CASCADE
+    user_id INTEGER REFERENCES users(id),
+    admin_id INTEGER REFERENCES admin(id),
+    reported_user_id INTEGER REFERENCES users(id),
+    auction_id INTEGER REFERENCES auction(id)
 );
 
-------------------------------------------------------------
--- USER FOLLOWS (many-to-many)
-------------------------------------------------------------
 CREATE TABLE user_follows (
     follower_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     followed_auction INTEGER REFERENCES auction(id) ON DELETE CASCADE,
