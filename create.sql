@@ -138,10 +138,86 @@ CREATE TABLE user_follows (
     PRIMARY KEY (follower_id, followed_auction)
 );
 
+-- * ====================================================
+-- * Index Creation
+-- * ====================================================
 
 CREATE INDEX idx_bid_auction_id ON bid (auction_id);
 
 CREATE INDEX idx_auction_enddate ON auction (end_date);
 
 CREATE INDEX idx_user_notifications on notifications (user_id);
+
+
+-- * ====================================================
+-- * Full Text Search Index Creation
+-- * ====================================================
+
+
+ALTER TABLE auction
+ADD COLUMN tsvectors TSVECTOR;
+
+
+CREATE FUNCTION auction_search_update() RETURNS TRIGGER AS $$
+BEGIN
+ IF TG_OP = 'INSERT' THEN
+        NEW.tsvectors = (
+         setweight(to_tsvector('english', NEW.title), 'A') ||
+         setweight(to_tsvector('english', NEW.description), 'B')
+        );
+ END IF;
+ IF TG_OP = 'UPDATE' THEN
+         IF (NEW.title <> OLD.title OR NEW.description <> OLD.description) THEN
+           NEW.tsvectors = (
+             setweight(to_tsvector('english', NEW.title), 'A') ||
+             setweight(to_tsvector('english', NEW.description), 'B')
+           );
+         END IF;
+ END IF;
+ RETURN NEW;
+END $$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER auction_search_update
+BEFORE INSERT OR UPDATE ON auction
+FOR EACH ROW
+EXECUTE PROCEDURE auction_search_update();
+
+
+CREATE INDEX auction_search_idx ON auction USING GIN (tsvectors);
+
+
+
+
+ALTER TABLE users
+ADD COLUMN tsvectors TSVECTOR;
+
+
+CREATE FUNCTION user_search_update() RETURNS TRIGGER AS $$
+BEGIN
+ IF TG_OP = 'INSERT' THEN
+        NEW.tsvectors = (
+         setweight(to_tsvector('english', NEW.name), 'A') ||
+         setweight(to_tsvector('english', NEW.obs), 'B')
+        );
+ END IF;
+ IF TG_OP = 'UPDATE' THEN
+         IF (NEW.name <> OLD.name OR NEW.obs <> OLD.obs) THEN
+           NEW.tsvectors = (
+             setweight(to_tsvector('english', NEW.name), 'A') ||
+             setweight(to_tsvector('english', NEW.obs), 'B')
+           );
+         END IF;
+ END IF;
+ RETURN NEW;
+END $$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER user_search_update
+BEFORE INSERT OR UPDATE ON users
+FOR EACH ROW
+EXECUTE PROCEDURE user_search_update();
+
+
+CREATE INDEX user_search_idx ON users USING GIN (tsvectors);
 
