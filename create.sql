@@ -60,13 +60,17 @@ CREATE TABLE auction (
     title TEXT NOT NULL,
     description TEXT,
     start_date TIMESTAMP NOT NULL,
-    end_date TIMESTAMP NOT NULL CHECK (enddate > startdate),
-    starting_price NUMERIC(12,2) NOT NULL CHECK (startingprice > 0),
-    current_price NUMERIC(12,2) NOT NULL CHECK (currentprice >= startingprice),
+    end_date TIMESTAMP NOT NULL CHECK (end_date > start_date),
+    starting_price NUMERIC(12,2) NOT NULL CHECK (starting_price > 0),
+    current_price NUMERIC(12,2) NOT NULL CHECK (current_price >= starting_price),
     status auction_status DEFAULT 'Pending',
     owner_id INTEGER NOT NULL REFERENCES users(id),
     category_id INTEGER REFERENCES category(id),
-    location_id INTEGER REFERENCES location(id)
+    location_id INTEGER REFERENCES location(id),
+    is_featured BOOLEAN DEFAULT FALSE,
+    featured_until TIMESTAMP,
+    buy_now_price NUMERIC(12,2) CHECK (buy_now_price > 0),
+    is_buy_now_active BOOLEAN DEFAULT FALSE
 );
 
 ------------------------------------------------------------
@@ -136,6 +140,17 @@ CREATE TABLE user_follows (
     follower_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     followed_auction INTEGER REFERENCES auction(id) ON DELETE CASCADE,
     PRIMARY KEY (follower_id, followed_auction)
+);
+
+------------------------------------------------------------
+-- FEATURE 
+------------------------------------------------------------
+
+CREATE TABLE feature_payment (
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    auction_id INTEGER NOT NULL REFERENCES auction(id) ON DELETE CASCADE,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    paid_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- * ====================================================
