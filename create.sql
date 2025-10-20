@@ -337,3 +337,33 @@ WHEN (OLD.status IS DISTINCT FROM NEW.status AND NEW.status = 'Cancelled')
 EXECUTE FUNCTION send_notifications_on_auction_cancel();
 
 
+CREATE OR REPLACE FUNCTION validate_bid()
+RETURNS TRIGGER AS $$
+DECLARE
+    auctionStatus auction_status;
+    auction_owner_id INT;
+    current_bid_price NUMERIC(12,2);
+BEGIN
+    SELECT status, owner_id, current_price
+    INTO auctionStatus, auction_owner_id, current_bid_price
+    FROM auction WHERE id = NEW.auction_id
+
+   IF auction_status <> 'Active' THEN
+        RAISE EXCEPTION 'Bidding is not allowed on auctions that are not active.';
+    END IF;
+
+    IF auction_owner_id = NEW.user_id  THEN
+        RAISE EXCEPTION 'Bidding is not allowed on auctions that you own.';
+    END IF;
+
+    IF current_bid_price <= NEW.amount THEN
+        RAISE EXCEPTION 'Your bid must be higher than the current price of %. a', current_bid_price;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_validate_bid
+BEFORE INSERT ON bid
+FOR EACH ROW
+EXECUTE FUNCTION validate_bid();
