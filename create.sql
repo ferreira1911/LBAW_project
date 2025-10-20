@@ -236,3 +236,104 @@ EXECUTE PROCEDURE user_search_update();
 
 CREATE INDEX user_search_idx ON users USING GIN (tsvectors);
 
+
+-----------------------------------------------------------------------------
+--TRIGERS
+-----------------------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION notify_on_new_bid() 
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO notifications (user_id, type, auction_id, bid_id)
+    SELECT
+        id_to_notify,
+        'new-bid' AS type,
+        NEW.auction_id,
+        NEW.id
+    FROM (
+        -- Select the auction owner
+        SELECT owner_id AS id_to_notify FROM auction WHERE id = NEW.auction_id
+        UNION
+        -- Select all users who have ever bid on this auction
+        SELECT user_id AS id_to_notify FROM bid WHERE auction_id = NEW.auction_id
+    ) AS recipients
+
+    WHERE id_to_notify <> NEW.user_id;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER on_new_bid_notification
+AFTER INSERT ON bid
+FOR EACH ROW
+EXECUTE FUNCTION notify_on_new_bid();
+
+
+
+
+CREATE OR REPLACE FUNCTION send_notifications_on_auction_end()
+RETURNS TRIGGER AS $$
+DECLARE
+    winner_id INT;
+BEGIN
+    INSERT INTO notifications (user_id, type, auction_id)
+    SELECT
+        id_to_notify,
+        'ended' AS type,
+        NEW.id 
+    FROM (
+        SELECT NEW.owner_id AS id_to_notify
+        UNION
+        SELECT DISTINCT user_id FROM bid WHERE auction_id = NEW.id
+    ) AS recipients;
+
+    -- get the winning bid
+    SELECT 
+        b.user_id INTO winner_id
+    FROM bid b
+    WHERE b.auction_id = NEW.id
+    ORDER BY b.amount DESC, b.date ASC 
+    LIMIT 1;
+
+    IF winner_id IS NOT NULL THEN
+        INSERT INTO notifications (user_id, type, auction_id)
+        VALUES (winner_id, 'winner', NEW.id);
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_auction_ended
+AFTER UPDATE ON auction
+FOR EACH ROW
+WHEN (OLD.status IS DISTINCT FROM NEW.status AND NEW.status = 'Ended')
+EXECUTE FUNCTION send_notifications_on_auction_end();
+
+
+
+CREATE OR REPLACE FUNCTION send_notifications_on_auction_cancel()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO notifications (user_id, type, auction_id)
+    SELECT
+        id_to_notify,
+        'cancel' AS type,
+        NEW.id 
+    FROM (
+        SELECT NEW.owner_id AS id_to_notify
+        UNION
+        SELECT DISTINCT user_id FROM bid WHERE auction_id = NEW.id
+    ) AS recipients;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_auction_cancelled
+AFTER UPDATE ON auction
+FOR EACH ROW
+WHEN (OLD.status IS DISTINCT FROM NEW.status AND NEW.status = 'Cancelled')
+EXECUTE FUNCTION send_notifications_on_auction_cancel();
+
+
