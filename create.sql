@@ -337,28 +337,61 @@ WHEN (OLD.status IS DISTINCT FROM NEW.status AND NEW.status = 'Cancelled')
 EXECUTE FUNCTION send_notifications_on_auction_cancel();
 
 
-CREATE OR REPLACE FUNCTION validate_bid()
+
+CREATE OR REPLACE FUNCTION validate_bid_rules()
 RETURNS TRIGGER AS $$
 DECLARE
-    auctionStatus auction_status;
+    auction_status_val auction_status;
     auction_owner_id INT;
     current_bid_price NUMERIC(12,2);
+    starting_bid_price NUMERIC(12,2);
+    user_credit_val NUMERIC(12,2);
+    min_increment NUMERIC(12,2);
+    current_high_bidder_id INT;
 BEGIN
-    SELECT status, owner_id, current_price
-    INTO auctionStatus, auction_owner_id, current_bid_price
-    FROM auction WHERE id = NEW.auction_id
+    
+    SELECT 
+        a.status, a.owner_id, a.current_price, a.starting_price, u.credit
+    INTO 
+        auction_status_val, auction_owner_id, current_bid_price, starting_bid_price, user_credit_val
+    FROM auction a
+    JOIN users u ON u.id = NEW.user_id
+    WHERE a.id = NEW.auction_id;
 
-   IF auction_status <> 'Active' THEN
+    -- Get the current highest bidder (if one exists)
+    SELECT user_id 
+    INTO current_high_bidder_id
+    FROM bid
+    WHERE auction_id = NEW.auction_id
+    ORDER BY amount DESC, date ASC
+    LIMIT 1;
+
+    -- Rule: Check if auction is active 
+    IF auction_status_val <> 'Active' THEN
         RAISE EXCEPTION 'Bidding is not allowed on auctions that are not active.';
     END IF;
 
-    IF auction_owner_id = NEW.user_id  THEN
-        RAISE EXCEPTION 'Bidding is not allowed on auctions that you own.';
+    -- Rule: Check if bidder is the owner 
+    IF auction_owner_id = NEW.user_id THEN
+        RAISE EXCEPTION 'You cannot bid on your own auction.';
     END IF;
 
-    IF current_bid_price <= NEW.amount THEN
-        RAISE EXCEPTION 'Your bid must be higher than the current price of %. a', current_bid_price;
+    -- BR06: Credit Requirement
+    IF user_credit_val < NEW.amount THEN
+        RAISE EXCEPTION 'Insufficient credit. You have %, but the bid is %.', user_credit_val, NEW.amount;
     END IF;
+    
+    -- BR03: No Self-Overbidding
+    IF NEW.user_id = current_high_bidder_id THEN
+        RAISE EXCEPTION 'You are already the highest bidder.';
+    END IF;
+
+    min_increment := starting_bid_price * 0.10;
+    
+    IF NEW.amount < (current_bid_price + min_increment) THEN
+        RAISE EXCEPTION 'Your bid must be at least % higher than the current price (%).', min_increment, current_bid_price;
+    END IF;
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -366,4 +399,84 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER trigger_validate_bid
 BEFORE INSERT ON bid
 FOR EACH ROW
-EXECUTE FUNCTION validate_bid();
+EXECUTE FUNCTION validate_bid_rules();
+
+
+CREATE OR REPLACE FUNCTION update_auction_on_bid()
+RETURNS TRIGGER AS $$
+DECLARE
+    previous_high_bidder_id INT;
+    previous_high_bid_amount NUMERIC(12,2);
+    auction_end_time TIMESTAMP;
+    buy_now_val NUMERIC(12,2);
+    is_buy_now_on BOOLEAN;
+BEGIN
+    -- BR08: Refund the *previous* high bidder (if they exist and are not the new bidder)
+    SELECT user_id, amount
+    INTO previous_high_bidder_id, previous_high_bid_amount
+    FROM bid
+    WHERE auction_id = NEW.auction_id AND id != NEW.id
+    ORDER BY amount DESC, date ASC
+    LIMIT 1;
+
+    IF previous_high_bidder_id IS NOT NULL AND previous_high_bidder_id <> NEW.user_id THEN
+        UPDATE users
+        SET credit = credit + previous_high_bid_amount
+        WHERE id = previous_high_bidder_id;
+    END IF;
+
+    -- BR08: Hold credit for the *new* high bidder
+    UPDATE users
+    SET credit = credit - NEW.amount
+    WHERE id = NEW.user_id;
+    
+    -- Update the auction's current price
+    UPDATE auction
+    SET current_price = NEW.amount
+    WHERE id = NEW.auction_id;
+
+    -- Handle "Buy Now"
+    SELECT buy_now_price, is_buy_now_active
+    INTO buy_now_val, is_buy_now_on
+    FROM auction
+    WHERE id = NEW.auction_id;
+
+    IF is_buy_now_on = TRUE AND NEW.amount >= buy_now_val THEN
+        UPDATE auction
+        SET status = 'Ended'
+        WHERE id = NEW.auction_id;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_update_auction_on_bid
+AFTER INSERT ON bid
+FOR EACH ROW
+EXECUTE FUNCTION update_auction_on_bid();
+
+
+CREATE OR REPLACE FUNCTION prevent_auction_cancellation()
+RETURNS TRIGGER AS $$
+DECLARE
+    bid_count INT;
+BEGIN
+    SELECT count(*)
+    INTO bid_count
+    FROM bid
+    WHERE auction_id = NEW.id;
+
+    IF bid_count > 0 THEN
+        RAISE EXCEPTION 'Cannot cancel an auction that already has bids.';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_prevent_cancellation
+BEFORE UPDATE ON auction
+FOR EACH ROW
+WHEN (OLD.status IS DISTINCT FROM NEW.status AND NEW.status = 'Cancelled')
+EXECUTE FUNCTION prevent_auction_cancellation();
