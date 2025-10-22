@@ -26,6 +26,7 @@ CREATE TABLE users (
     name TEXT NOT NULL,
     obs TEXT,
     credit NUMERIC(12,2) DEFAULT 0 CHECK (credit >= 0),
+    held_credit NUMERIC(12,2) DEFAULT 0 CHECK (held_credit >= 0),
     is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
     password TEXT NOT NULL,
     url TEXT
@@ -272,7 +273,7 @@ EXECUTE FUNCTION notify_on_new_bid();
 
 
 
-CREATE OR REPLACE FUNCTION send_notifications_on_auction_end()
+CREATE OR REPLACE FUNCTION handle_auction_end()
 RETURNS TRIGGER AS $$
 DECLARE
     winner_id INT;
@@ -299,8 +300,19 @@ BEGIN
     IF winner_id IS NOT NULL THEN
         INSERT INTO notifications (user_id, type, auction_id)
         VALUES (winner_id, 'winner', NEW.id);
-    END IF;
 
+        UPDATE users 
+        SET credit = credit + NEW.current_price
+        WHERE id = NEW.owner_id;
+
+        UPDATE users 
+        SET held_credit = held_credit - NEW.current_price
+        WHERE id = winner_id;
+
+        INSERT INTO transactions (amount, auction_id, buyer_id, seller_id, status)
+        VALUES (NEW.current_price, NEW.id, winner_id, NEW.owner_id, 'Completed');
+
+    END IF;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -309,7 +321,7 @@ CREATE TRIGGER trigger_auction_ended
 AFTER UPDATE ON auction
 FOR EACH ROW
 WHEN (OLD.status IS DISTINCT FROM NEW.status AND NEW.status = 'Ended')
-EXECUTE FUNCTION send_notifications_on_auction_end();
+EXECUTE FUNCTION handle_auction_end();
 
 
 
@@ -322,9 +334,7 @@ BEGIN
         'cancel' AS type,
         NEW.id 
     FROM (
-        SELECT NEW.owner_id AS id_to_notify
-        UNION
-        SELECT DISTINCT user_id FROM bid WHERE auction_id = NEW.id
+        SELECT DISTINCT user_id AS id_to_notify FROM bid WHERE auction_id = NEW.id
     ) AS recipients;
     RETURN NEW;
 END;
@@ -421,13 +431,13 @@ BEGIN
 
     IF previous_high_bidder_id IS NOT NULL AND previous_high_bidder_id <> NEW.user_id THEN
         UPDATE users
-        SET credit = credit + previous_high_bid_amount
+        SET credit = credit + previous_high_bid_amount, held_credit = held_credit -previous_high_bid_amount
         WHERE id = previous_high_bidder_id;
     END IF;
 
     -- BR08: Hold credit for the *new* high bidder
     UPDATE users
-    SET credit = credit - NEW.amount
+    SET credit = credit - NEW.amount, held_credit = held_credit + NEW.amount
     WHERE id = NEW.user_id;
     
     -- Update the auction's current price
