@@ -264,7 +264,7 @@ AFTER INSERT ON bid
 FOR EACH ROW
 EXECUTE FUNCTION notify_on_new_bid();
 
-
+------------------------------------------------------------------------
 
 
 CREATE OR REPLACE FUNCTION handle_auction_end()
@@ -317,7 +317,7 @@ FOR EACH ROW
 WHEN (OLD.status IS DISTINCT FROM NEW.status AND NEW.status = 'Ended')
 EXECUTE FUNCTION handle_auction_end();
 
-
+--------------------------------------------------------------------------------
 
 CREATE OR REPLACE FUNCTION send_notifications_on_auction_cancel()
 RETURNS TRIGGER AS $$
@@ -342,6 +342,7 @@ FOR EACH ROW
 WHEN (OLD.status IS DISTINCT FROM NEW.status AND NEW.status = 'Cancelled')
 EXECUTE FUNCTION send_notifications_on_auction_cancel();
 
+-----------------------------------------------------------------------------
 
 CREATE OR REPLACE FUNCTION review_send_notification()
 RETURNS TRIGGER AS $$
@@ -363,28 +364,28 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER send_review_notifications
-AFTER UPDATE ON review
+AFTER INSERT ON review
 FOR EACH ROW
 EXECUTE FUNCTION review_send_notification();
 
 
+-------------------------------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION set_initial_current_price()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.current_price = NEW.starting_price;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
 
+CREATE TRIGGER trigger_set_initial_price
+BEFORE INSERT ON auction
+FOR EACH ROW
+EXECUTE FUNCTION set_initial_current_price();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+------------------------------------------------------------
 
 CREATE OR REPLACE FUNCTION validate_bid_rules()
 RETURNS TRIGGER AS $$
@@ -449,6 +450,7 @@ BEFORE INSERT ON bid
 FOR EACH ROW
 EXECUTE FUNCTION validate_bid_rules();
 
+----------------------------------------------------------------------------------------------------------------
 
 CREATE OR REPLACE FUNCTION update_auction_on_bid()
 RETURNS TRIGGER AS $$
@@ -504,6 +506,7 @@ AFTER INSERT ON bid
 FOR EACH ROW
 EXECUTE FUNCTION update_auction_on_bid();
 
+---------------------------------------------------------------------------------------------
 
 CREATE OR REPLACE FUNCTION prevent_auction_cancellation()
 RETURNS TRIGGER AS $$
@@ -529,4 +532,45 @@ FOR EACH ROW
 WHEN (OLD.status IS DISTINCT FROM NEW.status AND NEW.status = 'Cancelled')
 EXECUTE FUNCTION prevent_auction_cancellation();
 
+------------------------------------------------------------------------------------------------
 
+CREATE OR REPLACE FUNCTION validate_review_permissions()
+RETURNS TRIGGER AS $$
+DECLARE
+    v_winner_id INT;
+    v_owner_id INT;
+BEGIN
+    SELECT owner_id INTO v_owner_id
+    FROM auction
+    WHERE id = NEW.auction_id;
+
+    -- Rule 1: Prevent owner from reviewing
+    IF NEW.user_id = v_owner_id THEN
+        RAISE EXCEPTION 'You cannot review your own auction.';
+    END IF;
+
+    -- Get auction winner
+    SELECT user_id INTO v_winner_id
+    FROM bid
+    WHERE auction_id = NEW.auction_id
+    ORDER BY amount DESC, date ASC
+    LIMIT 1;
+
+    -- Rule 2: Only the winner can review
+    IF v_winner_id IS NULL OR NEW.user_id <> v_winner_id THEN
+        RAISE EXCEPTION 'Only the auction winner can leave a review.';
+    END IF;
+
+    IF EXISTS (SELECT 1 FROM review WHERE user_id = NEW.user_id AND auction_id = NEW.auction_id) THEN
+        RAISE EXCEPTION 'You have already reviewed this auction.';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER trigger_validate_review
+BEFORE INSERT ON review
+FOR EACH ROW
+EXECUTE FUNCTION validate_review_permissions();
