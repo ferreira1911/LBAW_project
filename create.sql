@@ -8,7 +8,7 @@ SET search_path TO lbaw25172;
 CREATE TYPE auction_status AS ENUM ('Pending', 'Active', 'Ended', 'Cancelled');
 CREATE TYPE report_status AS ENUM ('Pending', 'InReview', 'Resolved', 'Dismissed');
 CREATE TYPE transaction_status AS ENUM ('Pending', 'Completed', 'Cancelled');
-CREATE TYPE transaction_type AS ENUM ('auction-buy', 'add-credit', 'feature-payment', 'credit-withdrawal')
+CREATE TYPE transaction_type AS ENUM ('auction-buy', 'add-credit', 'feature-payment', 'credit-withdrawal');
 
 CREATE TYPE notification_type AS ENUM (
     'new-bid',
