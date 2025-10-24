@@ -8,13 +8,15 @@ SET search_path TO lbaw25172;
 CREATE TYPE auction_status AS ENUM ('Pending', 'Active', 'Ended', 'Cancelled');
 CREATE TYPE report_status AS ENUM ('Pending', 'InReview', 'Resolved', 'Dismissed');
 CREATE TYPE transaction_status AS ENUM ('Pending', 'Completed', 'Cancelled');
+CREATE TYPE transaction_type AS ENUM ('auction-buy', 'add-credit', 'feature-payment', 'credit-withdrawal')
 
 CREATE TYPE notification_type AS ENUM (
     'new-bid',
     'ending',
     'ended',
     'winner',
-    'cancel'
+    'cancel',
+    'review'
 );
 
 ------------------------------------------------------------
@@ -24,33 +26,21 @@ CREATE TABLE users (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     email TEXT UNIQUE NOT NULL,
     name TEXT NOT NULL,
-    obs TEXT,
+    description TEXT,
     credit NUMERIC(12,2) DEFAULT 0 CHECK (credit >= 0),
     held_credit NUMERIC(12,2) DEFAULT 0 CHECK (held_credit >= 0),
     is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
+    is_admin BOOLEAN DEFAULT FALSE,
     password TEXT NOT NULL,
     url TEXT
 );
 
-CREATE TABLE admin (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    email TEXT UNIQUE NOT NULL,
-    name TEXT NOT NULL,
-    password TEXT NOT NULL
-);
-
 ------------------------------------------------------------
--- CATEGORY AND LOCATION
+-- CATEGORY
 ------------------------------------------------------------
 CREATE TABLE category (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name TEXT UNIQUE NOT NULL
-);
-
-CREATE TABLE location (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    latitude TEXT NOT NULL,
-    longitude TEXT NOT NULL
 );
 
 ------------------------------------------------------------
@@ -67,10 +57,12 @@ CREATE TABLE auction (
     status auction_status DEFAULT 'Pending',
     owner_id INTEGER NOT NULL REFERENCES users(id),
     category_id INTEGER REFERENCES category(id),
-    location_id INTEGER REFERENCES location(id),
     is_featured BOOLEAN DEFAULT FALSE,
     featured_until TIMESTAMP,
     buy_now_price NUMERIC(12,2) CHECK (buy_now_price > 0),
+    address TEXT,
+    latitude TEXT,
+    longitude TEXT,
     is_buy_now_active BOOLEAN DEFAULT FALSE
 );
 
@@ -93,10 +85,12 @@ CREATE TABLE transactions (
     amount NUMERIC(12,2) NOT NULL CHECK (amount > 0),
     date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status transaction_status DEFAULT 'Pending',
+    type transaction_type NOT NULL,
     auction_id INTEGER REFERENCES auction(id) ,
     buyer_id INTEGER REFERENCES users(id),
     seller_id INTEGER REFERENCES users(id)
 );
+
 
 ------------------------------------------------------------
 -- NOTIFICATION
@@ -129,10 +123,10 @@ CREATE TABLE review (
 CREATE TABLE report (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     description TEXT NOT NULL,
-    create_ddate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status report_status DEFAULT 'Pending',
     user_id INTEGER REFERENCES users(id),
-    admin_id INTEGER REFERENCES admin(id),
+    admin_id INTEGER REFERENCES users(id),
     reported_user_id INTEGER REFERENCES users(id),
     auction_id INTEGER REFERENCES auction(id)
 );
@@ -214,14 +208,14 @@ BEGIN
  IF TG_OP = 'INSERT' THEN
         NEW.tsvectors = (
          setweight(to_tsvector('english', NEW.name), 'A') ||
-         setweight(to_tsvector('english', NEW.obs), 'B')
+         setweight(to_tsvector('english', NEW.description), 'B')
         );
  END IF;
  IF TG_OP = 'UPDATE' THEN
-         IF (NEW.name <> OLD.name OR NEW.obs <> OLD.obs) THEN
+         IF (NEW.name <> OLD.name OR NEW.description <> OLD.description) THEN
            NEW.tsvectors = (
              setweight(to_tsvector('english', NEW.name), 'A') ||
-             setweight(to_tsvector('english', NEW.obs), 'B')
+             setweight(to_tsvector('english', NEW.description), 'B')
            );
          END IF;
  END IF;
@@ -309,8 +303,8 @@ BEGIN
         SET held_credit = held_credit - NEW.current_price
         WHERE id = winner_id;
 
-        INSERT INTO transactions (amount, auction_id, buyer_id, seller_id, status)
-        VALUES (NEW.current_price, NEW.id, winner_id, NEW.owner_id, 'Completed');
+        INSERT INTO transactions (amount, auction_id, buyer_id, seller_id, status,type)
+        VALUES (NEW.current_price, NEW.id, winner_id, NEW.owner_id, 'Completed','auction-buy');
 
     END IF;
     RETURN NEW;
@@ -335,6 +329,8 @@ BEGIN
         NEW.id 
     FROM (
         SELECT DISTINCT user_id AS id_to_notify FROM bid WHERE auction_id = NEW.id
+        UNION
+        SELECT NEW.owner_id AS id_to_notify
     ) AS recipients;
     RETURN NEW;
 END;
@@ -345,6 +341,48 @@ AFTER UPDATE ON auction
 FOR EACH ROW
 WHEN (OLD.status IS DISTINCT FROM NEW.status AND NEW.status = 'Cancelled')
 EXECUTE FUNCTION send_notifications_on_auction_cancel();
+
+
+CREATE OR REPLACE FUNCTION review_send_notification()
+RETURNS TRIGGER AS $$
+DECLARE
+    
+BEGIN
+    INSERT INTO notifications (user_id, type, auction_id)
+    SELECT
+        id_to_notify,
+        'review' AS type,
+        NEW.id 
+    FROM (
+        SELECT owner_id AS id_to_notify FROM auction WHERE id = NEW.auction_id
+        UNION
+        SELECT id FROM users WHERE id = NEW.user_id
+    ) AS recipients;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER send_review_notifications
+AFTER UPDATE ON review
+FOR EACH ROW
+EXECUTE FUNCTION review_send_notification();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -490,3 +528,5 @@ BEFORE UPDATE ON auction
 FOR EACH ROW
 WHEN (OLD.status IS DISTINCT FROM NEW.status AND NEW.status = 'Cancelled')
 EXECUTE FUNCTION prevent_auction_cancellation();
+
+
