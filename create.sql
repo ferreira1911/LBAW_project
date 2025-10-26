@@ -574,3 +574,25 @@ CREATE TRIGGER trigger_validate_review
 BEFORE INSERT ON review
 FOR EACH ROW
 EXECUTE FUNCTION validate_review_permissions();
+
+
+
+CREATE OR REPLACE FUNCTION annonamyze_user_upon_delete()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.name = 'Deleted User';
+    NEW.email =  NEW.id || '@deleted.user';
+    NEW.password = md5(random::text);   -- this password can be whatever so an attacker cannot get ahold of the account by sql injection
+    NEW.url := NULL;
+    NEW.credit := 0;
+    NEW.held_credit := 0;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER annonamyze_user
+BEFORE UPDATE ON users
+FOR EACH ROW
+WHEN (OLD.is_deleted IS DISTINCT FROM NEW.is_deleted AND NEW.is_deleted = TRUE)
+EXECUTE FUNCTION annonamyze_user_upon_delete();
