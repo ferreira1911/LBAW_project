@@ -152,11 +152,11 @@ CREATE TABLE feature_payment (
 -- * Index Creation
 -- * ====================================================
 
-CREATE INDEX idx_bid_auction_id ON bid (auction_id);
+CREATE INDEX idx_bid_auction_id ON bid USING hash (auction_id);
 
-CREATE INDEX idx_auction_enddate ON auction (end_date);
+CREATE INDEX idx_auction_enddate ON auction USING btree (end_date);
 
-CREATE INDEX idx_user_notifications on notifications (user_id);
+CREATE INDEX idx_user_notifications on notifications USING hash (user_id);
 
 
 -- * ====================================================
