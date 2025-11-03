@@ -7,7 +7,7 @@ use App\Http\Controllers\ItemController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\AuctionController;
 
 // Home
 Route::redirect('/', '/login');
@@ -48,3 +48,9 @@ Route::controller(RegisterController::class)->group(function () {
 Route::post('/send', [MailController::class, 'send']);
 
 Route::post('/post/like', [PostController::class, 'like']);
+
+Route::controller(AuctionController::class)->group(function () {
+    Route::get('/auction', 'index')->name('auctions.index');
+    Route::get('/auction/{auction}', 'show')->name('auction.show');
+    Route::get('/auction/store', 'store')->name('auction.store');
+});

@@ -45,7 +45,7 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
  
-            return redirect()->intended(route('/'));
+            return redirect()->intended(route('auctions.index'));
         }
  
         // 3. Authentication failed.
@@ -62,6 +62,6 @@ class LoginController extends Controller
  
         $request->session()->regenerateToken();
  
-        return redirect('/');
+        return redirect('auctions.index');
     }
 }
