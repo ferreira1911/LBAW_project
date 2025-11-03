@@ -3,24 +3,20 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-
+use App\Models\User; // **NEW**: Import the User model
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-
     /**
      * Show the login form.
-     *
-     * If the user is already authenticated, redirect them
-     * to the cards dashboard instead of showing the form.
      */
     public function showLoginForm()
     {
         if (Auth::check()) {
-            return redirect()->route('cards.index');
+            return redirect()->route('/'); 
         } else {
             return view('auth.login');
         }
@@ -28,31 +24,44 @@ class LoginController extends Controller
 
     /**
      * Process an authentication attempt.
-     *
-     * Validates the incoming request, checks the provided
-     * credentials, and logs the user in if successful.
-     * The session is regenerated to protect against session fixation.
      */
     public function authenticate(Request $request): RedirectResponse
     {
-        // Validate the request data.
+        // 1. Validate the request data.
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
  
-        // Attempt to authenticate and log in the user.
+        $user = User::where('email', $credentials['email'])->first();
+
+        if ($user && $user->is_deleted) {
+            return back()->withErrors([
+                'email' => 'This account has been deleted.',
+            ])->onlyInput('email');
+        }
+
+        // 2. Attempt to authenticate and log in the user.
         if (Auth::attempt($credentials, $request->filled('remember'))) {
-            // Regenerate the session ID to prevent session fixation attacks.
             $request->session()->regenerate();
  
-            // Redirect the user to their intended destination (default: /cards).
-            return redirect()->intended(route('cards.index'));
+            return redirect()->intended(route('/'));
         }
  
-        // Authentication failed: return back with an error message.
+        // 3. Authentication failed.
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');
+    }
+
+    public function logout(Request $request): RedirectResponse
+    {
+        Auth::logout();
+ 
+        $request->session()->invalidate();
+ 
+        $request->session()->regenerateToken();
+ 
+        return redirect('/');
     }
 }

@@ -36,11 +36,9 @@ Route::middleware('auth')->controller(ItemController::class)->group(function () 
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
     Route::post('/login', 'authenticate');
+    Route::post('/logout', 'logout');
 });
 
-Route::controller(LogoutController::class)->group(function () {
-    Route::get('/logout', 'logout')->name('logout');
-});
 
 Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');

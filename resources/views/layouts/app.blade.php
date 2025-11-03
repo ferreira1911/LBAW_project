@@ -19,16 +19,28 @@
     <body>
         <main>
             <header>
-                <h1><a href="{{ route('cards.index') }}">Thingy!</a></h1>
+                <h1><a href="{{ route('/') }}">AuctionEase</a></h1>
 
-                @auth
-                    <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
-                @endauth
+                <div class="auth-links">
+                    @auth
+                        <span>{{ Auth::user()->name }}</span>
+                        <span>Your credit is {{ Auth::user()->credit }}$</span>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="button button-outline">Logout</button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="button">Login</a>
+                        <a href="{{ route('register') }}" class="button button-outline">Register</a>
+                    @endauth
+                </div>
+
+
+
+                <section id="content">
+                    @yield('content')
+                </section>
             </header>
-
-            <section id="content">
-                @yield('content')
-            </section>
         </main>
     </body>
 </html>

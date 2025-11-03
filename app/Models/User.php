@@ -10,7 +10,7 @@ class User extends Authenticatable
     use Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'password', 'description', 'url', 'is_deleted', 'is_admin'
+        'name', 'email', 'password', 'description', 'url', 'is_deleted', 'is_admin','credit','held_credit',
     ];
 
     protected $hidden = [
@@ -53,4 +53,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(FeaturePayment::class, 'user_id');
     }
+
+    public function isAdmin() : bool {
+        return $this->is_admin;
+    }
+
+    public function deleteUser() : void {
+        $this->is_deleted = true;
+        $this->save();
+    }
+
 }

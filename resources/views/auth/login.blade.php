@@ -41,7 +41,10 @@
     </label>
 
     <button type="submit">Login</button>
-    <a class="button button-outline" href="{{ route('register') }}">Register</a>
+    <p>
+        Don't have an account?
+        <a class="button button-outline" href="{{ route('register') }}">Register</a>
+    </p>
 
     @if (session('status'))
         <p class="success" role="status">{{ session('status') }}</p>
