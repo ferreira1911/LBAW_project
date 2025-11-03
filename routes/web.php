@@ -35,6 +35,7 @@ Route::controller(AuctionController::class)->group(function () {
     Route::get('/auction', 'index')->name('auctions.index');
     Route::get('/auction/{auction}', 'show')->name('auction.show');
     Route::post('/auction/store', 'store')->name('auction.store');
+    Route::post('/auction/create', 'create')->name('auction.create');
 });
 
 Route::controller(UserController::class)->group(function () {

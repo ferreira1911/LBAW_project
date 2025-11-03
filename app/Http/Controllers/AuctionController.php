@@ -22,11 +22,16 @@ class AuctionController extends Controller
     }
 
     function show(Auction $auction) {
+        $this->authorize('view', $auction);
         
     }
 
     function store(Request $request){
         
+    }
+
+    function create(){
+        $this->authorize('create', Auction::class);
     }
 
 
