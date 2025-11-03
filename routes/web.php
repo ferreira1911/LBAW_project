@@ -8,28 +8,10 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\AuctionController;
+use App\Http\Controllers\Auth\UserController;
 
 // Home
 Route::redirect('/', '/login');
-
-// Cards (authentication required)
-Route::middleware('auth')->controller(CardController::class)->group(function () {
-    Route::get('/cards', 'index')->name('cards.index');
-    Route::get('/cards/{card}', 'show')->name('cards.show');
-});
-
-
-// API (authentication required)
-Route::middleware('auth')->controller(CardController::class)->group(function () {
-    Route::post('/api/cards', 'store');              // create card
-    Route::delete('/api/cards/{card}', 'destroy');   // delete card
-});
-
-Route::middleware('auth')->controller(ItemController::class)->group(function () {
-    Route::post('/api/cards/{card}/items', 'store'); // add item to card
-    Route::patch('/api/items/{item}', 'update');     // update item
-    Route::delete('/api/items/{item}', 'destroy');   // delete item
-});
 
 
 // Authentication
@@ -52,5 +34,14 @@ Route::post('/post/like', [PostController::class, 'like']);
 Route::controller(AuctionController::class)->group(function () {
     Route::get('/auction', 'index')->name('auctions.index');
     Route::get('/auction/{auction}', 'show')->name('auction.show');
-    Route::get('/auction/store', 'store')->name('auction.store');
+    Route::post('/auction/store', 'store')->name('auction.store');
+});
+
+Route::controller(UserController::class)->group(function () {
+    Route::get('/user', 'index')->name('auctions.index');
+    Route::get('/user/{user}', 'show')->name('user.show');
+    Route::post('/user/store', 'store')->name('auction.store');
+    Route::get('/user/{user}/edit', 'edit')->name('user.edit');
+    Route::post('/user/{user}', 'update')->name('user.update');
+    Route::post('/user/{user}/destroy', 'destroy')->name('user.destroy');
 });
