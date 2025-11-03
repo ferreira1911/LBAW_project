@@ -46,3 +46,7 @@ Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', 'register');
 });
+
+Route::post('/send', [MailController::class, 'send']);
+
+Route::post('/post/like', [PostController::class, 'like']);
