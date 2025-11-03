@@ -32,6 +32,7 @@ CREATE TABLE users (
     is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
     is_admin BOOLEAN DEFAULT FALSE,
     password TEXT NOT NULL,
+    remember_token TEXT,
     url TEXT
 );
 
@@ -63,6 +64,7 @@ CREATE TABLE auction (
     address TEXT,
     latitude TEXT,
     longitude TEXT,
+    picture TEXT,
     is_buy_now_active BOOLEAN DEFAULT FALSE
 );
 
