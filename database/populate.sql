@@ -5,28 +5,55 @@ SET search_path TO lbaw25172;
 ------------------------------------------------------------
 INSERT INTO users (email, name, description, credit, password, url, is_admin)
 VALUES
-('alice@example.com', 'Alice Johnson', 'Frequent bidder', 150.00, 'alice123', 'https://img.example.com/alice.jpg', FALSE),
-('bob@example.com', 'Bob Smith', 'Occasional seller', 300.00, 'bob123', 'https://img.example.com/bob.jpg', FALSE),
-('charlie@example.com', 'Charlie Brown', NULL, 50.00, 'charlie123', NULL, FALSE),
-('diana@example.com', 'Diana Prince', 'Top-rated user', 500.00, 'diana123', 'https://img.example.com/diana.jpg', FALSE),
-('john.doe@example.com', 'John Doe', 'Vintage collector and enthusiast', 10000.00, 'johndoe22', 'https://img.example.com/john.jpg', FALSE),
-('jane.smith@example.com', 'Jane Smith', 'Art lover and dealer', 12000.00, 'jane21321394', 'https://img.example.com/jane.jpg', FALSE),
-('mike.wilson@example.com', 'Mike Wilson', 'Tech gadget collector', 7000.00, 'mikey1', 'https://img.example.com/mike.jpg', FALSE),
-('sara.johnson@example.com', 'Sara Johnson', 'Antique furniture specialist', 20000.00, 'sara572', 'https://img.example.com/sara.jpg', FALSE),
-('david.brown@example.com', 'David Brown', 'Sports memorabilia fan', 6000.00, 'david123', 'https://img.example.com/david.jpg', FALSE),
-('emily.davis@example.com', 'Emily Davis', 'Book collector and bibliophile', 9000.00, 'emily123', 'https://img.example.com/emily.jpg', FALSE),
-('robert.miller@example.com', 'Robert Miller', 'Jewelry and watches expert', 25000.00, 'robert123', 'https://img.example.com/robert.jpg', FALSE),
-('lisa.garcia@example.com', 'Lisa Garcia', 'Fashion and accessories enthusiast', 11000.00, 'lisa123', 'https://img.example.com/lisa.jpg', FALSE),
-('james.martinez@example.com', 'James Martinez', 'Car and motorcycle collector', 30000.00, 'james123', 'https://img.example.com/james.jpg', FALSE),
-('anna.rodriguez@example.com', 'Anna Rodriguez', 'Coin and stamp collector', 5500.00, 'anna123', 'https://img.example.com/anna.jpg', FALSE),
-('thomas.lee@example.com', 'Thomas Lee', 'Electronics and gaming enthusiast', 8500.00, 'tomas123', 'https://img.example.com/thomas.jpg', FALSE),
-('maria.hernandez@example.com', 'Maria Hernandez', 'Home decor and vintage items', 4500.00, 'maria123', 'https://img.example.com/maria.jpg', FALSE),
-('chris.taylor@example.com', 'Chris Taylor', 'Musical instruments collector', 14000.00, 'chris123', 'https://img.example.com/chris.jpg', FALSE),
-('amanda.white@example.com', 'Amanda White', 'Toy and collectibles expert', 7500.00, 'amanda123', 'https://img.example.com/amanda.jpg', FALSE),
-('kevin.anderson@example.com', 'Kevin Anderson', 'Photography equipment enthusiast', 10000.00, 'kevin123', 'https://img.example.com/kevin.jpg', FALSE),
-('susan.clark@example.com', 'Susan Clark', 'Vintage clothing specialist', 6500.00, 'susan123', 'https://img.example.com/susan.jpg', FALSE),
-('pedro.hortença@example.com', 'Pedro Hortença', NULL, NULL, 'admin1', NULL, TRUE);
-
+('jharsent0@marketwatch.com', 'Junette Harsent', 'Phasellus in felis.', 683685700.12, 'eH7_XGkD"3sy}', 'https://blogspot.com/pulvinar/lobortis/est/phasellus/sit.json', true),
+('lgarvagh1@baidu.com', 'Leslie Garvagh', 'Morbi quis tortor id nulla ultrices aliquet. Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo.', 995880083.77, 'sK5(6"}Q', 'http://ebay.com/non/velit/nec/nisi.json', false),
+('sswiers2@weather.com', 'Sheryl Swiers', 'Morbi non quam nec dui luctus rutrum. Nulla tellus.', 129241874.11, 'iV4$UsE}oO0n5', 'https://soup.io/morbi/porttitor/lorem/id/ligula/suspendisse.aspx', false),
+('cland3@networkadvertising.org', 'Cassandry Land', 'Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo.', 626613560.95, 'xZ5%=J#D>SvpM0d', 'https://tinyurl.com/integer/tincidunt/ante.html', false),
+('vtongue4@sourceforge.net', 'Vivi Tongue', 'Proin at turpis a pede posuere nonummy. Integer non velit.', 975253510.12, 'tF9#$6H,GErwl/', 'http://nytimes.com/tellus/in/sagittis/dui.png', true),
+('hpallent5@boston.com', 'Heriberto Pallent', 'Morbi porttitor lorem id ligula. Suspendisse ornare consequat lectus.', 513657786.06, 'fF6<,h@/hl>', 'https://macromedia.com/duis/at/velit/eu/est.aspx', false),
+('lcorkish6@usnews.com', 'Lind Corkish', 'Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci.', 138105827.58, 'yZ5{k0j>1', 'http://youku.com/nulla/tellus/in.json', false),
+('dthomlinson7@weather.com', 'Danie Thomlinson', 'Duis bibendum.', 628979159.75, 'mK6\!M59c(D', 'http://latimes.com/at/lorem/integer/tincidunt/ante.png', false),
+('epeddel8@meetup.com', 'Erskine Peddel', 'Fusce posuere felis sed lacus.', 588846125.22, 'cM1%A<XN{y"CT', 'https://unblog.fr/orci/mauris/lacinia/sapien/quis/libero.xml', false),
+('onassau9@dion.ne.jp', 'Othilie Nassau', 'Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum.', 340981582.82, 'fU6*y\!Gg6cp9A_', 'http://vk.com/erat/fermentum/justo/nec/condimentum/neque.html', false),
+('hcollecotta@shinystat.com', 'Humfrey Collecott', 'Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla.', 580714059.52, 'qZ8$e}UL', 'https://canalblog.com/volutpat/quam/pede.jsp', false),
+('sgehrelsb@qq.com', 'Skip Gehrels', 'Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus.', 224608433.57, 'kB5/f0V$UgVPX', 'https://mapy.cz/accumsan.xml', false),
+('sbuggsc@dyndns.org', 'Svend Buggs', 'Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.', 960038605.24, 'vD2,\\y|f+<zi=|', 'http://ebay.com/vehicula/condimentum.xml', false),
+('lrockhilld@domainmarket.com', 'Lyell Rockhill', 'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien.', 465173846.36, 'wO2*NuV}''PNt3', 'http://angelfire.com/orci/mauris/lacinia/sapien/quis/libero.xml', false),
+('achinnerye@sogou.com', 'Anatollo Chinnery', 'Aliquam erat volutpat.', 536163196.07, 'pM9@a#t=G', 'http://msu.edu/curabitur/at/ipsum/ac/tellus/semper.jsp', false),
+('djagelsf@abc.net.au', 'Dougy Jagels', 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio. Curabitur convallis.', 868213327.54, 'nB0`251Ze6=\\', 'http://printfriendly.com/eros/suspendisse/accumsan/tortor.jpg', false),
+('fvang@youku.com', 'Freeman Van der Son', 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.', 619098709.85, 'qQ8$*0Sx}$L(aL7)', 'https://telegraph.co.uk/lacinia/erat.html', false),
+('hroadnighth@biglobe.ne.jp', 'Helaine Roadnight', 'Proin risus. Praesent lectus.', 783315355.71, 'lO9{MpH!Jp', 'https://newyorker.com/vestibulum/ante/ipsum.jpg', false),
+('eadamiaki@booking.com', 'Edythe Adamiak', 'Nulla nisl. Nunc nisl.', 551565597.06, 'lB4|ZOIfq', 'http://themeforest.net/vulputate.json', false),
+('idenisyukj@ifeng.com', 'Ingamar Denisyuk', 'Maecenas tincidunt lacus at velit.', 586356915.48, 'gJ0>QH)<Q)', 'https://bing.com/sed/augue/aliquam/erat/volutpat.html', true),
+('wseccombek@cisco.com', 'Wally Seccombe', 'Duis bibendum. Morbi non quam nec dui luctus rutrum.', 841399209.39, 'vM5*1}U#r&', 'https://admin.ch/elementum/in/hac/habitasse/platea/dictumst.aspx', false),
+('phyronsl@opera.com', 'Poul Hyrons', 'Phasellus sit amet erat.', 582130355.06, 'tQ2(3\(~', 'https://ibm.com/sagittis.js', false),
+('ocheasmanm@trellian.com', 'Olivie Cheasman', 'Aenean lectus. Pellentesque eget nunc.', 374429960.00, 'kT5{K_g4CEwxiI', 'http://dmoz.org/elit/proin/risus.json', false),
+('afairsn@123-reg.co.uk', 'Araldo Fairs', 'Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue.', 936244036.55, 'hU2#04A*', 'http://si.edu/in/quam/fringilla/rhoncus/mauris.json', false),
+('lbentono@hibu.com', 'Lukas Benton', 'Fusce consequat. Nulla nisl.', 51495344.68, 'xL0*Y{%`O!o''_', 'https://businessinsider.com/sapien/varius/ut/blandit/non.js', false),
+('fvasnetsovp@dot.gov', 'Fran Vasnetsov', 'Morbi a ipsum. Integer a nibh.', 637076152.23, 'bV1.B4gp9w', 'https://cdbaby.com/vestibulum/velit/id/pretium/iaculis.html', false),
+('gcrushq@so-net.ne.jp', 'Georgie Crush', 'Nulla facilisi. Cras non velit nec nisi vulputate nonummy.', 532994005.59, 'cW0`%adE,DY', 'https://google.nl/amet/sapien/dignissim/vestibulum.aspx', false),
+('lneylonr@who.int', 'Lindsay Neylon', 'Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue.', 612066211.56, 'wN5\t_wf', 'https://unicef.org/mauris.xml', false),
+('omartignons@weebly.com', 'Odey Martignon', 'In sagittis dui vel nisl. Duis ac nibh.', 140037353.32, 'qV4~uC&0', 'http://wiley.com/interdum/venenatis/turpis/enim/blandit.jpg', false),
+('bbeamant@meetup.com', 'Braden Beaman', 'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.', 119248141.12, 'fX9&lnX7BbVu(', 'https://nytimes.com/et/tempus/semper/est/quam/pharetra.jpg', false),
+('mleynhamu@netlog.com', 'Mamie Leynham', 'Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.', 931447290.74, 'qQ9''|F!/ATu8H|', 'http://stanford.edu/eget/elit/sodales/scelerisque/mauris.jsp', false),
+('sbohlinv@lulu.com', 'Shirlene Bohlin', 'Nullam sit amet turpis elementum ligula vehicula consequat.', 920683004.26, 'uO1*ip0HOy', 'http://mlb.com/sapien.json', false),
+('lschiesterlw@timesonline.co.uk', 'Lalo Schiesterl', 'Nulla tellus. In sagittis dui vel nisl.', 424638079.74, 'oN6$a0uzl', 'https://kickstarter.com/mauris.jsp', false),
+('rburkx@google.ru', 'Ramsay Burk', 'Integer ac neque. Duis bibendum.', 727551887.56, 'jJ8_ByQ&', 'https://arstechnica.com/in/lectus/pellentesque/at/nulla.xml', false),
+('tdriussiy@freewebs.com', 'Tiebold Driussi', 'Duis ac nibh.', 540751791.67, 'tV0>x|IkGnb', 'http://sina.com.cn/vestibulum/proin/eu/mi/nulla/ac.js', false),
+('sleschellez@usnews.com', 'Sherye Leschelle', 'Morbi porttitor lorem id ligula.', 972144328.37, 'yP0''N#,s9o', 'https://hexun.com/pellentesque.aspx', false),
+('wbaumert10@phpbb.com', 'Werner Baumert', 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam.', 551888119.90, 'iL8.<#J_{', 'http://yolasite.com/enim/sit/amet/nunc/viverra/dapibus.js', false),
+('mhunnicot11@ucoz.com', 'Melicent Hunnicot', 'Aenean auctor gravida sem. Praesent id massa id nisl venenatis lacinia.', 796323785.13, 'zN7/M8OGY3m', 'https://army.mil/elementum/nullam/varius/nulla/facilisi/cras.xml', false),
+('slindholm12@soundcloud.com', 'Sidney Lindholm', 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam. Suspendisse potenti.', 817879577.18, 'bV0/DBOI5', 'https://dyndns.org/et/ultrices/posuere/cubilia.html', false),
+('mgrimsley13@webnode.com', 'Mirelle Grimsley', 'Nam tristique tortor eu pede.', 726453149.93, 'cP4*X{2l,', 'http://howstuffworks.com/et/tempus/semper/est.jsp', false),
+('gscripps14@wisc.edu', 'Giustina Scripps', 'Suspendisse potenti. Nullam porttitor lacus at turpis.', 829835059.65, 'oW8&eWziy}SXIWT', 'http://archive.org/et/ultrices/posuere/cubilia/curae.js', false),
+('astede15@miibeian.gov.cn', 'Annabelle Stede', 'Proin risus.', 765591763.70, 'vC5!)H(2Jn!,~ASs', 'https://amazon.com/nisi/venenatis/tristique/fusce/congue/diam/id.js', false),
+('wtreace16@i2i.jp', 'Worthington Treace', 'In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.', 873067791.34, 'bR8*W_N\dl~G%BR/', 'https://hugedomains.com/curabitur/convallis/duis/consequat/dui.aspx', false),
+('ro17@whitehouse.gov', 'Rosanna O'' Dooley', 'Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.', 784071905.37, 'qP7{}I462t', 'http://elpais.com/lectus/pellentesque/at/nulla/suspendisse/potenti/cras.json', false),
+('mmapson18@unblog.fr', 'Mattias Mapson', 'Nullam porttitor lacus at turpis.', 57525783.18, 'yP8+.Db5Bvq*e.*I', 'https://mlb.com/ac.aspx', false),
+('brisdall19@statcounter.com', 'Beulah Risdall', 'Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim.', 81217045.99, 'xW2!Ds*OJ', 'http://examiner.com/rutrum/neque/aenean/auctor/gravida/sem/praesent.xml', false),
+('mcresswell1b@skype.com', 'Misha Cresswell', 'Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci.', 528736784.49, 'uA5|?=Nc', 'https://de.vu/lacinia/nisi/venenatis/tristique/fusce.jsp', false),
+('chatchman1c@tinyurl.com', 'Carey Hatchman', 'Maecenas tincidunt lacus at velit.', 545021304.27, 'dA9$gqV?\.''Cj', 'https://furl.net/quis/turpis/sed/ante/vivamus/tortor/duis.html', false),
+('dscandrite1d@scribd.com', 'Dulsea Scandrite', 'Proin risus. Praesent lectus.', 672296671.47, 'rJ3(1a,X', 'https://youtu.be/nisl/nunc/rhoncus/dui/vel/sem/sed.json', false);
 ------------------------------------------------------------
 -- CATEGORIES
 ------------------------------------------------------------
@@ -55,98 +82,187 @@ INSERT INTO auction (title, description, start_date, end_date, starting_price, s
 VALUES
 ('iPhone 14 Pro', 'Brand new iPhone 14 Pro 128GB in Space Black. Includes all original accessories and 1-year warranty.', NOW() - INTERVAL '2 days', NOW() + INTERVAL '5 days', 800.00, 'Active', 2, 1, 'San Francisco, CA', '37.7749', '-122.4194', 1200.00, TRUE, FALSE),
 ('Designer Handbag', 'Luxury leather handbag by premium brand, gently used. Comes with authenticity certificate.', NOW() - INTERVAL '1 day', NOW() + INTERVAL '3 days', 250.00, 'Active', 4, 2, 'New York, NY', '40.7128', '-74.0060', 450.00, TRUE, FALSE),
-('Mountain Bike', 'Full-suspension trail bike with carbon frame. Perfect for mountain trails and rough terrain.', NOW() - INTERVAL '5 days', NOW() - INTERVAL '1 day', 400.00, 'Ended', 3, 4, 'Denver, CO', '39.7392', '-104.9903', NULL, FALSE, FALSE),
-('Cookbook Collection', 'Set of 10 premium cookbooks covering various cuisines. Like new condition.', NOW() - INTERVAL '3 days', NOW() + INTERVAL '2 days', 50.00, 'Active', 1, 5, 'Chicago, IL', '41.8781', '-87.6298', NULL, FALSE, FALSE),
-('Vintage Watch', 'Classic vintage wristwatch from 1960s. Automatic movement, recently serviced.', NOW() - INTERVAL '4 days', NOW() + INTERVAL '1 day', 300.00, 'Active', 5, 8, 'Boston, MA', '42.3601', '-71.0589', 800.00, TRUE, TRUE),
+('Mountain Bike', 'Full-suspension trail bike with carbon frame. Perfect for mountain trails and rough terrain.', NOW() - INTERVAL '5 days', NOW() + INTERVAL '1 day', 400.00, 'Active', 3, 4, 'Denver, CO', '39.7392', '-104.9903', NULL, FALSE, FALSE),
+('Cookbook Collection', 'Set of 10 premium cookbooks covering various cuisines. Like new condition.', NOW() - INTERVAL '3 days', NOW() + INTERVAL '2 days', 50.00, 'Active', 24, 5, 'Chicago, IL', '41.8781', '-87.6298', NULL, FALSE, FALSE),
+('Vintage Watch', 'Classic vintage wristwatch from 1960s. Automatic movement, recently serviced.', NOW() - INTERVAL '4 days', NOW() + INTERVAL '1 day', 300.00, 'Active', 30, 8, 'Boston, MA', '42.3601', '-71.0589', 800.00, TRUE, TRUE),
 ('Gaming Laptop', 'High-performance laptop for gaming with RTX 3070, 16GB RAM, 1TB SSD.', NOW() - INTERVAL '2 days', NOW() + INTERVAL '4 days', 1200.00, 'Active', 6, 1, 'Austin, TX', '30.2672', '-97.7431', 2000.00, TRUE, FALSE),
-('Antique Vase', 'Beautiful antique vase from the 19th century. Hand-painted porcelain with gold trim.', NOW() - INTERVAL '6 days', NOW() - INTERVAL '2 days', 600.00, 'Ended', 7, 9, 'Philadelphia, PA', '39.9526', '-75.1652', NULL, FALSE, FALSE),
+('Antique Vase', 'Beautiful antique vase from the 19th century. Hand-painted porcelain with gold trim.', NOW() - INTERVAL '6 days', NOW() + INTERVAL '2 days', 600.00, 'Active', 7, 9, 'Philadelphia, PA', '39.9526', '-75.1652', NULL, FALSE, FALSE),
 ('Electric Guitar', 'Fender Stratocaster electric guitar in sunburst finish. Includes hard case and amp.', NOW() - INTERVAL '1 day', NOW() + INTERVAL '6 days', 700.00, 'Active', 8, 10, 'Nashville, TN', '36.1627', '-86.7816', 1500.00, TRUE, TRUE),
 ('Action Figure Set', 'Complete set of superhero action figures. Mint in box, never opened.', NOW() - INTERVAL '3 days', NOW() + INTERVAL '3 days', 80.00, 'Active', 9, 11, 'Seattle, WA', '47.6062', '-122.3321', NULL, FALSE, FALSE),
 ('Classic Car Model', 'Die-cast model of a 1967 Ford Mustang. 1:18 scale, highly detailed.', NOW() - INTERVAL '4 days', NOW() + INTERVAL '2 days', 150.00, 'Active', 10, 12, 'Detroit, MI', '42.3314', '-83.0458', 300.00, TRUE, FALSE),
 ('Digital Camera', 'High-resolution digital camera with lens kit. 24MP sensor, 4K video capability.', NOW() - INTERVAL '2 days', NOW() + INTERVAL '5 days', 500.00, 'Active', 11, 13, 'Los Angeles, CA', '34.0522', '-118.2437', 900.00, TRUE, FALSE),
-('Rare Coin', 'Gold coin from ancient Rome. Authenticated by professional numismatist.', NOW() - INTERVAL '5 days', NOW() - INTERVAL '1 day', 1000.00, 'Ended', 12, 14, 'Washington, DC', '38.9072', '-77.0369', NULL, FALSE, FALSE),
+('Rare Coin', 'Gold coin from ancient Rome. Authenticated by professional numismatist.', NOW() - INTERVAL '5 days', NOW() + INTERVAL '1 day', 1000.00, 'Active', 12, 14, 'Washington, DC', '38.9072', '-77.0369', NULL, FALSE, FALSE),
 ('Wooden Dining Table', 'Handcrafted wooden dining table made from solid oak. Seats 6-8 people.', NOW() - INTERVAL '3 days', NOW() + INTERVAL '4 days', 800.00, 'Active', 13, 15, 'Portland, OR', '45.5152', '-122.6784', 1500.00, TRUE, FALSE),
-('Stamp Collection', 'Extensive collection of rare stamps from various countries and eras.', NOW() - INTERVAL '6 days', NOW() - INTERVAL '2 days', 300.00, 'Ended', 14, 14, 'Miami, FL', '25.7617', '-80.1918', NULL, FALSE, FALSE),
+('Stamp Collection', 'Extensive collection of rare stamps from various countries and eras.', NOW() - INTERVAL '6 days', NOW() + INTERVAL '2 days', 300.00, 'Active', 14, 14, 'Miami, FL', '25.7617', '-80.1918', NULL, FALSE, FALSE),
 ('Leather Sofa', 'Comfortable leather sofa in excellent condition. Three-seater, brown leather.', NOW() - INTERVAL '2 days', NOW() + INTERVAL '6 days', 1200.00, 'Active', 15, 3, 'Phoenix, AZ', '33.4484', '-112.0740', 2200.00, TRUE, FALSE),
 ('Bluetooth Speaker', 'Portable Bluetooth speaker with deep bass. Waterproof, 20-hour battery life.', NOW() - INTERVAL '1 day', NOW() + INTERVAL '5 days', 100.00, 'Active', 16, 1, 'San Diego, CA', '32.7157', '-117.1611', 180.00, TRUE, FALSE),
 ('Painting by Local Artist', 'Original painting by a renowned local artist. Abstract expressionism, acrylic on canvas.', NOW() - INTERVAL '4 days', NOW() + INTERVAL '3 days', 400.00, 'Active', 17, 6, 'Santa Fe, NM', '35.6870', '-105.9378', NULL, FALSE, TRUE),
-('Vintage Vinyl Records', 'Collection of classic vinyl records from the 70s and 80s. Includes Beatles, Pink Floyd, Led Zeppelin.', NOW() - INTERVAL '5 days', NOW() - INTERVAL '1 day', 200.00, 'Ended', 18, 5, 'Memphis, TN', '35.1495', '-90.0490', NULL, FALSE, FALSE),
+('Vintage Vinyl Records', 'Collection of classic vinyl records from the 70s and 80s. Includes Beatles, Pink Floyd, Led Zeppelin.', NOW() - INTERVAL '5 days', NOW() + INTERVAL '1 day', 200.00, 'Active', 18, 5, 'Memphis, TN', '35.1495', '-90.0490', NULL, FALSE, FALSE),
 ('Smartwatch', 'Latest model smartwatch with health tracking features. Heart rate monitor, GPS, sleep tracking.', NOW() - INTERVAL '2 days', NOW() + INTERVAL '4 days', 250.00, 'Active', 19, 1, 'Dallas, TX', '32.7767', '-96.7970', 450.00, TRUE, FALSE),
-('Designer Sunglasses', 'Stylish designer sunglasses with UV protection. Polarized lenses, includes case.', NOW() - INTERVAL '3 days', NOW() + INTERVAL '2 days', 150.00, 'Active', 20, 2, 'Miami Beach, FL', '25.7907', '-80.1300', 280.00, TRUE, FALSE);
+('Designer Sunglasses', 'Stylish designer sunglasses with UV protection. Polarized lenses, includes case.', NOW() - INTERVAL '3 days', NOW() + INTERVAL '2 days', 150.00, 'Active', 20, 2, 'Miami Beach, FL', '25.7907', '-80.1300', 280.00, TRUE, FALSE),
+('MacBook Pro M2', 'Latest MacBook Pro with M2 chip, 16GB RAM, 512GB SSD. Perfect condition, barely used.', NOW() - INTERVAL '1 day', NOW() + INTERVAL '7 days', 1800.00, 'Active', 22, 1, 'Seattle, WA', '47.6062', '-122.3321', 2500.00, TRUE, TRUE),
+('Vintage Rolex', 'Rolex Submariner from 1980s. Serviced and authenticated. Comes with original box.', NOW() - INTERVAL '3 days', NOW() + INTERVAL '5 days', 5000.00, 'Active', 32, 8, 'New York, NY', '40.7128', '-74.0060', 8000.00, TRUE, TRUE),
+('First Edition Book', 'First edition Harry Potter and the Philosopher''s Stone. Excellent condition.', NOW() - INTERVAL '2 days', NOW() + INTERVAL '6 days', 2000.00, 'Active', 22, 5, 'London, UK', '51.5074', '-0.1278', NULL, FALSE, FALSE),
+('Signed Baseball', 'Baseball signed by Babe Ruth. Authenticated by PSA. Rare collectible.', NOW() - INTERVAL '1 day', NOW() + INTERVAL '8 days', 3000.00, 'Active', 25, 4, 'Boston, MA', '42.3601', '-71.0589', NULL, FALSE, FALSE),
+('Modern Art Sculpture', 'Contemporary bronze sculpture by emerging artist. Limited edition piece.', NOW() - INTERVAL '4 days', NOW() + INTERVAL '3 days', 1500.00, 'Active', 26, 6, 'San Francisco, CA', '37.7749', '-122.4194', 2800.00, TRUE, FALSE),
+('Vintage Arcade Machine', 'Original Pac-Man arcade machine from 1980. Fully restored and working.', NOW() - INTERVAL '2 days', NOW() + INTERVAL '5 days', 2500.00, 'Active', 27, 11, 'Las Vegas, NV', '36.1699', '-115.1398', 4000.00, TRUE, FALSE),
+('Designer Wedding Dress', 'Vera Wang wedding dress, size 6. Worn once, professionally cleaned.', NOW() - INTERVAL '3 days', NOW() + INTERVAL '4 days', 1200.00, 'Active', 28, 2, 'Los Angeles, CA', '34.0522', '-118.2437', 2000.00, TRUE, FALSE),
+('Antique Writing Desk', 'Victorian writing desk from 1890s. Solid mahogany with brass fittings.', NOW() - INTERVAL '1 day', NOW() + INTERVAL '6 days', 900.00, 'Active', 29, 15, 'Charleston, SC', '32.7765', '-79.9311', 1600.00, TRUE, FALSE),
+('Leica Camera M6', 'Classic Leica M6 rangefinder camera. Excellent condition, recently serviced.', NOW() - INTERVAL '2 days', NOW() + INTERVAL '5 days', 1800.00, 'Active', 33, 13, 'Tokyo, Japan', '35.6762', '139.6503', NULL, FALSE, FALSE),
+('Royal Doulton China Set', 'Complete Royal Doulton fine china set for 12. Mint condition, never used.', NOW() - INTERVAL '3 days', NOW() + INTERVAL '4 days', 600.00, 'Active', 36, 3, 'Edinburgh, UK', '55.9533', '-3.1883', 1000.00, TRUE, FALSE),
+('Upcoming Art Auction', 'Collection of watercolor paintings by local artists. Auction starts next week.', NOW() + INTERVAL '3 days', NOW() + INTERVAL '10 days', 500.00, 'Active', 26, 6, 'Portland, OR', '45.5152', '-122.6784', NULL, FALSE, FALSE),
+('Future Electronics Sale', 'Brand new iPad Pro with accessories. Auction scheduled for next week.', NOW() + INTERVAL '2 days', NOW() + INTERVAL '9 days', 700.00, 'Active', 7, 1, 'Austin, TX', '30.2672', '-97.7431', 1100.00, TRUE, FALSE),
+('Vintage Comic Books', 'Collection of Marvel comics from 1960s-1970s. Including Amazing Spider-Man issues.', NOW() - INTERVAL '8 days', NOW() + INTERVAL '3 days', 800.00, 'Active', 23, 7, 'Chicago, IL', '41.8781', '-87.6298', NULL, FALSE, FALSE),
+('Antique Grandfather Clock', 'Working grandfather clock from early 1900s. Beautiful chime mechanism.', NOW() - INTERVAL '10 days', NOW() + INTERVAL '4 days', 1500.00, 'Active', 8, 9, 'Baltimore, MD', '39.2904', '-76.6122', NULL, FALSE, FALSE),
+('Rare Vinyl Box Set', 'Limited edition Beatles White Album box set. Numbered edition, pristine condition.', NOW() - INTERVAL '7 days', NOW() + INTERVAL '2 days', 600.00, 'Active', 31, 5, 'Nashville, TN', '36.1627', '-86.7816', NULL, FALSE, FALSE),
+('Vintage Typewriter', 'Royal typewriter from 1950s. Fully functional, perfect for collectors or display.', NOW() - INTERVAL '9 days', NOW() + INTERVAL '3 days', 200.00, 'Active', 29, 7, 'Portland, OR', '45.5152', '-122.6784', NULL, FALSE, FALSE),
+('Old Telescope', 'Vintage brass telescope. Some wear but functional. Great for collectors.', NOW() - INTERVAL '6 days', NOW() + INTERVAL '1 day', 300.00, 'Active', 33, 7, 'San Diego, CA', '32.7157', '-117.1611', NULL, FALSE, FALSE),
+('Board Game Collection', 'Vintage board games from 1970s and 1980s. Some rare editions included.', NOW() - INTERVAL '5 days', NOW() + INTERVAL '1 day', 150.00, 'Active', 18, 11, 'Denver, CO', '39.7392', '-104.9903', NULL, FALSE, FALSE),
+('Gaming Console', 'PlayStation 5 with extra controller. Changed mind about selling.', NOW() - INTERVAL '4 days', NOW() + INTERVAL '3 days', 450.00, 'Active', 27, 1, 'Miami, FL', '25.7617', '-80.1918', 650.00, TRUE, FALSE),
+('Jewelry Box', 'Handcrafted wooden jewelry box. Seller no longer available.', NOW() - INTERVAL '3 days', NOW() + INTERVAL '4 days', 80.00, 'Active', 34, 3, 'Houston, TX', '29.7604', '-95.3698', NULL, FALSE, FALSE),
+('Professional Drone', '4K drone with gimbal stabilization. Perfect for aerial photography.', NOW() - INTERVAL '1 day', NOW() + INTERVAL '6 days', 800.00, 'Active', 19, 1, 'San Francisco, CA', '37.7749', '-122.4194', 1400.00, TRUE, FALSE),
+('Signed Movie Poster', 'Original Star Wars poster signed by cast. Authenticated with COA.', NOW() - INTERVAL '2 days', NOW() + INTERVAL '5 days', 1000.00, 'Active', 23, 7, 'Los Angeles, CA', '34.0522', '-118.2437', NULL, FALSE, TRUE),
+('Vintage Motorcycle Helmet', 'Classic motorcycle helmet from 1960s. Original paint, display quality.', NOW() - INTERVAL '3 days', NOW() + INTERVAL '4 days', 250.00, 'Active', 35, 12, 'Sturgis, SD', '44.4097', '-103.5091', 450.00, TRUE, FALSE),
+('Persian Rug', 'Hand-woven Persian rug, 8x10 feet. Excellent condition, vibrant colors.', NOW() - INTERVAL '1 day', NOW() + INTERVAL '7 days', 2000.00, 'Active', 8, 3, 'New York, NY', '40.7128', '-74.0060', 3500.00, TRUE, FALSE),
+('Model Train Set', 'Complete HO scale model train set with tracks and accessories.', NOW() - INTERVAL '2 days', NOW() + INTERVAL '6 days', 400.00, 'Active', 37, 11, 'Chicago, IL', '41.8781', '-87.6298', 750.00, TRUE, FALSE),
+('Smart Home Starter Kit', 'Bundle of smart home devices including smart plugs, bulbs, and voice assistant. Starts next week.', NOW() + INTERVAL '4 days', NOW() + INTERVAL '11 days', 150.00, 'Pending', 6, 1, 'San Jose, CA', '37.3382', '-121.8863', 300.00, TRUE, FALSE),
+('Handmade Jewelry Set', 'Custom handcrafted silver necklace and earrings by local artisan.', NOW() + INTERVAL '2 days', NOW() + INTERVAL '9 days', 120.00, 'Pending', 10, 8, 'Santa Fe, NM', '35.6870', '-105.9378', 250.00, TRUE, FALSE),
+('Limited Edition Sneakers', 'Brand new pair of limited-edition Air Jordan sneakers in original box.', NOW() + INTERVAL '5 days', NOW() + INTERVAL '12 days', 400.00, 'Pending', 12, 2, 'Los Angeles, CA', '34.0522', '-118.2437', 800.00, TRUE, TRUE),
+('Photography Workshop', 'Weekend photography workshop by professional photographer. Includes guided sessions and materials.', NOW() + INTERVAL '3 days', NOW() + INTERVAL '7 days', 100.00, 'Pending', 15, 13, 'Portland, OR', '45.5152', '-122.6784', NULL, FALSE, FALSE),
+('Classic Vinyl Auction', 'Upcoming sale of rare jazz and blues vinyls from the 1950s. Collectors dream set.', NOW() + INTERVAL '6 days', NOW() + INTERVAL '14 days', 300.00, 'Pending', 19, 5, 'Memphis, TN', '35.1495', '-90.0490', NULL, FALSE, TRUE);
+
 ------------------------------------------------------------
 -- BIDS
 ------------------------------------------------------------
-INSERT INTO bid (amount, date, user_id, auction_id)
-VALUES
-(880.00, NOW() - INTERVAL '2 days' + INTERVAL '2 hours', 5, 1),
-(950.00, NOW() - INTERVAL '1 day' + INTERVAL '5 hours', 7, 1),
-(1050.00, NOW() - INTERVAL '1 day' + INTERVAL '8 hours', 5, 1),
-(1150.00, NOW() - INTERVAL '12 hours', 13, 1),
-(275.00, NOW() - INTERVAL '1 day' + INTERVAL '3 hours', 6, 2),
-(300.00, NOW() - INTERVAL '20 hours', 12, 2),
-(350.00, NOW() - INTERVAL '10 hours', 6, 2),
-(440.00, NOW() - INTERVAL '5 days' + INTERVAL '2 hours', 8, 3),
-(480.00, NOW() - INTERVAL '4 days' + INTERVAL '5 hours', 11, 3),
-(520.00, NOW() - INTERVAL '3 days' + INTERVAL '8 hours', 9, 3),
-(580.00, NOW() - INTERVAL '2 days' + INTERVAL '3 hours', 8, 3),
-(1320.00, NOW() - INTERVAL '2 days' + INTERVAL '3 hours', 15, 6),
-(1450.00, NOW() - INTERVAL '1 day' + INTERVAL '6 hours', 7, 6),
-(1600.00, NOW() - INTERVAL '18 hours', 15, 6),
-(660.00, NOW() - INTERVAL '6 days' + INTERVAL '4 hours', 16, 7),
-(720.00, NOW() - INTERVAL '5 days' + INTERVAL '6 hours', 11, 7),
-(800.00, NOW() - INTERVAL '4 days' + INTERVAL '8 hours', 16, 7),
-(900.00, NOW() - INTERVAL '3 days' + INTERVAL '5 hours', 17, 7),
-(88.00, NOW() - INTERVAL '3 days' + INTERVAL '2 hours', 18, 9),
-(100.00, NOW() - INTERVAL '2 days' + INTERVAL '5 hours', 10, 9),
-(120.00, NOW() - INTERVAL '1 day' + INTERVAL '7 hours', 18, 9),
-(165.00, NOW() - INTERVAL '4 days' + INTERVAL '3 hours', 9, 10),
-(185.00, NOW() - INTERVAL '3 days' + INTERVAL '6 hours', 12, 10),
-(210.00, NOW() - INTERVAL '2 days' + INTERVAL '4 hours', 9, 10),
-(550.00, NOW() - INTERVAL '2 days' + INTERVAL '4 hours', 19, 11),
-(620.00, NOW() - INTERVAL '1 day' + INTERVAL '8 hours', 11, 11),
-(700.00, NOW() - INTERVAL '16 hours', 19, 11),
-(1100.00, NOW() - INTERVAL '5 days' + INTERVAL '3 hours', 14, 12),
-(1250.00, NOW() - INTERVAL '4 days' + INTERVAL '6 hours', 20, 12),
-(1400.00, NOW() - INTERVAL '3 days' + INTERVAL '4 hours', 12, 12),
-(1600.00, NOW() - INTERVAL '2 days' + INTERVAL '5 hours', 14, 12),
-(880.00, NOW() - INTERVAL '3 days' + INTERVAL '5 hours', 16, 13),
-(980.00, NOW() - INTERVAL '2 days' + INTERVAL '7 hours', 8, 13),
-(1100.00, NOW() - INTERVAL '1 day' + INTERVAL '6 hours', 16, 13),
-(330.00, NOW() - INTERVAL '6 days' + INTERVAL '2 hours', 14, 14),
-(380.00, NOW() - INTERVAL '5 days' + INTERVAL '5 hours', 10, 14),
-(450.00, NOW() - INTERVAL '4 days' + INTERVAL '7 hours', 14, 14),
-(520.00, NOW() - INTERVAL '3 days' + INTERVAL '4 hours', 20, 14),
-(1320.00, NOW() - INTERVAL '2 days' + INTERVAL '6 hours', 13, 15),
-(1480.00, NOW() - INTERVAL '1 day' + INTERVAL '8 hours', 11, 15),
-(1650.00, NOW() - INTERVAL '14 hours', 13, 15),
-(110.00, NOW() - INTERVAL '1 day' + INTERVAL '2 hours', 6, 16),
-(125.00, NOW() - INTERVAL '18 hours', 9, 16),
-(145.00, NOW() - INTERVAL '10 hours', 6, 16),
-(440.00, NOW() - INTERVAL '4 days' + INTERVAL '4 hours', 12, 17),
-(500.00, NOW() - INTERVAL '3 days' + INTERVAL '6 hours', 6, 17),
-(580.00, NOW() - INTERVAL '2 days' + INTERVAL '8 hours', 12, 17),
-(660.00, NOW() - INTERVAL '1 day' + INTERVAL '5 hours', 11, 17),
-(220.00, NOW() - INTERVAL '5 days' + INTERVAL '3 hours', 17, 18),
-(260.00, NOW() - INTERVAL '4 days' + INTERVAL '5 hours', 8, 18),
-(310.00, NOW() - INTERVAL '3 days' + INTERVAL '7 hours', 17, 18),
-(370.00, NOW() - INTERVAL '2 days' + INTERVAL '6 hours', 9, 18),
-(275.00, NOW() - INTERVAL '2 days' + INTERVAL '5 hours', 7, 19),
-(310.00, NOW() - INTERVAL '1 day' + INTERVAL '7 hours', 10, 19),
-(360.00, NOW() - INTERVAL '16 hours', 7, 19),
-(165.00, NOW() - INTERVAL '3 days' + INTERVAL '3 hours', 15, 20),
-(190.00, NOW() - INTERVAL '2 days' + INTERVAL '5 hours', 19, 20),
-(220.00, NOW() - INTERVAL '1 day' + INTERVAL '4 hours', 15, 20);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (880.00, NOW() - INTERVAL '2 days' + INTERVAL '2 hours', 25, 1);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (960.00, NOW() - INTERVAL '1 day' + INTERVAL '5 hours', 7, 1);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1040.00, NOW() - INTERVAL '1 day' + INTERVAL '8 hours', 25, 1);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (275.00, NOW() - INTERVAL '1 day' + INTERVAL '3 hours', 6, 2);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (300.00, NOW() - INTERVAL '20 hours', 12, 2);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (350.00, NOW() - INTERVAL '10 hours', 6, 2);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (440.00, NOW() - INTERVAL '5 days' + INTERVAL '2 hours', 8, 3);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (480.00, NOW() - INTERVAL '4 days' + INTERVAL '5 hours', 11, 3);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (520.00, NOW() - INTERVAL '3 days' + INTERVAL '8 hours', 9, 3);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (580.00, NOW() - INTERVAL '2 days' + INTERVAL '3 hours', 8, 3);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1320.00, NOW() - INTERVAL '2 days' + INTERVAL '3 hours', 15, 6);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1450.00, NOW() - INTERVAL '1 day' + INTERVAL '6 hours', 7, 6);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1600.00, NOW() - INTERVAL '18 hours', 15, 6);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (660.00, NOW() - INTERVAL '6 days' + INTERVAL '4 hours', 16, 7);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (720.00, NOW() - INTERVAL '5 days' + INTERVAL '6 hours', 11, 7);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (800.00, NOW() - INTERVAL '4 days' + INTERVAL '8 hours', 16, 7);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (900.00, NOW() - INTERVAL '3 days' + INTERVAL '5 hours', 17, 7);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (88.00, NOW() - INTERVAL '3 days' + INTERVAL '2 hours', 18, 9);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (100.00, NOW() - INTERVAL '2 days' + INTERVAL '5 hours', 10, 9);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (120.00, NOW() - INTERVAL '1 day' + INTERVAL '7 hours', 18, 9);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (165.00, NOW() - INTERVAL '4 days' + INTERVAL '3 hours', 20, 10);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (185.00, NOW() - INTERVAL '3 days' + INTERVAL '6 hours', 12, 10);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (210.00, NOW() - INTERVAL '2 days' + INTERVAL '4 hours', 20, 10);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (550.00, NOW() - INTERVAL '2 days' + INTERVAL '4 hours', 19, 11);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (620.00, NOW() - INTERVAL '1 day' + INTERVAL '8 hours', 12, 11);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (700.00, NOW() - INTERVAL '16 hours', 19, 11);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1100.00, NOW() - INTERVAL '5 days' + INTERVAL '3 hours', 14, 12);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1250.00, NOW() - INTERVAL '4 days' + INTERVAL '6 hours', 20, 12);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1400.00, NOW() - INTERVAL '3 days' + INTERVAL '4 hours', 22, 12);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1600.00, NOW() - INTERVAL '2 days' + INTERVAL '5 hours', 14, 12);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (880.00, NOW() - INTERVAL '3 days' + INTERVAL '5 hours', 16, 13);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (980.00, NOW() - INTERVAL '2 days' + INTERVAL '7 hours', 8, 13);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1100.00, NOW() - INTERVAL '1 day' + INTERVAL '6 hours', 16, 13);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (330.00, NOW() - INTERVAL '6 days' + INTERVAL '2 hours', 24, 14);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (380.00, NOW() - INTERVAL '5 days' + INTERVAL '5 hours', 10, 14);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (450.00, NOW() - INTERVAL '4 days' + INTERVAL '7 hours', 24, 14);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (520.00, NOW() - INTERVAL '3 days' + INTERVAL '4 hours', 20, 14);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1320.00, NOW() - INTERVAL '2 days' + INTERVAL '6 hours', 13, 15);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1480.00, NOW() - INTERVAL '1 day' + INTERVAL '8 hours', 11, 15);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1650.00, NOW() - INTERVAL '14 hours', 13, 15);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (110.00, NOW() - INTERVAL '1 day' + INTERVAL '2 hours', 6, 16);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (125.00, NOW() - INTERVAL '18 hours', 9, 16);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (145.00, NOW() - INTERVAL '10 hours', 6, 16);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (440.00, NOW() - INTERVAL '4 days' + INTERVAL '4 hours', 12, 17);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (500.00, NOW() - INTERVAL '3 days' + INTERVAL '6 hours', 6, 17);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (580.00, NOW() - INTERVAL '2 days' + INTERVAL '8 hours', 12, 17);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (660.00, NOW() - INTERVAL '1 day' + INTERVAL '5 hours', 11, 17);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (220.00, NOW() - INTERVAL '5 days' + INTERVAL '3 hours', 17, 18);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (260.00, NOW() - INTERVAL '4 days' + INTERVAL '5 hours', 8, 18);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (310.00, NOW() - INTERVAL '3 days' + INTERVAL '7 hours', 17, 18);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (370.00, NOW() - INTERVAL '2 days' + INTERVAL '6 hours', 9, 18);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (275.00, NOW() - INTERVAL '2 days' + INTERVAL '5 hours', 7, 19);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (310.00, NOW() - INTERVAL '1 day' + INTERVAL '7 hours', 10, 19);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (360.00, NOW() - INTERVAL '16 hours', 7, 19);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (165.00, NOW() - INTERVAL '3 days' + INTERVAL '3 hours', 15, 20);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (190.00, NOW() - INTERVAL '2 days' + INTERVAL '5 hours', 19, 20);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (220.00, NOW() - INTERVAL '1 day' + INTERVAL '4 hours', 15, 20);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1980.00, NOW() - INTERVAL '1 day' + INTERVAL '3 hours', 11, 21);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (2180.00, NOW() - INTERVAL '20 hours', 24, 21);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (2500.00, NOW() - INTERVAL '15 hours', 11, 21);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (5500.00, NOW() - INTERVAL '3 days' + INTERVAL '2 hours', 28, 22);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (6000.00, NOW() - INTERVAL '2 days' + INTERVAL '6 hours', 6, 22);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (6600.00, NOW() - INTERVAL '1 day' + INTERVAL '8 hours', 31, 22);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (7260.00, NOW() - INTERVAL '18 hours', 24, 22);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (2200.00, NOW() - INTERVAL '2 days' + INTERVAL '4 hours', 10, 23);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (2420.00, NOW() - INTERVAL '1 day' + INTERVAL '7 hours', 24, 23);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (2662.00, NOW() - INTERVAL '16 hours', 10, 23);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (3300.00, NOW() - INTERVAL '1 day' + INTERVAL '2 hours', 24, 24);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (3630.00, NOW() - INTERVAL '20 hours', 9, 24);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (3993.00, NOW() - INTERVAL '12 hours', 33, 24);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1650.00, NOW() - INTERVAL '4 days' + INTERVAL '3 hours', 6, 25);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1815.00, NOW() - INTERVAL '3 days' + INTERVAL '6 hours', 24, 25);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1996.50, NOW() - INTERVAL '2 days' + INTERVAL '8 hours', 17, 25);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (2196.15, NOW() - INTERVAL '1 day' + INTERVAL '5 hours', 8, 25);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (2750.00, NOW() - INTERVAL '2 days' + INTERVAL '4 hours', 24, 26);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (3025.00, NOW() - INTERVAL '1 day' + INTERVAL '7 hours', 23, 26);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (3327.50, NOW() - INTERVAL '18 hours', 24, 26);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1320.00, NOW() - INTERVAL '3 days' + INTERVAL '3 hours', 12, 27);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1597.20, NOW() - INTERVAL '1 day' + INTERVAL '8 hours', 17, 27);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (2200.00, NOW() - INTERVAL '1 day' + INTERVAL '4 hours', 10, 44);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1089.00, NOW() - INTERVAL '20 hours', 36, 28);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1197.90, NOW() - INTERVAL '14 hours', 8, 28);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1980.00, NOW() - INTERVAL '2 days' + INTERVAL '3 hours', 19, 29);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (2178.00, NOW() - INTERVAL '1 day' + INTERVAL '6 hours', 8, 29);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (2395.80, NOW() - INTERVAL '16 hours', 19, 29);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (660.00, NOW() - INTERVAL '3 days' + INTERVAL '2 hours', 25, 30);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (726.00, NOW() - INTERVAL '2 days' + INTERVAL '5 hours', 35, 30);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (798.60, NOW() - INTERVAL '1 day' + INTERVAL '7 hours', 24, 30);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (880.00, NOW() - INTERVAL '8 days' + INTERVAL '3 hours', 33, 33);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (968.00, NOW() - INTERVAL '7 days' + INTERVAL '6 hours', 10, 33);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1064.80, NOW() - INTERVAL '6 days' + INTERVAL '8 hours', 30, 33);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1171.28, NOW() - INTERVAL '5 days' + INTERVAL '4 hours', 27, 33);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1288.41, NOW() - INTERVAL '4 days' + INTERVAL '6 hours', 33, 33);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1650.00, NOW() - INTERVAL '10 days' + INTERVAL '2 hours', 24, 34);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1815.00, NOW() - INTERVAL '9 days' + INTERVAL '5 hours', 10, 34);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1996.50, NOW() - INTERVAL '8 days' + INTERVAL '7 hours', 36, 34);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (2196.15, NOW() - INTERVAL '7 days' + INTERVAL '6 hours', 24, 34);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (2415.77, NOW() - INTERVAL '6 days' + INTERVAL '4 hours', 11, 34);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (2657.34, NOW() - INTERVAL '5 days' + INTERVAL '8 hours', 24, 34);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (660.00, NOW() - INTERVAL '7 days' + INTERVAL '3 hours', 24, 35);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (726.00, NOW() - INTERVAL '6 days' + INTERVAL '5 hours', 18, 35);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (798.60, NOW() - INTERVAL '5 days' + INTERVAL '7 hours', 24, 35);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (878.46, NOW() - INTERVAL '4 days' + INTERVAL '6 hours', 30, 35);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (966.31, NOW() - INTERVAL '3 days' + INTERVAL '4 hours', 24, 35);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (220.00, NOW() - INTERVAL '9 days' + INTERVAL '2 hours', 34, 36);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (242.00, NOW() - INTERVAL '8 days' + INTERVAL '5 hours', 24, 36);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (266.20, NOW() - INTERVAL '7 days' + INTERVAL '7 hours', 37, 36);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (292.82, NOW() - INTERVAL '6 days' + INTERVAL '4 hours', 34, 36);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (322.10, NOW() - INTERVAL '5 days' + INTERVAL '6 hours', 24, 36);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (880.00, NOW() - INTERVAL '1 day' + INTERVAL '3 hours', 33, 41);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (968.00, NOW() - INTERVAL '20 hours', 24, 41);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1064.80, NOW() - INTERVAL '14 hours', 33, 41);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1100.00, NOW() - INTERVAL '2 days' + INTERVAL '2 hours', 24, 42);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1210.00, NOW() - INTERVAL '1 day' + INTERVAL '6 hours', 7, 42);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1331.00, NOW() - INTERVAL '18 hours', 27, 42);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (275.00, NOW() - INTERVAL '3 days' + INTERVAL '3 hours', 24, 43);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (302.50, NOW() - INTERVAL '2 days' + INTERVAL '6 hours', 36, 43);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (332.75, NOW() - INTERVAL '1 day' + INTERVAL '7 hours', 24, 43);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (2420.00, NOW() - INTERVAL '20 hours', 30, 44);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (2662.00, NOW() - INTERVAL '15 hours', 32, 44);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (440.00, NOW() - INTERVAL '2 days' + INTERVAL '3 hours', 24, 45);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (484.00, NOW() - INTERVAL '1 day' + INTERVAL '6 hours', 9, 45);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (532.40, NOW() - INTERVAL '16 hours', 24, 45);
 
 ------------------------------------------------------------
 -- TRANSACTIONS
 ------------------------------------------------------------
 INSERT INTO transactions (amount, date, status, type, auction_id, buyer_id, seller_id)
 VALUES
-(580.00, NOW() - INTERVAL '1 day' + INTERVAL '10 minutes', 'Completed', 'auction-buy', 3, 8, 3),
-(900.00, NOW() - INTERVAL '2 days' + INTERVAL '10 minutes', 'Completed', 'auction-buy', 7, 17, 7),
-(1600.00, NOW() - INTERVAL '1 day' + INTERVAL '10 minutes', 'Completed', 'auction-buy', 12, 14, 12),
-(520.00, NOW() - INTERVAL '2 days' + INTERVAL '10 minutes', 'Completed', 'auction-buy', 14, 20, 14),
-(370.00, NOW() - INTERVAL '1 day' + INTERVAL '10 minutes', 'Completed', 'auction-buy', 18, 9, 18),
 (5000.00, NOW() - INTERVAL '7 days', 'Completed', 'add-credit', NULL, 5, NULL),
 (3000.00, NOW() - INTERVAL '6 days', 'Completed', 'add-credit', NULL, 7, NULL),
 (2500.00, NOW() - INTERVAL '6 days', 'Completed', 'add-credit', NULL, 13, NULL),
@@ -160,59 +276,64 @@ VALUES
 (1000.00, NOW() - INTERVAL '2 days', 'Completed', 'add-credit', NULL, 10, NULL),
 (2800.00, NOW() - INTERVAL '1 day', 'Completed', 'add-credit', NULL, 12, NULL),
 (1600.00, NOW() - INTERVAL '1 day', 'Completed', 'add-credit', NULL, 16, NULL),
-(100.00, NOW() - INTERVAL '4 days' + INTERVAL '30 minutes', 'Completed', 'feature-payment', 5, 5, NULL),
+(100.00, NOW() - INTERVAL '4 days' + INTERVAL '30 minutes', 'Completed', 'feature-payment', 5, 30, NULL),
 (100.00, NOW() - INTERVAL '1 day' + INTERVAL '30 minutes', 'Completed', 'feature-payment', 8, 8, NULL),
 (100.00, NOW() - INTERVAL '4 days' + INTERVAL '30 minutes', 'Completed', 'feature-payment', 17, 17, NULL),
-(1500.00, NOW() - INTERVAL '2 hours', 'Pending', 'add-credit', NULL, 19, NULL);
-
-------------------------------------------------------------
--- NOTIFICATIONS
-------------------------------------------------------------
-INSERT INTO notifications (type, is_read, created_date, user_id, auction_id, bid_id)
-VALUES
-('winner', TRUE, NOW() - INTERVAL '1 day' + INTERVAL '5 minutes', 8, 3, NULL),
-('winner', TRUE, NOW() - INTERVAL '2 days' + INTERVAL '5 minutes', 17, 7, NULL),
-('winner', TRUE, NOW() - INTERVAL '1 day' + INTERVAL '5 minutes', 14, 12, NULL),
-('winner', TRUE, NOW() - INTERVAL '2 days' + INTERVAL '5 minutes', 20, 14, NULL),
-('winner', TRUE, NOW() - INTERVAL '1 day' + INTERVAL '5 minutes', 9, 18, NULL),
-('ended', TRUE, NOW() - INTERVAL '1 day' + INTERVAL '5 minutes', 3, 3, NULL),
-('ended', TRUE, NOW() - INTERVAL '2 days' + INTERVAL '5 minutes', 7, 7, NULL),
-('ended', TRUE, NOW() - INTERVAL '1 day' + INTERVAL '5 minutes', 12, 12, NULL),
-('ended', TRUE, NOW() - INTERVAL '2 days' + INTERVAL '5 minutes', 14, 14, NULL),
-('ended', TRUE, NOW() - INTERVAL '1 day' + INTERVAL '5 minutes', 18, 18, NULL),
-('ending', FALSE, NOW() - INTERVAL '6 hours', 2, 1, NULL),
-('ending', FALSE, NOW() - INTERVAL '6 hours', 5, 5, NULL),
-('new-bid', FALSE, NOW() - INTERVAL '8 hours', 8, 8, 30),
-('new-bid', FALSE, NOW() - INTERVAL '10 hours', 16, 16, 43);
-
-
+(1500.00, NOW() - INTERVAL '2 hours', 'Pending', 'add-credit', NULL, 19, NULL),
+(3000.00, NOW() - INTERVAL '8 days', 'Completed', 'add-credit', NULL, 23, NULL),
+(4500.00, NOW() - INTERVAL '7 days', 'Completed', 'add-credit', NULL, 24, NULL),
+(2000.00, NOW() - INTERVAL '7 days', 'Completed', 'add-credit', NULL, 25, NULL),
+(5000.00, NOW() - INTERVAL '6 days', 'Completed', 'add-credit', NULL, 26, NULL),
+(3500.00, NOW() - INTERVAL '6 days', 'Completed', 'add-credit', NULL, 27, NULL),
+(2500.00, NOW() - INTERVAL '5 days', 'Completed', 'add-credit', NULL, 28, NULL),
+(1500.00, NOW() - INTERVAL '5 days', 'Completed', 'add-credit', NULL, 29, NULL),
+(2000.00, NOW() - INTERVAL '4 days', 'Completed', 'add-credit', NULL, 30, NULL),
+(4000.00, NOW() - INTERVAL '4 days', 'Completed', 'add-credit', NULL, 31, NULL),
+(8000.00, NOW() - INTERVAL '3 days', 'Completed', 'add-credit', NULL, 32, NULL),
+(3000.00, NOW() - INTERVAL '3 days', 'Completed', 'add-credit', NULL, 33, NULL),
+(1500.00, NOW() - INTERVAL '2 days', 'Completed', 'add-credit', NULL, 34, NULL),
+(2000.00, NOW() - INTERVAL '2 days', 'Completed', 'add-credit', NULL, 35, NULL),
+(2500.00, NOW() - INTERVAL '1 day', 'Completed', 'add-credit', NULL, 36, NULL),
+(1800.00, NOW() - INTERVAL '1 day', 'Completed', 'add-credit', NULL, 37, NULL),
+(500.00, NOW() - INTERVAL '3 hours', 'Completed', 'add-credit', NULL, 40, NULL),
+(1000.00, NOW() - INTERVAL '2 days', 'Completed', 'credit-withdrawal', NULL, 11, NULL),
+(500.00, NOW() - INTERVAL '4 days', 'Completed', 'credit-withdrawal', NULL, 17, NULL),
+(1500.00, NOW() - INTERVAL '1 day', 'Pending', 'credit-withdrawal', NULL, 13, NULL);
 ------------------------------------------------------------
 -- REVIEWS
 ------------------------------------------------------------
 INSERT INTO review (description, rating, created_date, user_id, auction_id)
 VALUES
-('Excellent bike! Exactly as described. Seller was very helpful and shipping was fast. Highly recommend!', 5.00, NOW() - INTERVAL '1 day' + INTERVAL '3 hours', 8, 3),
-('Beautiful piece! Very well packaged and authentic. The seller provided great documentation. Very satisfied.', 4.80, NOW() - INTERVAL '2 days' + INTERVAL '2 hours', 17, 7),
-('Amazing coin! Authentication certificate was included. Seller was professional and responsive. Would buy again.', 5.00, NOW() - INTERVAL '1 day' + INTERVAL '4 hours', 14, 12);
+('Excellent bike! Exactly as described. Seller was very helpful and shipping was fast. Highly recommend!', 5.00, NOW() - INTERVAL '1 day' + INTERVAL '3 hours', 11, 21);
 
 
 
 ------------------------------------------------------------
 -- REPORTS
 ------------------------------------------------------------
-INSERT INTO report (description, status, user_id, admin_id, reported_user_id, auction_id)
+INSERT INTO report (description, create_date, status, user_id, admin_id, reported_user_id, auction_id)
 VALUES
 ('Item looks fake. I don''t think this is a real Fender Stratocaster.', NOW() - INTERVAL '12 hours', 'Dismissed', 9, 21, NULL, 8),
 ('This user is bidding on multiple auctions and not following through with payments. Suspicious activity.', NOW() - INTERVAL '2 days', 'InReview', 12, 21, 6, NULL),
-('The handbag appears to be counterfeit based on the stitching visible in the photos.', NOW() - INTERVAL '4 days', 'Resolved', 12, 21, NULL, 2);
+('The handbag appears to be counterfeit based on the stitching visible in the photos.', NOW() - INTERVAL '4 days', 'Resolved', 12, 21, NULL, 2),
+('The MacBook shown in photos doesn''t match the model description. Possible scam.', NOW() - INTERVAL '1 day', 'Pending', 15, NULL, NULL, 21),
+('This Rolex watch looks suspicious. Serial number appears to be fake in the photos.', NOW() - INTERVAL '3 days', 'InReview', 24, 21, NULL, 22),
+('Auction ended but seller is not responding to messages about pickup.', NOW() - INTERVAL '5 days', 'Resolved', 8, 21, NULL, 34),
+('Item received was damaged and not as described. Seller refusing refund.', NOW() - INTERVAL '6 days', 'Resolved', 20, 21, 14, 14),
+('Auction description is misleading. Photos don''t show the actual condition of the item.', NOW() - INTERVAL '8 hours', 'Pending', 11, NULL, NULL, 26),
+('User is using multiple accounts to bid on their own auctions.', NOW() - INTERVAL '3 days', 'InReview', 16, 21, 27, NULL),
+('Seller sent threatening messages after I won the auction.', NOW() - INTERVAL '4 days', 'Resolved', 14, 21, 18, NULL),
+('This user has won multiple auctions but never completed payment.', NOW() - INTERVAL '2 days', 'InReview', 7, 21, 25, NULL),
+('Inappropriate language in user profile description.', NOW() - INTERVAL '1 day', 'Dismissed', 19, 21, 35, NULL),
+('User is posting fake reviews to boost their rating.', NOW() - INTERVAL '5 days', 'Resolved', 22, 21, 12, NULL),
+('Auction listing contains spam links in description.', NOW() - INTERVAL '6 hours', 'Pending', 28, NULL, NULL, 41),
+('User sent unsolicited promotional messages.', NOW() - INTERVAL '10 hours', 'Pending', 30, NULL, 34, NULL);
 
 ------------------------------------------------------------
 -- USER FOLLOWS
 ------------------------------------------------------------
 INSERT INTO user_follows (follower_id, followed_auction)
 VALUES
-(1,1),
-(1,5),
 (2,2),
 (2,6),
 (9,4),
@@ -220,13 +341,59 @@ VALUES
 (19,11),
 (20,17),
 (16,13),
-(11,6);
+(11,6),
+(6, 22),
+(6, 25),
+(7, 1),
+(7, 19),
+(7, 42),
+(8, 28),
+(8, 44),
+(10, 23),
+(10, 24),
+(11, 21),
+(12, 2),
+(12, 27),
+(13, 22),
+(13, 43),
+(14, 29),
+(15, 20),
+(15, 41),
+(17, 25),
+(17, 42),
+(18, 30),
+(19, 29),
+(19, 41),
+(22, 23),
+(23, 33),
+(23, 42),
+(24, 21),
+(25, 24),
+(26, 25),
+(27, 26),
+(27, 33),
+(28, 27),
+(29, 28),
+(29, 36),
+(30, 30),
+(30, 44),
+(31, 35),
+(32, 22),
+(32, 44),
+(33, 29),
+(35, 43),
+(36, 28),
+(36, 30),
+(37, 45);
 
 ------------------------------------------------------------
 -- FEATURE PAYMENT
 ------------------------------------------------------------
 INSERT INTO feature_payment (auction_id, user_id, paid_date)
 VALUES
-(5, 5, NOW() - INTERVAL '4 days' + INTERVAL '30 minutes'),
+(5, 30, NOW() - INTERVAL '4 days' + INTERVAL '30 minutes'),
 (8, 8, NOW() - INTERVAL '1 day' + INTERVAL '30 minutes'),
-(17, 17, NOW() - INTERVAL '4 days' + INTERVAL '30 minutes');
+(17, 17, NOW() - INTERVAL '4 days' + INTERVAL '30 minutes'),
+(21, 22, NOW() - INTERVAL '1 day' + INTERVAL '30 minutes'),
+(22, 32, NOW() - INTERVAL '3 days' + INTERVAL '30 minutes'),
+(42, 23, NOW() - INTERVAL '2 days' + INTERVAL '30 minutes');
