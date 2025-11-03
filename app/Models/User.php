@@ -34,5 +34,23 @@ class User extends Authenticatable
         return $this->hasMany(Report::class, 'user_id');
     }
 
-    
+    public function reportsReceived(): HasMany
+    {
+        return $this->hasMany(Report::class, 'reported_user_id');
+    }
+
+    public function reportsHandled(): HasMany
+    {
+        return $this->hasMany(Report::class, 'admin_id');
+    }
+
+    public function followedAuctions(): BelongsToMany
+    {
+        return $this->belongsToMany(Auction::class, 'user_follows', 'follower_id', 'followed_auction');
+    }
+
+    public function featurePayments(): HasMany
+    {
+        return $this->hasMany(FeaturePayment::class, 'user_id');
+    }
 }
