@@ -14,6 +14,9 @@
   <hr>
 
   <section class="row">
+    <div class="col-md-6 text-center">
+      <img src="{{ $user->getProfileImage() }}" alt="{{ $user->name }}'s Profile Picture" class="img-fluid rounded shadow-sm" style="max-height: 400px;">
+    </div>
     <div class="col-md-6">
       <h3>User Info</h3>
       <p><b>Name:</b> {{ $user->name }}</p>

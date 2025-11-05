@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User; // Needed for User::find()
+use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {   
 
-    static $default = 'default.jpg';
+    static $default = 'default.png';
     static $diskName = 'Tutorial02';
 
     static $systemTypes = [
@@ -23,19 +24,21 @@ class FileController extends Controller
     }
 
     private static function defaultAsset(String $type) {
-        return asset($type . '/' . self::$default);
+        return asset('images/' . $type . '/' . self::$default);
     }
 
-    private static function getFileName (String $type, int $id) {
-        
+    private static function getFileName(String $type, int $id, String $extension = null) {
+
         $fileName = null;
         switch($type) {
             case 'profile':
-                $fileName = User::find($id)->profile_image;
+                $fileName = User::find($id)->url;
                 break;
             case 'post':
                 // other models
                 break;
+            default:
+                return null;
         }
 
         return $fileName;
@@ -53,7 +56,8 @@ class FileController extends Controller
         // Validation: file exists
         $fileName = self::getFileName($type, $userId);
         if ($fileName) {
-            return asset($type . '/' . $fileName); // Return specific file
+            $filePath = 'images/' . $type . '/' . $fileName;
+            return Storage::disk(self::$diskName)->url($filePath); // Return specific file
         }
 
         // Not found: returns default asset
@@ -63,18 +67,44 @@ class FileController extends Controller
 
     function upload(Request $request) {
 
-        // Parameters
+        if (!$request->hasFile('file')) {
+            return redirect()->back()->with('error', 'Error: File not found');
+        }
+        if (!self::isValidType($request->type)) {
+            return redirect()->back()->with('error', 'Error: Unsupported upload type');
+        }
+
         $file = $request->file('file');
         $type = $request->type;
         $id = $request->id;
-        $extension = $file->getClientOriginalExtension();
 
-        // Hashing
-        $fileName = $file->hashName(); // generate a random unique id
+        $fileName = $file->hashName();
 
-        // Save in correct folder and disk
-        $request->file->storeAs($type, $fileName, self::$diskName);
+        $error = null;
+        switch($request->type) {
+            case 'profile':
+                $user = User::findOrFail($id);
+                if ($user) {
+                    $user->url = $fileName;
+                    $user->save();
+                } else {
+                    $error = "unknown user";
+                }
+                break;
+            case 'post':
+                break;
+            default:
+                return redirect()->back()->with('error', 'Error: Unsupported upload object');
+        }
+
+        if ($error) {
+            return redirect()->back()->with('error', `Error: {$error}`);
+        }
+
+        $folderPath = 'images/' . $type;
+        $request->file->storeAs($folderPath, $fileName, self::$diskName);
         
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Success: upload completed!');
     }
+    
 }
