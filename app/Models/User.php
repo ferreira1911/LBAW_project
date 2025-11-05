@@ -24,6 +24,23 @@ class User extends Authenticatable
         return $this->hasMany(Auction::class, 'owner_id');
     }
 
+    public function auctionsCreated(): HasMany
+    {
+        return $this->hasMany(Auction::class, 'owner_id')->where('status', 'Active');
+    }
+
+    protected function averageRating(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->hasManyThrough(
+                Review::class,
+                Auction::class,
+                'owner_id',   // Foreign key on 'auction' table
+                'auction_id'    // Foreign key on 'review' table
+            )->avg('rating') 
+        );
+    }
+
     public function bids() {
         return $this->hasMany(Bid::class);
     }
