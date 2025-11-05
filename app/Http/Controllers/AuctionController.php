@@ -15,7 +15,7 @@ class AuctionController extends Controller
                     ->orderBy('end_date','ASC')
                     ->paginate(9);
         $categories = Category::all();
-        return view('pages.auctions.index', [
+        return view('pages.auction.index', [
             'auctions' => $auctions,
             'categories' => $categories,
         ]);

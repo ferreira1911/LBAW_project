@@ -29,6 +29,7 @@
                             @csrf
                             <button type="submit" class="button button-outline">Logout</button>
                         </form>
+                        <a href="{{ route('user.show',Auth::user()) }}">Profile</a>
                     @else
                         <a href="{{ route('login') }}" class="button">Login</a>
                         <a href="{{ route('register') }}" class="button button-outline">Register</a>

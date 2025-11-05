@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\AuctionStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,13 +15,14 @@ class Auction extends Model
 
     public $timestamps = false;
 
+    protected $table = 'auction';
+
     protected $fillable = [
         'title',
         'description',
         'start_date',
         'end_date',
         'starting_price',
-        'status',
         'owner_id',
         'category_id',
         'buy_now_price',
@@ -41,7 +41,6 @@ class Auction extends Model
         'buy_now_price' => 'decimal:2',
         'is_featured' => 'boolean',
         'is_buy_now_active' => 'boolean',
-        'status' => AuctionStatus::class,
     ];
 
     // --- Relationships ---

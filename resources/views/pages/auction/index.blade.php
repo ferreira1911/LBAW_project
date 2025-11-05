@@ -9,7 +9,7 @@
     <div class="page-header">
         <h2>Active Auctions</h2>
         @auth
-            <a href="{{ route('auctions.create') }}" class="button button-primary">Create Auction</a>
+            <a href="{{ route('auction.create') }}" class="button button-primary">Create Auction</a>
         @endauth
     </div>
 
@@ -25,7 +25,7 @@
                 
                 <h3>
                     {{-- Link to the single auction page --}}
-                    <a href="{{ route('auctions.show', $auction) }}">
+                    <a href="{{ route('auction.show', $auction) }}">
                         {{ $auction->title }}
                     </a>
                 </h3>
@@ -40,7 +40,7 @@
             <div class="no-auctions">
                 <p>No active auctions right now. Check back soon!</p>
                 @auth
-                    <p>Why not <a href="{{ route('auctions.create') }}">create one</a>?</p>
+                    <p>Why not <a href="{{ route('auction.create') }}">create one</a>?</p>
                 @endauth
             </div>
         @endforelse
