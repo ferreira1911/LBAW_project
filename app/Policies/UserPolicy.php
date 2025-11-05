@@ -39,5 +39,10 @@ class UserPolicy
         return $user->isAdmin() || $user->id === $model->id;
     }
 
+    public function viewBalance(User $currentUser, User $userToView): bool
+    {
+        
+        return $currentUser->id === $userToView->id || $currentUser->is_admin;
+    }
 
 }

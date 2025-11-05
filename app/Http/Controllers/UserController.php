@@ -27,9 +27,17 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        $canViewBalance = false;
+        if (Auth::check()) { // Check if a user is even logged in
+            if (Auth::id() === $user->id || Auth::user()->is_admin) {
+                $canViewBalance = true;
+            }
+        }
        if(!$user->is_deleted){
-            return view('pages.user.profile',
-            ['user' => $user,]);
+            return view('pages.user.profile',[
+            'user' => $user,
+            'canViewBalance' => $canViewBalance,
+        ]);
        }
        return redirect('/auction')->with('failure', 'This account has been deleted');
     }

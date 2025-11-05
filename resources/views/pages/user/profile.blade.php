@@ -21,7 +21,9 @@
         <p><b>Name:</b> {{ $user->name }}</p>
         <p><b>Email:</b> {{ $user->email }}</p>
         <p><b>Description:</b> {{ $user->description ?? 'No description provided.' }}</p>
-        <p><b>Credit:</b> {{ $user->credit }} (Held: {{ $user->held_credit }})</p>
+        @if ($canViewBalance)
+            <p><b>Credit:</b> {{ $user->credit }} (Held: {{ $user->held_credit }})</p>
+        @endif
         <p>Rating: {{ number_format($user->average_rating, 1) ?? 'N/A' }} / 5.0</p>
         
         @if (Auth::id() == $user->id)
