@@ -78,6 +78,8 @@ class FileController extends Controller
         $type = $request->type;
         $id = $request->id;
 
+        self::delete($type, $id);
+
         $fileName = $file->hashName();
 
         $error = null;
@@ -105,6 +107,28 @@ class FileController extends Controller
         $request->file->storeAs($folderPath, $fileName, self::$diskName);
         
         return redirect()->back()->with('success', 'Success: upload completed!');
+    }
+
+    private static function delete(String $type, int $id) {
+        $existingFileName = self::getFileName($type, $id);
+        if ($existingFileName) {
+            
+            $folderPath = 'images/' . $type;
+            Storage::disk(self::$diskName)->delete($folderPath . '/' . $existingFileName);
+
+            switch($type) {
+                case 'profile':
+                    $user = User::find($id);
+                    if ($user) {
+                        $user->url = null;
+                        $user->save();
+                    }
+                    break;
+                case 'post':
+                    // Lógica para apagar ficheiros de posts
+                    break;
+            }
+        }
     }
     
 }

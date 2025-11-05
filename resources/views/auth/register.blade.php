@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<form method="POST" action="{{ route('register') }}">
+<form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
     @csrf
 
     <label for="name">Name</label>
@@ -52,6 +52,16 @@
         required
         autocomplete="new-password"
     >
+
+    <label for="profile_image">Profile Image (Optional)</label>
+    <input
+        id="profile_image"
+        type="file"
+        name="profile_image"
+    >
+    @error('profile_image')
+      <span class="error" role="alert">{{ $message }}</span>
+    @enderror
 
     <button type="submit">Register</button>
     <a class="button button-outline" href="{{ route('login') }}">Login</a>
