@@ -2,13 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\CardController;
-use App\Http\Controllers\ItemController;
+
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Auth\AuctionController;
-use App\Http\Controllers\Auth\UserController;
+use App\Http\Controllers\AuctionController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\MailController;
+use App\Http\Controllers\PostController;
 
 // Home
 Route::redirect('/', '/login');
@@ -18,7 +19,7 @@ Route::redirect('/', '/login');
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
     Route::post('/login', 'authenticate');
-    Route::post('/logout', 'logout');
+    Route::post('/logout', 'logout')->name('logout');
 });
 
 
@@ -41,7 +42,7 @@ Route::controller(AuctionController::class)->group(function () {
 Route::controller(UserController::class)->group(function () {
     Route::get('/user', 'index')->name('users.index');
     Route::get('/user/{user}', 'show')->name('user.show');
-    Route::post('/user/store', 'store')->name('auction.store');
+    Route::post('/user/store', 'store')->name('user.store');
     Route::get('/user/{user}/edit', 'edit')->name('user.edit');
     Route::post('/user/{user}', 'update')->name('user.update');
     Route::post('/user/{user}/destroy', 'destroy')->name('user.destroy');

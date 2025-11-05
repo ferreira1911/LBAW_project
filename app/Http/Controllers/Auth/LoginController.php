@@ -16,7 +16,7 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         if (Auth::check()) {
-            return redirect()->route('/'); 
+            return redirect()->route('auctions.index'); 
         } else {
             return view('auth.login');
         }
@@ -62,6 +62,6 @@ class LoginController extends Controller
  
         $request->session()->regenerateToken();
  
-        return redirect('auctions.index');
+        return redirect()->route('auctions.index');
     }
 }

@@ -10,6 +10,8 @@ class Review extends Model
 {
     use HasFactory;
 
+    protected $table = 'review';
+
     // Map 'created_date' to 'created_at' and disable 'updated_at'
     const CREATED_AT = 'created_date';
     const UPDATED_AT = null;

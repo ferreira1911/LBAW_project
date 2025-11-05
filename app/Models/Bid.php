@@ -10,7 +10,7 @@ class Bid extends Model
 {
     use HasFactory;
 
-    
+    protected $table = 'bid';
 
     protected $fillable = [
         'amount',
