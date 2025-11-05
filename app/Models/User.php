@@ -82,4 +82,8 @@ class User extends Authenticatable
         $this->save();
     }
 
+    public function getProfileImage() {
+        return FileController::get('profile', $this->id);
+    }
+
 }
