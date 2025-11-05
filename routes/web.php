@@ -39,7 +39,7 @@ Route::controller(AuctionController::class)->group(function () {
 });
 
 Route::controller(UserController::class)->group(function () {
-    Route::get('/user', 'index')->name('auctions.index');
+    Route::get('/user', 'index')->name('users.index');
     Route::get('/user/{user}', 'show')->name('user.show');
     Route::post('/user/store', 'store')->name('auction.store');
     Route::get('/user/{user}/edit', 'edit')->name('user.edit');

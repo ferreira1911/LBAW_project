@@ -19,7 +19,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        
+        $this->authorize('viewAny', User::class);
     }
 
     /**
@@ -27,7 +27,19 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-       
+        $canViewBalance = false;
+        if (Auth::check()) { // Check if a user is even logged in
+            if (Auth::id() === $user->id || Auth::user()->is_admin) {
+                $canViewBalance = true;
+            }
+        }
+       if(!$user->is_deleted){
+            return view('pages.user.profile',[
+            'user' => $user,
+            'canViewBalance' => $canViewBalance,
+        ]);
+       }
+       return redirect('/auction')->with('failure', 'This account has been deleted');
     }
 
     /**
@@ -35,7 +47,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        
+        $this->authorize('update', $user);
         
     }
 
@@ -44,7 +56,7 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-
+        $this->authorize('update', $user);
         // Validate the request data, restricting to only username, profile_picture, and address
         $validated = $request->validate([
             'username' => 'required|string|max:255|unique:users,username,' . $user->id, // Exclude current user's username from uniqueness check
@@ -59,8 +71,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-
-        // Delete the user's profile
+        $this->authorize('delete', $user);
+        
         $user->deleteUser();
 
         if (auth()->user()->id === $user->id) {
@@ -70,18 +82,6 @@ class UserController extends Controller
 
         return redirect('/auction')->with('success', 'User profile deleted successfully.');
     }
-
-    public function create() {
-        
-    }
-
-    public function storeUser(Request $request)
-    {
-
-        
-    }
-
-
 
 
 }

@@ -19,7 +19,7 @@
     <body>
         <main>
             <header>
-                <h1><a href="{{ route('/') }}">AuctionEase</a></h1>
+                <h1><a href="{{ url('/auction') }}">AuctionEase</a></h1>
 
                 <div class="auth-links">
                     @auth
