@@ -10,6 +10,7 @@ use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\FileController;
 
 // Home
 Route::redirect('/', '/login');
@@ -47,3 +48,5 @@ Route::controller(UserController::class)->group(function () {
     Route::post('/user/{user}', 'update')->name('user.update');
     Route::post('/user/{user}/destroy', 'destroy')->name('user.destroy');
 });
+
+Route::post('/file/upload', [FileController::class, 'upload']);

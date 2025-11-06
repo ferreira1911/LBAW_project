@@ -43,11 +43,23 @@ class RegisterController extends Controller
         ]);
 
         // Create the new user.
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);
+
+        if ($request->hasFile('profile_image')) {
+            $file = $request->file('profile_image');
+            $fileName = $file->hashName();
+            $folderPath = 'images/profile';
+            
+            // Usar o mesmo disco que definiu no FileController
+            $file->storeAs($folderPath, $fileName, 'Tutorial02'); 
+            
+            $user->url = $fileName;
+            $user->save();
+        }
 
         // Attempt login for the newly registered user.
         $credentials = $request->only('email', 'password');

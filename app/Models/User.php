@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Http\Controllers\FileController;
 
 class User extends Authenticatable
 {
@@ -80,6 +81,10 @@ class User extends Authenticatable
     public function deleteUser() : void {
         $this->is_deleted = true;
         $this->save();
+    }
+
+    public function getProfileImage() {
+        return FileController::get('profile', $this->id);
     }
 
 }

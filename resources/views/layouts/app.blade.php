@@ -19,29 +19,31 @@
     <body>
         <main>
             <header>
-                <h1><a href="{{ url('/auction') }}">AuctionEase</a></h1>
-
-                <div class="auth-links">
-                    @auth
-                        <span>{{ Auth::user()->name }}</span>
-                        <span>Your credit is {{ Auth::user()->credit }}$</span>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="button button-outline">Logout</button>
-                        </form>
-                        <a href="{{ route('user.show',Auth::user()) }}">Profile</a>
-                    @else
-                        <a href="{{ route('login') }}" class="button">Login</a>
-                        <a href="{{ route('register') }}" class="button button-outline">Register</a>
-                    @endauth
+                <div class="column">
+                    <h1><a href="{{ url('/auction') }}">AuctionEase</a></h1>
                 </div>
 
-
-
-                <section id="content">
-                    @yield('content')
-                </section>
+                <div class="column">
+                    <div class="auth-links float-right">
+                        @auth
+                            <span>{{ Auth::user()->name }}</span>
+                            <span>Your credit is {{ Auth::user()->credit }}$</span>
+                            <a href="{{ route('user.show',Auth::user()) }}">Profile</a>
+                            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                                @csrf
+                                <button type="submit" class="button button-danger button-outline">Logout</button>
+                            </form>
+                        @else
+                            <a href="{{ route('login') }}" class="button">Login</a>
+                            <a href="{{ route('register') }}" class="button button-outline">Register</a>
+                        @endauth
+                    </div>
+                </div>
             </header>
+
+            <section id="content">
+                @yield('content')
+            </section>
         </main>
     </body>
 </html>
