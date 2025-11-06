@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\FileController;
 
 
 class UserController extends Controller
@@ -48,7 +49,9 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $this->authorize('update', $user);
-        
+        return view('pages.user.edit',[
+            'user' => $user,
+        ]);
     }
 
     /**
@@ -57,15 +60,39 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $this->authorize('update', $user);
-        // Validate the request data, restricting to only username, profile_picture, and address
+
         $validated = $request->validate([
-            'username' => 'required|string|max:255|unique:users,username,' . $user->id, // Exclude current user's username from uniqueness check
-            'url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Optional image upload validation
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'description' => ['nullable', 'string', 'max:1000'],
+            'url' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'], // The form input
+            'password' => ['nullable', 'confirmed'],
         ]);
 
-        return redirect('/auction')->with('success', 'User profile updated successfully.');
-    }
+        if ($request->hasFile('url')) {
+            // A. Delete the old file
+            FileController::delete('profile', $user->id);
 
+            // B. Store the new file
+            $file = $request->file('url');
+            $fileName = $file->hashName();
+            $folderPath = 'images/profile'; // Path from FileController
+            $file->storeAs($folderPath, $fileName, FileController::$diskName); // Disk from FileController
+
+            
+            $validated['url'] = $fileName;
+        }
+
+        if ($request->filled('password')) {
+            $validated['password'] = Hash::make($request->password);
+        } else {
+            unset($validated['password']);
+        }
+
+        $user->update($validated);
+
+        return redirect()->route('user.show', $user)->with('success', 'User profile updated successfully.');
+    }
     /**
      * Remove the specified resource from storage.
      */
