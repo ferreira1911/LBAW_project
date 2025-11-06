@@ -53,7 +53,7 @@
                 </div>
             @endif
 
-            <input id="url" type="file" name="file">
+            <input id="url" type="file" name="url">
             <p><small>Leave blank to keep your current picture.</small></p>
             
             @error('url')
