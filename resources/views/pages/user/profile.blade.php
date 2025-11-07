@@ -23,6 +23,8 @@
           <p><strong>Credit:</strong> {{ $user->credit }} (Held: {{ $user->held_credit }})</p>
       @endif
 
+      <a href="{{ route('credit.create') }}" class="button">Add Credit to Account</a>
+
       <p>
         <strong>Rating:</strong> 
         {{ isset($user->average_rating) ? number_format($user->average_rating, 1) : 'N/A' }} / 5.0
