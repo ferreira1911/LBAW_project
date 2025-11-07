@@ -24,7 +24,7 @@
       @endif
 
       <a href="{{ route('credit.create') }}" class="button">Add Credit to Account</a>
-
+      <a href="{{ route('withdrawal.create') }}" class="button">Withdraw Credit</a>
       <p>
         <strong>Rating:</strong> 
         {{ isset($user->average_rating) ? number_format($user->average_rating, 1) : 'N/A' }} / 5.0

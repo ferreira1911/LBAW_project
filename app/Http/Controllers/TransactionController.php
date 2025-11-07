@@ -107,16 +107,16 @@ class TransactionController extends Controller
                     'buyer_id' => $user->id, // O "comprador" é quem recebe o dinheiro
                 ]);
 
-                // 2. Move o crédito de 'disponível' para 'retido'
+                
                 $user->decrement('credit', $validated['amount']);
-                $user->increment('held_credit', $validated['amount']);
+                
             });
         } catch (\Exception $e) {
             Log::error('Falha ao levantar crédito', ['user' => $user->id, 'error' => $e->getMessage()]);
             return redirect()->back()->with('failure', 'Ocorreu um erro ao processar o seu pedido.');
         }
 
-        return redirect()->route('transactions.index')->with('success', 'Pedido de levantamento submetido!');
+        return redirect()->route('user.show', Auth::user())->with('success', 'Pedido de levantamento submetido!');
     }
 
     /**
