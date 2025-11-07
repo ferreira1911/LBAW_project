@@ -27,7 +27,7 @@ class FileController extends Controller
         return asset('images/' . $type . '/' . self::$default);
     }
 
-    private static function getFileName(String $type, int $id, String $extension = null) {
+    private static function getFileName(String $type, int $id) {
 
         $fileName = null;
         switch($type) {
@@ -109,7 +109,7 @@ class FileController extends Controller
         return redirect()->back()->with('success', 'Success: upload completed!');
     }
 
-    private static function delete(String $type, int $id) {
+    public static function delete(String $type, int $id) {
         $existingFileName = self::getFileName($type, $id);
         if ($existingFileName) {
             
