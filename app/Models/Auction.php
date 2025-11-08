@@ -29,6 +29,7 @@ class Auction extends Model
         'address',
         'latitude',
         'longitude',
+        'picture',
         'is_buy_now_active',
     ];
 
