@@ -6,8 +6,8 @@
 <div class="bg-light py-5">
     <div class="container py-4">
 
-        {{-- Cabeçalho --}}
-        <div class="d-flex justify-content-between align-items-center mb-5">
+        {{-- Cabeçalho e Ações --}}
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3">
             <div>
                 <h1 class="fw-bold text-dark mb-0">Leilões Ativos</h1>
                 <p class="text-muted mb-0">Explore e licite nos itens mais recentes.</p>
@@ -20,15 +20,32 @@
             @endauth
         </div>
 
-        {{-- Grelha de cartões --}}
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            @forelse ($auctions as $auction)
-                <div class="col d-flex">
-                    {{-- 🔹 h-100 + flex-column para forçar altura igual --}}
-                    <div class="card flex-fill d-flex flex-column border-0 shadow-sm overflow-hidden auction-card-hover rounded-0">
+        {{-- BARRA DE PESQUISA --}}
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto">
+                <form action="{{ route('auctions.search') }}" method="GET">
+                    <div class="input-group input-group-lg shadow-sm rounded-0 overflow-hidden">
+                        <span class="input-group-text bg-white border-0 ps-4">
+                            <i class="fas fa-search text-muted"></i>
+                        </span>
+                        <input type="text" name="query" class="form-control border-0 ps-3 py-3" 
+                               placeholder="O que procura hoje?" 
+                               aria-label="Pesquisar" required>
+                        <button class="btn btn-primary px-4 fw-bold rounded-0" type="submit">
+                            PESQUISAR
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
-                        {{-- Imagem com altura fixa --}}
-                        <div class="position-relative" style="height: 220px; background-color: #f8f9fa;">
+        {{-- Flexbox Grid de Leilões --}}
+        <div class="d-flex flex-wrap gap-4 justify-content-center justify-content-md-start">
+            @forelse ($auctions as $auction)
+                <div class="flex-grow-1" style="flex-basis: 300px; max-width: 450px;">
+                    <div class="card h-100 border-0 shadow-sm overflow-hidden auction-card-hover rounded-0">
+                        
+                        <div class="position-relative" style="height: 250px; background-color: #f8f9fa;">
                             @if ($auction->is_featured)
                                 <span class="position-absolute top-0 end-0 badge bg-warning text-dark m-3 shadow-sm z-2 rounded-0">
                                     <i class="fas fa-star me-1"></i> Destaque
@@ -47,12 +64,9 @@
                             </a>
                         </div>
 
-                        {{-- Corpo --}}
-                        <div class="card-body d-flex flex-column p-4 flex-grow-1">
+                        <div class="card-body d-flex flex-column p-4">
                             <div class="mb-2">
-                                <span class="badge bg-light text-secondary border rounded-0">
-                                    {{ $auction->category->name ?? 'Geral' }}
-                                </span>
+                                <span class="badge bg-light text-secondary border rounded-0">{{ $auction->category->name ?? 'Geral' }}</span>
                             </div>
 
                             <h4 class="card-title fw-bold mb-3 fs-5">
@@ -65,7 +79,6 @@
                                 {{ Str::limit($auction->description, 80) }}
                             </p>
 
-                            {{-- Rodapé dentro do body para alinhar consistentemente --}}
                             <div class="d-flex justify-content-between align-items-end border-top pt-3 mt-auto">
                                 <div>
                                     <small class="text-muted fw-bold" style="font-size: 0.75rem;">LICITAÇÃO ATUAL</small>
@@ -90,7 +103,7 @@
                     </div>
                 </div>
             @empty
-                <div class="col-12">
+                <div class="w-100">
                     <div class="text-center py-5 px-4 bg-white shadow-sm rounded-0">
                         <i class="fas fa-search fa-4x text-muted opacity-25 mb-4"></i>
                         <h3 class="fw-bold text-dark">Não encontrámos leilões ativos.</h3>
@@ -107,7 +120,6 @@
             @endforelse
         </div>
 
-        {{-- Paginação --}}
         <div class="d-flex justify-content-center mt-5">
             {{ $auctions->links('pagination::bootstrap-5') }}
         </div>
@@ -128,8 +140,6 @@
     .object-fit-cover {
         object-fit: cover;
     }
-    .ls-1 {
-        letter-spacing: 1px;
-    }
+    .ls-1 { letter-spacing: 1px; }
 </style>
 @endpush
