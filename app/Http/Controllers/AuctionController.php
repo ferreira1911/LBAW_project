@@ -36,26 +36,58 @@ class AuctionController extends Controller
     }
 
     function search(Request $request){
-        $query = $request->input('query');
+        
+            $query = $request->input('query');
+            $categoryId = $request->input('category');
+            $minPrice = $request->input('min_price');
+            $maxPrice = $request->input('max_price');
+            $sort = $request->input('sort');
 
-        // If no query is provided, just redirect home
-        if (!$query) {
-            return redirect()->route('auctions.index');
-        }
+            $auctionsQuery = Auction::where('status', 'Active');
 
-        $auctions = Auction::where('status', 'Active') // Only search active auctions
-            ->whereRaw("tsvectors @@ plainto_tsquery('english', ?)", [$query]) // The Magic Line
-            ->orderByRaw("ts_rank(tsvectors, plainto_tsquery('english', ?)) DESC", [$query]) // Rank by relevance
-            ->paginate(12)
-            ->withQueryString(); // Keeps the ?query=... in pagination links
+            if ($query) {
+                $auctionsQuery->whereRaw("tsvectors @@ plainto_tsquery('english', ?)", [$query]);
+            }
+            if ($categoryId) {
+                $auctionsQuery->where('category_id', $categoryId);
+            }
+            if ($minPrice) {
+                $auctionsQuery->where('current_price', '>=', $minPrice);
+            }
+            if ($maxPrice) {
+                $auctionsQuery->where('current_price', '<=', $maxPrice);
+            }
 
-        $categories = Category::all();
-        // Reuse the same view as the home page to display results
-        return view('pages.auction.search', [
-            'auctions' => $auctions,
-            'searchQuery' => $query, // Pass the query to the view to show it in the UI
-            'categories' => $categories,
-        ]);
+            if($sort) {
+                switch($sort) {
+                    case 'price_asc':
+                        $auctionsQuery->orderBy('current_price', 'ASC');
+                        break;
+                    case 'price_desc':
+                        $auctionsQuery->orderBy('current_price', 'DESC');
+                        break;
+                    case 'ending_soon':
+                        $auctionsQuery->orderBy('end_date', 'ASC');
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+
+            // 5. Executar consulta
+            $auctions = $auctionsQuery->paginate(12)->withQueryString();
+
+            // 6. Obter todas as categorias para a sidebar
+            $categories = Category::all();
+
+            // 7. Retornar a view de PESQUISA
+            return view('pages.auction.search', [
+                'auctions' => $auctions,
+                'categories' => $categories,
+                'searchQuery' => $query,
+            ]);
+        
     }
 
 
