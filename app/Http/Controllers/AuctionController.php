@@ -70,5 +70,60 @@ class AuctionController extends Controller
     ]);
     }
 
+    function search(Request $request){
+        
+            $query = $request->input('query');
+            $categoryId = $request->input('category');
+            $minPrice = $request->input('min_price');
+            $maxPrice = $request->input('max_price');
+            $sort = $request->input('sort');
+
+            $auctionsQuery = Auction::where('status', 'Active');
+
+            if ($query) {
+                $auctionsQuery->whereRaw("tsvectors @@ plainto_tsquery('english', ?)", [$query]);
+            }
+            if ($categoryId) {
+                $auctionsQuery->where('category_id', $categoryId);
+            }
+            if ($minPrice) {
+                $auctionsQuery->where('current_price', '>=', $minPrice);
+            }
+            if ($maxPrice) {
+                $auctionsQuery->where('current_price', '<=', $maxPrice);
+            }
+
+            if($sort) {
+                switch($sort) {
+                    case 'price_asc':
+                        $auctionsQuery->orderBy('current_price', 'ASC');
+                        break;
+                    case 'price_desc':
+                        $auctionsQuery->orderBy('current_price', 'DESC');
+                        break;
+                    case 'ending_soon':
+                        $auctionsQuery->orderBy('end_date', 'ASC');
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+
+            // 5. Executar consulta
+            $auctions = $auctionsQuery->paginate(12)->withQueryString();
+
+            // 6. Obter todas as categorias para a sidebar
+            $categories = Category::all();
+
+            // 7. Retornar a view de PESQUISA
+            return view('pages.auction.search', [
+                'auctions' => $auctions,
+                'categories' => $categories,
+                'searchQuery' => $query,
+            ]);
+        
+    }
+
 
 }

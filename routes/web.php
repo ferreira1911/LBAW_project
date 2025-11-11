@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\TransactionController;
 
 // Home
 Route::redirect('/', '/login');
@@ -51,3 +52,20 @@ Route::controller(UserController::class)->group(function () {
 });
 
 Route::post('/file/upload', [FileController::class, 'upload']);
+
+
+Route::controller(TransactionController::class)->middleware('auth')->group(function () {
+    // Histórico de transações (extrato)
+    Route::get('/wallet', 'index')->name('transactions.index');
+
+    // Adicionar Crédito
+    Route::get('/wallet/add-credit', 'createCredit')->name('credit.create');
+    Route::post('/wallet/add-credit', 'storeCredit')->name('credit.store');
+    
+    // Levantar Crédito
+    Route::get('/wallet/withdraw', 'createWithdrawal')->name('withdrawal.create');
+    Route::post('/wallet/withdraw', 'storeWithdrawal')->name('withdrawal.store');
+    
+    // Ver uma transação específica
+    Route::get('/wallet/{transaction}', 'show')->name('transaction.show');
+});

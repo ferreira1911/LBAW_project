@@ -1,49 +1,36 @@
 @extends('layouts.app')
 
-@section('title', 'Home Page')
+@section('title', 'Leilões')
 
 @section('content')
-<div class="container">
+<div class="main-page">
     
-    
-    <div class="page-header">
-        <h2>Active Auctions</h2>
-        @auth
-            <a href="{{ route('auction.create') }}" class="button button-primary">Create Auction</a>
-        @endauth
-    </div>
+    <aside class="sidebar">
+        <form method="GET" action="{{ route('auctions.search') }}" id="filter-form">
+            @include('partials.filters', ['categories' => $categories])
+        </form>
+    </aside>
 
+    <a href="{{ route('auction.create') }}">Criar um Leilão</a>
     
-    <div class="auction-grid">
-        @forelse ($auctions as $auction)
-            {{-- This is the auction card component --}}
-            <div class="auction-card {{ $auction->is_featured ? 'featured' : '' }}">
-                
-                @if ($auction->is_featured)
-                    <span class="featured-badge">Featured</span>
-                @endif
-                
-                <h3>
-                    {{-- Link to the single auction page --}}
-                    <a href="{{ route('auction.show', $auction) }}">
-                        {{ $auction->title }}
-                    </a>
-                </h3>
-                
-                <div class="auction-details">
-                    <p class="price">
-                        Current Price: <strong>${{ number_format($auction->current_price, 2) }}</strong>
-                    </p>
+    <section class="cards-container">
+        {{-- Grelha de Cartões --}}
+        <div class="all-cards">
+            @forelse($auctions as $auction)
+                @include('partials.card', ['auction' => $auction])
+            @empty
+                <div class="no-results">
+                    <p>Não foram encontrados leilões que correspondam aos seus filtros.</p>
+                    <a href="{{ route('auctions.index') }}" class="button">Limpar filtros</a>
                 </div>
-            </div>
-        @empty
-            <div class="no-auctions">
-                <p>No active auctions right now. Check back soon!</p>
-                @auth
-                    <p>Why not <a href="{{ route('auction.create') }}">create one</a>?</p>
-                @endauth
-            </div>
-        @endforelse
-    </div>
+            @endforelse
+        </div>
+
+        {{-- Paginação --}}
+        <div class="pagination-links">
+            {{ $auctions->appends(request()->query())->links() }}
+        </div>
+    </section>
+
 </div>
 @endsection

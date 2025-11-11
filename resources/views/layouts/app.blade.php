@@ -14,6 +14,7 @@
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
+        <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
         @stack('scripts')
     </head>
     <body>
@@ -45,5 +46,14 @@
                 @yield('content')
             </section>
         </main>
+        <footer class="bg-dark text-light py-4 mt-auto">
+        <div class="container">
+            <div class="d-flex flex-wrap justify-content-between align-items-center">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <span class="text-muted">&copy; {{ date('Y') }} AuctionEase. Todos os direitos reservados.</span>
+                </div>
+            </div>
+        </div>
+    </footer>
     </body>
 </html>
