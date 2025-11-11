@@ -29,19 +29,23 @@ class UserController extends Controller
     public function show(User $user)
     {
         $canViewBalance = false;
-        if (Auth::check()) { // Check if a user is even logged in
-            if (Auth::id() === $user->id || Auth::user()->is_admin) {
-                $canViewBalance = true;
-            }
+        if (Auth::check() && (Auth::id() === $user->id || Auth::user()->is_admin)) {
+            $canViewBalance = true;
         }
-       if(!$user->is_deleted){
-            return view('pages.user.profile',[
-            'user' => $user,
-            'canViewBalance' => $canViewBalance,
-        ]);
-       }
-       return redirect('/auction')->with('failure', 'This account has been deleted');
+
+        if (!$user->is_deleted) {
+            $auctions = $user->auctions()->orderBy('end_date', 'DESC')->get();
+
+            return view('pages.user.profile', [
+                'user' => $user,
+                'canViewBalance' => $canViewBalance,
+                'auctions' => $auctions,
+            ]);
+        }
+
+        return redirect('/auction')->with('failure', 'This account has been deleted');
     }
+
 
     /**
      * Show the form for editing the specified resource.

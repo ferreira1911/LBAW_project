@@ -35,9 +35,10 @@ Route::post('/post/like', [PostController::class, 'like']);
 
 Route::controller(AuctionController::class)->group(function () {
     Route::get('/auction', 'index')->name('auctions.index');
-    Route::get('/auction/{auction}', 'show')->name('auction.show');
+    Route::get('/auction/create', 'create')->name('auction.create');
     Route::post('/auction/store', 'store')->name('auction.store');
-    Route::post('/auction/create', 'create')->name('auction.create');
+    Route::get('/auction/{auction}', 'show')->whereNumber('auction')->name('auction.show');
+
 });
 
 Route::controller(UserController::class)->group(function () {

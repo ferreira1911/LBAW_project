@@ -34,6 +34,26 @@
       </div>
       @endif
     </div>
-  </div>
+    </div>
+    @if($auctions->count() > 0)
+        <h3>User Auctions</h3>
+        <div class="auction-grid">
+            @foreach($auctions as $auction)
+                <div class="auction-card {{ $auction->is_featured ? 'featured' : '' }}">
+                    @if ($auction->is_featured)
+                        <span class="featured-badge">Featured</span>
+                    @endif
+                    <h4>
+                        <a href="{{ route('auction.show', $auction) }}">{{ $auction->title }}</a>
+                    </h4>
+                    <p>Current Price: ${{ number_format($auction->current_price, 2) }}</p>
+                    <p>Status: {{ $auction->status }}</p>
+                </div>
+            @endforeach
+        </div>
+    @else
+        <p>This user does not own any auctions yet.</p>
+    @endif
+
 </div>
 @endsection
