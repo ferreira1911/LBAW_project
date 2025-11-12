@@ -27,6 +27,7 @@
                 <div class="column">
                     <div class="auth-links float-right">
                         @auth
+                            <a href="{{ route('auction.create') }}" class="button">Criar um Leilão</a>
                             <span>{{ Auth::user()->name }}</span>
                             <span>Your credit is {{ Auth::user()->credit }}$</span>
                             <a href="{{ route('user.show',Auth::user()) }}">Profile</a>

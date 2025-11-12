@@ -29,8 +29,24 @@ class AuctionController extends Controller
         'auction' => $auction,
         'bids' => $auction->bids()->orderBy('date', 'DESC')->get(),
     ]);
-        
     }
+
+        public function edit(Auction $auction){
+        $this->authorize('update', $auction);
+        return view('pages.auction.edit', ['auction' => $auction]);
+    }
+
+    public function update(Request $request, Auction $auction){
+        $this->authorize('update', $auction);
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+        ]);
+        $auction->update($validated);
+
+        return redirect()->route('auction.show', $auction)->with('success', 'Auction updated!');
+    }
+
 
     function store(Request $request){
         $this->authorize('create', Auction::class);

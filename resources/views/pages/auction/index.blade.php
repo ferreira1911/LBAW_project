@@ -11,7 +11,6 @@
         </form>
     </aside>
 
-    <a href="{{ route('auction.create') }}">Criar um Leilão</a>
     
     <section class="cards-container">
         {{-- Grelha de Cartões --}}

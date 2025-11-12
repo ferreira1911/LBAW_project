@@ -30,4 +30,8 @@ class AuctionPolicy
     {
       return $user->id === $auction->owner_id;
     }
+    public function update(User $user, Auction $auction)
+    {
+        return $user->id === $auction->owner_id;
+    }
 }
