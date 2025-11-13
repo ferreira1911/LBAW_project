@@ -42,7 +42,7 @@ Route::controller(AuctionController::class)->group(function () {
     Route::get('/auction/{auction}', 'show')->whereNumber('auction')->name('auction.show');
     Route::get('/auction/{auction}/edit', 'edit')->whereNumber('auction')->name('auction.edit');
     Route::put('/auction/{auction}', 'update')->whereNumber('auction')->name('auction.update');
-
+    Route::post('/auction/{auction}/bid', 'bid')->whereNumber('auction')->name('auction.bid');
 });
 
 Route::controller(UserController::class)->group(function () {
