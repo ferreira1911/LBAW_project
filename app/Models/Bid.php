@@ -11,11 +11,13 @@ class Bid extends Model
     use HasFactory;
 
     protected $table = 'bid';
-
+    public $timestamps = false;
+    
     protected $fillable = [
         'amount',
         'user_id',
         'auction_id',
+        'date',
     ];
 
     protected $casts = [
