@@ -20,7 +20,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $this->authorize('viewAny', User::class);
+        //$this->authorize('viewAny', User::class);
+        return view('pages.user.index');
     }
 
     /**
@@ -114,5 +115,23 @@ class UserController extends Controller
         return redirect('/auction')->with('success', 'User profile deleted successfully.');
     }
 
+    public function getUsers(Request $request)
+    {
+        $search = $request->input('search');
+
+        $query = User::where('is_deleted', false); 
+
+        if ($search) {
+            
+            $query->whereRaw("tsvectors @@ plainto_tsquery('english', ?)", [$search])
+                  ->orderByRaw("ts_rank(tsvectors, plainto_tsquery('english', ?)) DESC", [$search]);
+        } else {
+            $query->orderBy('id', 'desc');
+        }
+
+        $users = $query->paginate(20);
+
+        return response()->json($users);
+    }
 
 }
