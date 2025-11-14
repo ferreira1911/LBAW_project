@@ -12,7 +12,7 @@ class AuctionPolicy
     
     public function view(User $user, Auction $auction): bool
     {
-        return $user->id === $auction->owner_id;
+        return Auth::check();
     }
 
     

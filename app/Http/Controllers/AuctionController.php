@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Auction;
+use Illuminate\Support\Facades\Auth;
 
 
 class AuctionController extends Controller
@@ -26,9 +27,9 @@ class AuctionController extends Controller
         $this->authorize('view', $auction);
 
         return view('pages.auction.show', [
-        'auction' => $auction,
-        'bids' => $auction->bids()->orderBy('date', 'DESC')->get(),
-    ]);
+            'auction' => $auction,
+            'bids' => $auction->bids()->orderBy('date', 'DESC')->get(),
+        ]);
     }
 
         public function edit(Auction $auction){
@@ -149,6 +150,58 @@ class AuctionController extends Controller
                 'searchQuery' => $query,
             ]);
         
+    }
+
+    public function bid(Request $request, Auction $auction){
+        if (!$auction->status === 'Active') {
+            return back()->withErrors(['message' => 'This auction has already ended.']);
+        }
+
+        if ($auction->owner_id === Auth::id()) {
+            return back()->withErrors(['message' => 'You cannot bid on your own auction.']);
+        }
+
+        if (Auth::user()->credit < $request->amount) {
+            return back()->withErrors(['message' => 'You do not have sufficient credit to place this bid.']);
+        }
+
+        $highestBidRecord = $auction->bids()->orderBy('amount', 'desc')->first();
+
+        if ($highestBidRecord && $highestBidRecord->user_id === Auth::id()) {
+            return back()->withErrors(['message' => 'You are already the highest bidder.']);
+        }
+
+        $highestBidAmount = $highestBidRecord ? $highestBidRecord->amount : $auction->starting_price;
+        $minIncrement = $auction->starting_price * 0.10; // BR05: 10% of the starting price
+        $requiredMinBid = $highestBidAmount + $minIncrement;
+
+        $validationRules = [
+            'amount' => [
+                'required',
+                'numeric',
+                'gte:' . $requiredMinBid,
+            ],
+        ];
+
+        /* if ($auction->is_buy_now_active && !is_null($auction->buy_now_price)) {
+            $validationRules['amount'][] = 'lte:' . $auction->buy_now_price;
+        } */
+
+        $request->validate($validationRules, [
+            'amount.gte' => 'The bid must be at least €' . number_format($requiredMinBid, 2) . '.',
+            // 'amount.lte' => 'The bid cannot be higher than the Buy Now price of €' . number_format($auction->buy_now_price, 2) . '.',
+        ]);
+
+        $auction->bids()->create([
+            'user_id' => Auth::id(),
+            'amount' => $request->amount,
+            'date' => now(),
+        ]);
+
+        $auction->current_price = $request->amount;
+        $auction->save();
+
+        return redirect()->route('auction.show', $auction)->with('success', 'Your bid was placed successfully!');
     }
 
 
