@@ -143,30 +143,14 @@ class AuctionController extends Controller
         
     }
 
-    public function bid(Request $request, Auction $auction){
-        try {
+    public function cancel(Auction $auction)
+    {
+        $this->authorize('cancel', $auction);
 
-            $auction->bids()->create([
-                'user_id' => Auth::id(),
-                'amount' => $request->amount,
-                'date' => now(),
-            ]);
+        $auction->status = 'Cancelled';
+        $auction->save();
 
-            $auction->current_price = $request->amount;
-            $auction->save();
-
-            return redirect()->route('auction.show', $auction)->with('success', 'Your bid was placed successfully!');
-
-        } catch (QueryException $e) {
-
-            $rawErrorMessage = $e->errorInfo[2] ?? 'An error occurred while placing the bid.';
-            $cleanMessage = $rawErrorMessage;
-
-            if (preg_match('/ERROR:\s*(.*?)\s*CONTEXT:/s', $rawErrorMessage, $matches)) {
-                $cleanMessage = $matches[1];
-            }
-
-            return back()->withInput()->withErrors(['message' => trim($cleanMessage)]);
-        }
+        return redirect()->route('auction.show', $auction)->with('success', 'The auction has been successfully cancelled.');
     }
+
 }

@@ -31,5 +31,21 @@
 
         <button type="submit" class="button button-primary">Update Auction</button>
     </form>
+
+    <hr style="margin-top: 2rem; margin-bottom: 2rem;">
+
+    @can('cancel', $auction)
+        <div>
+            <h3>Cancel Auction</h3>
+            <p>This action cannot be undone. The auction will be permanently cancelled.</p>
+            <form method="POST" action="{{ route('auction.cancel', $auction) }}">
+                @csrf
+                <button type="submit" class="button button-danger" 
+                        onclick="return confirm('Are you sure you want to cancel this auction?')">
+                    Cancel Auction
+                </button>
+            </form>
+        </div>
+    @endcan
 </div>
 @endsection
