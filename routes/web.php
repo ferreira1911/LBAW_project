@@ -46,9 +46,11 @@ Route::controller(AuctionController::class)->group(function () {
 });
 
 Route::controller(UserController::class)->group(function () {
-    Route::get('/user', 'index')->name('users.index');
-    Route::get('/user/{user}', 'show')->name('user.show');
+    Route::get('/users', 'index')->name('users.index');
+    Route::get('/users/api', 'getUsers')->name('users.api');
     Route::post('/user/store', 'store')->name('user.store');
+    Route::get('/user/create', 'create')->name('user.create');
+    Route::get('/user/{user}', 'show')->name('user.show');
     Route::get('/user/{user}/edit', 'edit')->name('user.edit');
     Route::post('/user/{user}', 'update')->name('user.update');
     Route::post('/user/{user}/destroy', 'destroy')->name('user.destroy');
