@@ -134,4 +134,45 @@ class UserController extends Controller
         return response()->json($users);
     }
 
+    public function create(){
+        //$this->authorize('create',Auth::user());
+        return view('pages.user.create');
+    }
+
+    public function store(Request $request)
+    {
+        
+        //$this->authorize('create', User::class);
+
+        
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed'],
+            'is_admin' => ['nullable', 'boolean'], 
+        ]);
+
+        try {
+            
+            $dataToCreate = [
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'password' => Hash::make($validated['password']),
+                'is_admin' => $request->has('is_admin') 
+            ];
+
+            
+            User::create($dataToCreate);
+
+        } catch (\Exception $e) {
+            Log::error('Falha ao criar utilizador (Admin): ' . $e->getMessage());
+            return redirect()->back()
+                             ->with('failure', 'Ocorreu um erro ao criar o utilizador.')
+                             ->withInput(); // Mantém os dados no formulário
+        }
+
+        return redirect()->route('users.index')
+                         ->with('success', 'Utilizador criado com sucesso!');
+    }
+
 }

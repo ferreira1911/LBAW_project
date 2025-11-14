@@ -15,13 +15,11 @@
                 <span class="input-group-text bg-white border-0 ps-4">
                     <i class="fas fa-search text-muted"></i>
                 </span>
-                {{-- ID para o JavaScript --}}
                 <input type="text" id="searchInput" class="form-control border-0 ps-3 py-3" 
                        placeholder="Pesquisar por nome ou email..." 
                        aria-label="Pesquisar utilizadores">
-                {{-- ID para o JavaScript --}}
                 <button id="searchButton" class="btn btn-primary px-4 fw-bold rounded-0" type="button">
-                    PESQUISAR
+                    Search
                 </button>
             </div>
         </div>
@@ -32,11 +30,13 @@
         
     </div>
 
-    {{-- Botão "Carregar Mais" --}}
+    <a href="{{ route('user.create') }}">Create a New User</a>
+
+ 
     <div class="text-center mt-5">
-        {{-- ID para o JavaScript --}}
+        
         <button id="loadMoreBtn" class="btn btn-outline-primary btn-lg px-5 rounded-0 d-none">
-            Carregar Mais
+            Load More
         </button>
     </div>
 
