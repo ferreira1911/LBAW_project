@@ -8,6 +8,8 @@ info:
 servers:
   - url: http://localhost:8000
     description: Development server
+  - url: http://lbaw.fe.up.pt
+    description: Production server
 
 externalDocs:
   description: Find more info here.
@@ -22,7 +24,7 @@ tags:
 
 paths:
   # ==============================================
-  # M01: Authentication & Profile
+  # M01: Authentication & Individual Profile
   # ==============================================
   /login:
     get:
@@ -49,6 +51,7 @@ paths:
               properties:
                 email:
                   type: string
+                  format: email
                 password:
                   type: string
               required:
@@ -56,17 +59,17 @@ paths:
                 - password
       responses:
         '302':
-          description: 'Redirect after processing credentials.'
+          description: 'Redirect after processing the login credentials.'
           headers:
             Location:
               schema:
                 type: string
               examples:
                 302Success:
-                  description: 'Redirect to home/auctions index.'
+                  description: 'Successful authentication. Redirect to home.'
                   value: '/auctions'
                 302Error:
-                  description: 'Redirect to login form.'
+                  description: 'Failed authentication. Redirect to login form.'
                   value: '/login'
 
   /logout:
@@ -107,6 +110,7 @@ paths:
                   type: string
                 email:
                   type: string
+                  format: email
                 password:
                   type: string
                 password_confirmation:
@@ -124,7 +128,7 @@ paths:
     get:
       operationId: R106
       summary: 'R106: View User Profile'
-      description: 'Show the individual user profile (and wallet if owner). Access: USR'
+      description: 'Show the individual user profile. If owner or admin, shows wallet balance. Access: USR, ADM'
       tags:
         - 'M01: Authentication and Individual Profile'
       parameters:
@@ -137,50 +141,129 @@ paths:
         '200':
           description: 'Ok. Show User Profile UI'
 
+  /user/{id}/edit:
+    get:
+      operationId: R107
+      summary: 'R107: Edit Profile Form'
+      description: 'Show form to edit user profile. Access: OWN, ADM'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Show Edit Profile UI'
+
+  /user/{id} (Update):
+    post:
+      operationId: R108
+      summary: 'R108: Update Profile Action'
+      description: 'Update user information (name, description, photo). Access: OWN, ADM'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                description:
+                  type: string
+                url:
+                  type: string
+                  format: binary
+                  description: 'Profile picture upload'
+                password:
+                  type: string
+                password_confirmation:
+                  type: string
+      responses:
+        '302':
+          description: 'Redirect to profile page.'
+
+  /user/{id}/destroy:
+    post:
+      operationId: R109
+      summary: 'R109: Delete Account'
+      description: 'Anonymize user account (is_deleted=true). Access: OWN, ADM'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '302':
+          description: 'Redirect to home.'
+
   # ==============================================
-  # M02: Auction Discovery
+  # M02: Auction Discovery & Management
   # ==============================================
-  /search:
+  /auctions:
     get:
       operationId: R201
-      summary: 'R201: Search Auctions'
-      description: 'Searches active auctions with filters (full-text search). Access: PUB'
+      summary: 'R201: List Auctions (Home)'
+      description: 'Homepage showing active auctions. Access: PUB'
+      tags:
+        - 'M02: Auction Discovery & Management'
+      responses:
+        '200':
+          description: 'Ok. Show Homepage UI'
+
+  /auctions/search:
+    get:
+      operationId: R202
+      summary: 'R202: Search Auctions'
+      description: 'Full-text search using tsvectors and filters. Access: PUB'
       tags:
         - 'M02: Auction Discovery & Management'
       parameters:
         - in: query
           name: query
-          description: Full-text search string
           schema:
             type: string
+          description: 'Search term'
         - in: query
           name: category
-          description: Filter by Category ID
           schema:
             type: integer
         - in: query
           name: min_price
-          description: Minimum current price
           schema:
             type: number
         - in: query
           name: max_price
-          description: Maximum current price
           schema:
             type: number
         - in: query
           name: sort
-          description: Sort order (relevance, price_asc, price_desc, ending_soon)
           schema:
             type: string
+            enum: [relevance, ending_soon, price_asc, price_desc]
       responses:
         '200':
           description: 'Ok. Show Search Results UI'
 
   /auction/{id}:
     get:
-      operationId: R202
-      summary: 'R202: View Auction Details'
+      operationId: R203
+      summary: 'R203: View Auction Details'
       description: 'Show details of a specific auction. Access: PUB'
       tags:
         - 'M02: Auction Discovery & Management'
@@ -196,8 +279,8 @@ paths:
 
   /auction/create:
     get:
-      operationId: R203
-      summary: 'R203: Create Auction Form'
+      operationId: R204
+      summary: 'R204: Create Auction Form'
       description: 'Show form to create a new auction. Access: USR'
       tags:
         - 'M02: Auction Discovery & Management'
@@ -205,8 +288,8 @@ paths:
         '200':
           description: 'Ok. Show Create Form'
     post:
-      operationId: R204
-      summary: 'R204: Store Auction'
+      operationId: R205
+      summary: 'R205: Store Auction'
       description: 'Save new auction to database. Access: USR'
       tags:
         - 'M02: Auction Discovery & Management'
@@ -221,7 +304,11 @@ paths:
                   type: string
                 description:
                   type: string
-                start_price:
+                category_id:
+                  type: integer
+                starting_price:
+                  type: number
+                buy_now_price:
                   type: number
                 end_date:
                   type: string
@@ -229,40 +316,62 @@ paths:
                 image:
                   type: string
                   format: binary
+              required:
+                - title
+                - starting_price
+                - end_date
       responses:
         '302':
           description: 'Redirect to the created auction page.'
 
-  # ==============================================
-  # M03: Reviews & Following
-  # ==============================================
-  /auction/{id}/follow:
-    post:
-      operationId: R301
-      summary: 'R301: Follow Auction'
-      description: 'Add auction to user watchlist. Access: USR'
+  /auction/{id} (Update):
+    put:
+      operationId: R206
+      summary: 'R206: Update Auction'
+      description: 'Update auction details. Access: OWN (Seller)'
       tags:
-        - 'M03: Reviews & Auction Following'
+        - 'M02: Auction Discovery & Management'
       parameters:
         - in: path
           name: id
           required: true
           schema:
             type: integer
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
       responses:
         '302':
-          description: 'Redirect back to auction page.'
+          description: 'Redirect to auction page.'
+
+  # ==============================================
+  # M03: Reviews & Auction Following
+  # ==============================================
+  
 
   # ==============================================
   # M04: Bidding & Transactions
   # ==============================================
-  /bid:
+  /auction/{id}/bid:
     post:
       operationId: R401
       summary: 'R401: Place Bid'
-      description: 'Place a new bid on an auction. Access: USR'
+      description: 'Place a bid. Validates credit and anti-sniping via Trigger. Access: USR'
       tags:
         - 'M04: Bidding & Transactions'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
       requestBody:
         required: true
         content:
@@ -270,33 +379,28 @@ paths:
             schema:
               type: object
               properties:
-                auction_id:
-                  type: integer
                 amount:
                   type: number
               required:
-                - auction_id
                 - amount
       responses:
         '302':
-          description: 'Redirect. Success or Failure (insufficient funds/low bid).'
+          description: 'Redirect. Success or failure message.'
 
-  /wallet:
+  /wallet/add-credit:
     get:
-      operationId: R402
-      summary: 'R402: View Wallet'
-      description: 'Show user transaction history. Access: USR'
+      operationId: R403
+      summary: 'R403: Add Credit Form'
+      description: 'Show form to add funds. Access: USR'
       tags:
         - 'M04: Bidding & Transactions'
       responses:
         '200':
-          description: 'Ok. Show Wallet UI'
-
-  /wallet/add-credit:
+          description: 'Ok. Show Add Credit UI'
     post:
-      operationId: R403
-      summary: 'R403: Add Credit'
-      description: 'Simulate adding funds to the wallet. Access: USR'
+      operationId: R404
+      summary: 'R404: Store Credit Transaction'
+      description: 'Process adding funds (simulated). Access: USR'
       tags:
         - 'M04: Bidding & Transactions'
       requestBody:
@@ -310,15 +414,27 @@ paths:
                   type: number
                 card_number:
                   type: string
+                  description: 'Not stored, only for validation'
+              required:
+                - amount
       responses:
         '302':
-          description: 'Redirect to wallet with success message.'
+          description: 'Redirect to wallet.'
 
   /wallet/withdraw:
+    get:
+      operationId: R405
+      summary: 'R405: Withdraw Credit Form'
+      description: 'Show form to withdraw funds. Access: USR'
+      tags:
+        - 'M04: Bidding & Transactions'
+      responses:
+        '200':
+          description: 'Ok. Show Withdraw UI'
     post:
-      operationId: R404
-      summary: 'R404: Withdraw Credit'
-      description: 'Request withdrawal (moves credit to held_credit). Access: USR'
+      operationId: R406
+      summary: 'R406: Process Withdrawal'
+      description: 'Moves credit to held_credit. Access: USR'
       tags:
         - 'M04: Bidding & Transactions'
       requestBody:
@@ -333,26 +449,78 @@ paths:
                 method:
                   type: string
                   enum: [mbway, iban]
+                mbway_phone:
+                  type: string
+                iban:
+                  type: string
+              required:
+                - amount
+                - method
       responses:
         '302':
-          description: 'Redirect to wallet with success message.'
+          description: 'Redirect to wallet.'
+
 
   # ==============================================
-  # M05: Administration
+  # M05: Administration & Moderation
   # ==============================================
-  /api/users:
+  /users/create:
     get:
       operationId: R501
-      summary: 'R501: Search Users API'
-      description: 'Search users using full-text search (tsvectors). Access: ADM'
+      summary: 'R501: Admin User Creation Form'
+      description: 'Form for admins to create users (including admins). Access: ADM'
+      tags:
+        - 'M05: Administration & Moderation'
+      responses:
+        '200':
+          description: 'Ok. Show Create User UI'
+
+  /user/store:
+    post:
+      operationId: R502
+      summary: 'R502: Admin Store User'
+      description: 'Process user creation by admin. Access: ADM'
+      tags:
+        - 'M05: Administration & Moderation'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                password_confirmation:
+                  type: string
+                is_admin:
+                  type: boolean
+                  description: 'Flag to create another admin'
+              required:
+                - name
+                - email
+                - password
+      responses:
+        '302':
+          description: 'Redirect to user list.'
+
+  /users/api:
+    get:
+      operationId: R503
+      summary: 'R503: Search Users API'
+      description: 'JSON API for searching users via tsvectors. Access: ADM'
       tags:
         - 'M05: Administration & Moderation'
       parameters:
         - in: query
           name: search
+          description: 'Search term'
           schema:
             type: string
-          description: Name or email search term
         - in: query
           name: page
           schema:
@@ -364,34 +532,7 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        name:
-                          type: string
-                        email:
-                          type: string
-                        is_admin:
-                          type: boolean
 
-  /user/{id}/block:
-    post:
-      operationId: R502
-      summary: 'R502: Block User'
-      description: 'Block a user account. Access: ADM'
-      tags:
-        - 'M05: Administration & Moderation'
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-      responses:
-        '302':
-          description: 'Redirect to user list.'
+
+
+  
