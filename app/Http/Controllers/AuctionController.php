@@ -7,11 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Auction;
 use App\Models\AuctionImage;
 use Illuminate\Support\Facades\Auth;
-<<<<<<< HEAD
 use Illuminate\Database\QueryException;
-=======
 use Illuminate\Support\Facades\Storage;
->>>>>>> Media
 
 
 class AuctionController extends Controller
@@ -203,11 +200,7 @@ class AuctionController extends Controller
         return redirect()->route('auction.show', $auction)->with('success', 'The auction has been successfully cancelled.');
     }
 
-<<<<<<< HEAD
-=======
-    /**
-     * Delete a single image from an auction.
-     */
+
     public function destroyImage(Auction $auction, $imageId)
     {
         $this->authorize('update', $auction);
@@ -234,5 +227,4 @@ class AuctionController extends Controller
     }
 
 
->>>>>>> Media
 }
