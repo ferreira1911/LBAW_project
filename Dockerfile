@@ -65,5 +65,15 @@ CMD ["/docker_run.sh"]
 # Install cron
 RUN apt-get update && apt-get install -y cron
 
+# Copy cron job
+COPY ./etc/cron/laravel-cron /etc/cron.d/laravel-cron
+
+# Set permissions
+RUN chmod 0644 /etc/cron.d/laravel-cron
+
+# Apply cron job
+RUN crontab /etc/cron.d/laravel-cron
+
 # Start command
 CMD sh /docker_run.sh
+

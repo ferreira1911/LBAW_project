@@ -32,7 +32,9 @@
 
       @if (Auth::id() === $user->id)
       <div style="margin-top: 2rem;">
+        <a href="{{ route('user.destroy', $user) }}" class="button">Delete Profile</a>
         <a href="{{ route('user.edit', $user) }}" class="button">Edit Profile</a>
+        <a href="{{ route('notifications.index') }}" class="button">View Notifications</a>
       </div>
       @endif
     </div>

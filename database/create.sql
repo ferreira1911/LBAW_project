@@ -5,7 +5,7 @@ SET search_path TO lbaw25172;
 ------------------------------------------------------------
 -- ENUMERATED TYPES
 ------------------------------------------------------------
-CREATE TYPE auction_status AS ENUM ('Pending', 'Active', 'Ended', 'Cancelled');
+CREATE TYPE auction_status AS ENUM ('Pending', 'Active','Ending' ,'Ended', 'Cancelled');
 CREATE TYPE report_status AS ENUM ('Pending', 'InReview', 'Resolved', 'Dismissed');
 CREATE TYPE transaction_status AS ENUM ('Pending', 'Completed', 'Cancelled');
 CREATE TYPE transaction_type AS ENUM ('auction-buy', 'add-credit', 'feature-payment', 'credit-withdrawal');
@@ -584,7 +584,7 @@ RETURNS TRIGGER AS $$
 BEGIN
     NEW.name = 'Deleted User';
     NEW.email =  NEW.id || '@deleted.user';
-    NEW.password = md5(random::text);   -- this password can be whatever so an attacker cannot get ahold of the account by sql injection
+    NEW.password = md5(random()::text);   -- this password can be whatever so an attacker cannot get ahold of the account by sql injection
     NEW.url := NULL;
     NEW.credit := 0;
     NEW.held_credit := 0;
