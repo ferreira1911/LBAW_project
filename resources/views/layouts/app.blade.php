@@ -10,7 +10,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
         <!-- Styles -->
-        <link rel="stylesheet" href="{{ asset('css/milligram.css') }}">
+        <!-- <link rel="stylesheet" href="{{ asset('css/milligram.css') }}"> -->
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
         @stack('styles')
 
@@ -22,30 +22,48 @@
     </head>
     <body>
         <main>
-            <header>
-                <div class="column">
-                    <h1><a href="{{ url('/auction') }}">AuctionEase</a></h1>
-                </div>
-
-                <div class="column">
-                    <div class="auth-links float-right">
-                        @auth
-                            <a href="{{ route('auction.create') }}" class="button">Criar um Leilão</a>
-                            <span>{{ Auth::user()->name }}</span>
-                            <span>Your credit is {{ Auth::user()->credit }}$</span>
-                            <a href="{{ route('user.show',Auth::user()) }}">Profile</a>
-                            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                                @csrf
-                                <button type="submit" class="button button-danger button-outline">Logout</button>
-                            </form>
-                            <a href="{{ route('users.index') }}" class="button">Admin</a>
-                        @else
-                            <a href="{{ route('login') }}" class="button">Login</a>
-                            <a href="{{ route('register') }}" class="button button-outline">Register</a>
-                        @endauth
+            <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+                <div class="container">
+                    <a class="navbar-brand" href="{{ url('/auction') }}">AuctionEase</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto align-items-center">
+                            @auth
+                                <li class="nav-item">
+                                    <a href="{{ route('auction.create') }}" class="btn btn-primary me-2">Create Auction</a>
+                                </li>
+                                <li class="nav-item me-2">
+                                    <span class="navbar-text fw-bold">{{ Auth::user()->name }}</span>
+                                </li>
+                                <li class="nav-item me-2">
+                                    <span class="navbar-text">Credit: {{ Auth::user()->credit }}$</span>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('user.show', Auth::user()) }}" class="nav-link">Profile</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('users.index') }}" class="nav-link">Admin</a>
+                                </li>
+                                <li class="nav-item">
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit" class="btn btn-outline-danger ms-2">Logout</button>
+                                    </form>
+                                </li>
+                            @else
+                                <li class="nav-item">
+                                    <a href="{{ route('login') }}" class="btn btn-outline-primary me-2">Login</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('register') }}" class="btn btn-primary">Register</a>
+                                </li>
+                            @endauth
+                        </ul>
                     </div>
                 </div>
-            </header>
+            </nav>
 
             <section id="content">
                 @yield('content')
@@ -55,7 +73,7 @@
         <div class="container">
             <div class="d-flex flex-wrap justify-content-between align-items-center">
                 <div class="col-md-6 mb-3 mb-md-0">
-                    <span class="text-muted">&copy; {{ date('Y') }} AuctionEase. Todos os direitos reservados.</span>
+                    <span class="text-muted">&copy; {{ date('Y') }} AuctionEase. All rights reserved.</span>
                 </div>
             </div>
         </div>
