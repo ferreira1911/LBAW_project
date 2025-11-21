@@ -45,6 +45,8 @@ Route::controller(AuctionController::class)->group(function () {
     Route::get('/auction/{auction}/edit', 'edit')->whereNumber('auction')->name('auction.edit');
     Route::put('/auction/{auction}', 'update')->whereNumber('auction')->name('auction.update');
     Route::post('/auction/{auction}/cancel', 'cancel')->name('auction.cancel');
+    Route::delete('/auction/{auction}/image/{image}', 'destroyImage')->whereNumber('auction')->name('auction.image.destroy');
+    Route::post('/auction/{auction}/bid', 'bid')->whereNumber('auction')->name('auction.bid');
 });
 
 Route::post('/auctions/{auction}/bids', [BidController::class, 'store'])->name('bids.store')->middleware('auth');

@@ -150,6 +150,15 @@ CREATE TABLE feature_payment (
     paid_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE auction_images (
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    auction_id INTEGER NOT NULL REFERENCES auction(id) ON DELETE CASCADE,
+    path TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
 -- * ====================================================
 -- * Index Creation
 -- * ====================================================

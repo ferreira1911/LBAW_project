@@ -1,15 +1,23 @@
 <div class="card h-100 shadow-sm border-0 rounded-0 auction-card-hover {{ $auction->is_featured ? 'border-warning' : '' }}">
     
     <div class="position-relative">
-        @if ($auction->is_featured)
-            <span class="position-absolute top-0 end-0 badge bg-warning text-dark m-3 shadow-sm z-2 rounded-0">
-                <i class="fas fa-star me-1"></i> Destaque
+        @if (Auth::check() && Auth::id() === $auction->owner_id)
+            <a href="{{ route('auction.edit', $auction) }}" 
+            class="position-absolute top-0 end-0 btn btn-warning m-3"
+            style="z-index: 10; font-size: 0.9rem; padding: 0.5rem 0.8rem;">
+            Edit Auction
+            </a>
+        @elseif (($showFeatured ?? true) && $auction->is_featured)
+            <span class="position-absolute top-0 end-0 badge bg-warning text-dark m-3">
+                <i class="fas fa-star"></i> Destaque
             </span>
         @endif
 
+
         <a href="{{ route('auction.show', $auction) }}" class="d-flex align-items-center justify-content-center h-100 text-decoration-none text-muted" style="height: 220px; background-color: #f8f9fa;">
-            @if ($auction->picture)
-                <img src="{{ asset('storage/' . $auction->picture) }}" alt="{{ $auction->title }}" class="w-100 h-100 object-fit-cover">
+            @php $firstImg = $auction->images->first(); @endphp
+            @if ($firstImg)
+                <img src="{{ asset('images/auction/' . $firstImg->path) }}" alt="{{ $auction->title }}" class="w-100 h-100 object-fit-cover">
             @else
                 <div class="text-center opacity-50">
                     <i class="fas fa-image fa-3x mb-2"></i>
@@ -18,6 +26,7 @@
             @endif
         </a>
     </div>
+
 
     <div class="card-body d-flex flex-column p-4">
         

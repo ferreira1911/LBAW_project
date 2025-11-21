@@ -43,26 +43,20 @@
   @if($auctions->count() > 0)
       <h3>User Auctions</h3>
       <div class="auction-grid">
-          @foreach($auctions as $auction)
-              <div class="auction-card {{ $auction->is_featured ? 'featured' : '' }}">
-                  @if ($auction->is_featured)
-                      <span class="featured-badge">Featured</span>
-                  @endif
-                  <h4>
-                      <a href="{{ route('auction.show', $auction) }}">{{ $auction->title }}</a>
-                  </h4>
-                  <p>Current Price: ${{ number_format($auction->current_price, 2) }}</p>
-                  <p>Status: {{ $auction->status }}</p>
-
-                  @if(Auth::check() && Auth::id() === $user->id)
-                      <a href="{{ route('auction.edit', $auction) }}" class="button button-secondary">Edit Auction</a>
-                  @endif
-              </div>
-          @endforeach
+          <div class="row g-3">
+              @forelse ($auctions as $auction)
+                  <div class="col-12 col-sm-6 col-lg-4">
+                      @include('partials.card', ['auction' => $auction, 'showFeatured' => false])
+                  </div>
+              @empty
+                  <p>No auctions...</p>
+              @endforelse
+          </div>
       </div>
   @else
       <p>This user does not own any auctions yet.</p>
   @endif
+
 
 </div>
 @endsection
