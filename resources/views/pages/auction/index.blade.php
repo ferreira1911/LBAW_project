@@ -9,10 +9,6 @@
         <aside class="col-12 col-md-3 mb-4">
             <div class="card shadow-sm border-0">
                 <div class="card-body p-3">
-                    <h5 class="mb-3 d-flex align-items-center fw-bold text-secondary">
-                        <i class="bi bi-funnel me-2"></i>
-                        Filters
-                    </h5>
 
                     <form method="GET" action="{{ route('auctions.search') }}" id="filter-form">
                         @include('partials.filters', ['categories' => $categories])
