@@ -74,7 +74,7 @@
         <div class="container">
             <div class="d-flex flex-wrap justify-content-between align-items-center">
                 <div class="col-md-6 mb-3 mb-md-0">
-                    <span class="text-muted">&copy; {{ date('Y') }} AuctionEase. All rights reserved.</span>
+                    <span>&copy; {{ date('Y') }} AuctionEase. All rights reserved.</span>
                 </div>
             </div>
         </div>
