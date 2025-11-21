@@ -584,7 +584,7 @@ RETURNS TRIGGER AS $$
 BEGIN
     NEW.name = 'Deleted User';
     NEW.email =  NEW.id || '@deleted.user';
-    NEW.password = md5(random::text);   -- this password can be whatever so an attacker cannot get ahold of the account by sql injection
+    NEW.password = md5(random()::text);   -- this password can be whatever so an attacker cannot get ahold of the account by sql injection
     NEW.url := NULL;
     NEW.credit := 0;
     NEW.held_credit := 0;
