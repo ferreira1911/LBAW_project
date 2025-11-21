@@ -3,76 +3,100 @@
 @section('title', 'Create Auction')
 
 @section('content')
-<div class="container">
-    <div class="page-header">
-        <h2>Create a New Auction</h2>
-        <a href="{{ route('auctions.index') }}" class="button button-secondary">Back to Auctions</a>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold mb-0">Create New Auction</h2>
+                <a href="{{ route('auctions.index') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Back
+                </a>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <form action="{{ route('auction.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+
+                        <div class="mb-3">
+                            <label for="title" class="form-label fw-bold">Title</label>
+                            <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" value="{{ old('title') }}" required autofocus>
+                            @error('title')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label fw-bold">Description</label>
+                            <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="4" required>{{ old('description') }}</textarea>
+                            @error('description')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="start_date" class="form-label fw-bold">Start Date</label>
+                                <input type="datetime-local" class="form-control @error('start_date') is-invalid @enderror" id="start_date" name="start_date" value="{{ old('start_date') }}" required>
+                                @error('start_date')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mt-3 mt-md-0">
+                                <label for="end_date" class="form-label fw-bold">End Date</label>
+                                <input type="datetime-local" class="form-control @error('end_date') is-invalid @enderror" id="end_date" name="end_date" value="{{ old('end_date') }}" required>
+                                @error('end_date')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label for="starting_price" class="form-label fw-bold">Starting Price (€)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">€</span>
+                                    <input type="number" class="form-control @error('starting_price') is-invalid @enderror" id="starting_price" name="starting_price" step="0.01" min="0" value="{{ old('starting_price') }}" required>
+                                    @error('starting_price')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-3 mt-md-0">
+                                <label for="category_id" class="form-label fw-bold">Category</label>
+                                <select class="form-select @error('category_id') is-invalid @enderror" id="category_id" name="category_id" required>
+                                    <option value="" selected disabled>Select a category</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('category_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="file" class="form-label fw-bold">Auction Image</label>
+                            <input type="file" class="form-control @error('file') is-invalid @enderror" id="file" name="file" accept="image/*">
+                            @error('file')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-plus-circle me-2"></i>Create Auction
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <form action="{{ route('auction.store') }}" method="POST" class="auction-form" enctype="multipart/form-data">
-        @csrf
-
-        <div class="form-group">
-            <label for="title">Title</label>
-            <input type="text" name="title" id="title" value="{{ old('title') }}" required>
-            @error('title')
-                <p class="error">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <div class="form-group">
-            <label for="description">Description</label>
-            <textarea name="description" id="description" required>{{ old('description') }}</textarea>
-            @error('description')
-                <p class="error">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <div class="form-group">
-            <label for="start_date">Start Date</label>
-            <input type="datetime-local" name="start_date" id="start_date" value="{{ old('start_date') }}" required>
-            @error('start_date')
-                <p class="error">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <div class="form-group">
-            <label for="end_date">End Date</label>
-            <input type="datetime-local" name="end_date" id="end_date" value="{{ old('end_date') }}" required>
-            @error('end_date')
-                <p class="error">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <div class="form-group">
-            <label for="starting_price">Starting Price</label>
-            <input type="number" name="starting_price" id="starting_price" step="0.01" value="{{ old('starting_price') }}" required>
-            @error('starting_price')
-                <p class="error">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <div class="form-group">
-            <label for="category_id">Category</label>
-            <select name="category_id" id="category_id" required>
-                <option value="">Select a category</option>
-                @foreach($categories as $category)
-                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                        {{ $category->name }}
-                    </option>
-                @endforeach
-            </select>
-            @error('category_id')
-                <p class="error">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <div class="form-group">
-            <label for="file">Auction Image</label>
-            <input type="file" name="file" id="file" accept="image/*">
-        </div>
-
-        <button type="submit" class="button button-primary">Create Auction</button>
-    </form>
 </div>
 @endsection
