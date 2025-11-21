@@ -9,7 +9,7 @@
             <h1 class="display-5 fw-bold text-primary">Welcome to AuctionEase</h1>
             <p class="col-md-8 fs-4">The best platform to buy and sell unique items securely. Join our community and start bidding on exclusive auctions today.</p>
             <div class="mt-4">
-                <a href="{{ url('/auctions') }}" class="btn btn-primary btn-lg px-4 me-md-2">Browse Auctions</a>
+                <a href="{{ url('/auction') }}" class="btn btn-primary btn-lg px-4 me-md-2">Browse Auctions</a>
                 @guest
                     <a href="{{ route('register') }}" class="btn btn-outline-secondary btn-lg px-4">Sign Up</a>
                 @endguest
