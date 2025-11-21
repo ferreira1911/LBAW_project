@@ -18,10 +18,22 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+public function index(Request $request)
     {
-        //$this->authorize('viewAny', User::class);
-        return view('pages.user.index');
+        $query = User::where('is_deleted', false);
+
+        if ($request->has('search') && $request->get('search') != '') {
+            $search = $request->get('search');
+
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'ilike', "%{$search}%")
+                  ->orWhere('email', 'ilike', "%{$search}%");
+            });
+        }
+
+        $users = $query->orderBy('id', 'asc')->paginate(10);
+
+        return view('pages.user.index', compact('users'));
     }
 
     /**

@@ -1,110 +1,98 @@
 @php
-    // Configuração de Cores e Ícones
     $status = match($notification->type) {
-        'new-bid' => ['icon' => 'fa-gavel',         'color' => 'primary',   'title' => 'Nova Licitação'],
-        'winner'  => ['icon' => 'fa-trophy',        'color' => 'success',   'title' => 'Vencedor!'],
-        'ended'   => ['icon' => 'fa-hourglass-end', 'color' => 'secondary', 'title' => 'Leilão Terminado'],
-        'cancel'  => ['icon' => 'fa-ban',           'color' => 'danger',    'title' => 'Cancelado'],
-        'review'  => ['icon' => 'fa-star',          'color' => 'warning',   'title' => 'Nova Avaliação'],
-        default   => ['icon' => 'fa-bell',          'color' => 'info',      'title' => 'Notificação'],
+        'new-bid' => ['icon' => 'bi-hammer',        'color' => 'primary',   'title' => 'New Bid'],
+        'winner'  => ['icon' => 'bi-trophy-fill',   'color' => 'success',   'title' => 'You Won!'],
+        'ended'   => ['icon' => 'bi-hourglass-bottom', 'color' => 'secondary', 'title' => 'Auction Ended'],
+        'cancel'  => ['icon' => 'bi-x-circle-fill', 'color' => 'danger',    'title' => 'Cancelled'],
+        'review'  => ['icon' => 'bi-star-fill',     'color' => 'warning',   'title' => 'New Review'],
+        default   => ['icon' => 'bi-bell-fill',     'color' => 'info',      'title' => 'Notification'],
     };
 
     $color = $status['color'];
     $icon  = $status['icon'];
     
-    $cardClass = $notification->is_read 
-        ? 'bg-light border-0 opacity-75' 
-        : 'bg-white border-0 shadow-sm border-start border-4 border-' . $color;
-        
+    $bgClass = $notification->is_read ? 'bg-light text-muted' : 'bg-white shadow-sm border-start border-4 border-' . $color;
     $isOwner = Auth::id() === $notification->auction->owner_id;
 @endphp
 
-<div class="card mb-3 overflow-hidden {{ $cardClass }} position-relative">
-    <div class="card-body p-4">
-        <div class="d-flex">
+<div class="card mb-3 border-0 {{ $bgClass }}">
+    <div class="card-body p-3">
+        <div class="d-flex align-items-start">
             
-            {{-- 1. Coluna do Ícone --}}
-            <div class="flex-shrink-0 me-4">
-                <div class="d-flex align-items-center justify-content-center rounded-circle bg-{{ $color }} bg-opacity-10 text-{{ $color }}" 
-                     style="width: 50px; height: 50px;">
-                    <i class="fas {{ $icon }} fa-lg"></i>
+            <div class="flex-shrink-0 me-3">
+                <div class="rounded-circle d-flex align-items-center justify-content-center bg-{{ $color }} bg-opacity-10 text-{{ $color }}" 
+                     style="width: 40px; height: 40px;">
+                    <i class="bi {{ $icon }} fs-5"></i>
                 </div>
             </div>
 
-            {{-- 2. Coluna do Conteúdo --}}
             <div class="flex-grow-1">
-                
-                {{-- Cabeçalho --}}
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                    <h6 class="fw-bold mb-0 text-dark">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <h6 class="fw-bold mb-0 {{ $notification->is_read ? 'text-secondary' : 'text-dark' }}">
                         {{ $status['title'] }}
                         @if(!$notification->is_read)
-                            <span class="badge bg-{{ $color }} ms-2" style="font-size: 0.6em; vertical-align: middle;">NOVA</span>
+                            <span class="badge bg-{{ $color }} ms-2" style="font-size: 0.6rem;">NEW</span>
                         @endif
                     </h6>
-                    <small class="text-muted ms-2 text-nowrap" style="font-size: 0.8rem;">
-                        <i class="far fa-clock me-1"></i>{{ $notification->created_date->diffForHumans() }}
+                    <small class="text-muted" style="font-size: 0.75rem;">
+                        {{ $notification->created_date->diffForHumans() }}
                     </small>
                 </div>
 
-                
-                <div class="text-secondary mb-3 small" style="line-height: 1.6;">
+                <p class="mb-2 small {{ $notification->is_read ? 'text-muted' : 'text-secondary' }}">
                     @switch($notification->type)
-                        
                         @case('new-bid')
                             @if($isOwner)
-                                Boas notícias! Alguém ofereceu <span class="fw-bold text-dark">{{ number_format($notification->bid->amount ?? 0, 2) }} €</span> 
-                                pelo teu leilão <a href="{{ route('auction.show', $notification->auction) }}" class="link-primary text-decoration-none fw-bold">{{ $notification->auction->title }}</a>.
+                                Good news! Someone placed a bid of <span class="fw-bold">€{{ number_format($notification->bid->amount ?? 0, 2) }}</span> 
+                                on your auction <a href="{{ route('auction.show', $notification->auction) }}" class="text-decoration-none fw-bold">{{ $notification->auction->title }}</a>.
                             @else
-                                Há atividade recente! Foi feita uma licitação de <span class="fw-bold text-dark">{{ number_format($notification->bid->amount ?? 0, 2) }} €</span> 
-                                no leilão <a href="{{ route('auction.show', $notification->auction) }}" class="link-primary text-decoration-none fw-bold">{{ $notification->auction->title }}</a>.
+                                Activity alert! A new bid of <span class="fw-bold">€{{ number_format($notification->bid->amount ?? 0, 2) }}</span> 
+                                was placed on <a href="{{ route('auction.show', $notification->auction) }}" class="text-decoration-none fw-bold">{{ $notification->auction->title }}</a>.
                             @endif
                             @break
 
                         @case('winner')
-                            Parabéns! Ganhaste o leilão <a href="{{ route('auction.show', $notification->auction) }}" class="link-success text-decoration-none fw-bold">{{ $notification->auction->title }}</a>.
-                            O valor foi debitado da tua carteira.
+                            Congratulations! You won the auction <a href="{{ route('auction.show', $notification->auction) }}" class="text-success text-decoration-none fw-bold">{{ $notification->auction->title }}</a>.
+                            The amount has been deducted from your wallet.
                             @break
 
                         @case('ended')
                             @if($isOwner)
-                                O teu leilão <a href="{{ route('auction.show', $notification->auction) }}" class="link-dark text-decoration-none fw-bold">{{ $notification->auction->title }}</a> chegou ao fim.
-                                Verifica se foi vendido!
+                                Your auction <a href="{{ route('auction.show', $notification->auction) }}" class="text-dark text-decoration-none fw-bold">{{ $notification->auction->title }}</a> has ended.
+                                Check if it was sold!
                             @else
-                                O leilão <a href="{{ route('auction.show', $notification->auction) }}" class="link-dark text-decoration-none fw-bold">{{ $notification->auction->title }}</a> terminou.
+                                The auction <a href="{{ route('auction.show', $notification->auction) }}" class="text-dark text-decoration-none fw-bold">{{ $notification->auction->title }}</a> has ended.
                             @endif
                             @break
 
                         @case('cancel')
                             @if($isOwner)
-                                O teu leilão <strong>{{ $notification->auction->title }}</strong> foi cancelado com sucesso.
+                                Your auction <strong>{{ $notification->auction->title }}</strong> was successfully cancelled.
                             @else
-                                O leilão <strong>{{ $notification->auction->title }}</strong> (onde tinhas licitado) foi cancelado. 
-                                O teu crédito retido foi devolvido.
+                                The auction <strong>{{ $notification->auction->title }}</strong> (which you bid on) was cancelled. 
+                                Your held credit has been refunded.
                             @endif
                             @break
 
                         @case('review')
-                            Recebeste uma avaliação de <strong>{{ $notification->rating ?? 5 }} estrelas</strong> numa venda recente.
+                            You received a <strong>{{ $notification->rating ?? 5 }}-star</strong> review on a recent sale.
                             @break
 
                         @default
-                            Tens uma nova atualização na tua conta.
+                            You have a new update on your account.
                     @endswitch
-                </div>
+                </p>
 
-                {{-- Ações --}}
                 @if(!$notification->is_read)
-                    <div class="d-flex justify-content-end mt-2">
-                        <form action="{{ route('notifications.markAsRead', $notification) }}" method="POST">
+                    <div class="text-end">
+                        <form action="{{ route('notifications.markAsRead', $notification) }}" method="POST" class="d-inline">
                             @csrf
-                            <button type="submit" class="btn btn-sm btn-outline-secondary rounded-pill px-3" title="Marcar como lida">
-                                <i class="fas fa-check me-1"></i> Marcar como lida
+                            <button type="submit" class="btn btn-link btn-sm p-0 text-decoration-none text-muted small" title="Mark as read">
+                                <i class="bi bi-check2-all me-1"></i>Mark as read
                             </button>
                         </form>
                     </div>
                 @endif
-
             </div>
         </div>
     </div>

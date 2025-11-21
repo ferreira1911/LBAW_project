@@ -8,58 +8,115 @@
         <title>@yield('title', config('app.name', 'Laravel'))</title>
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
         <!-- Styles -->
-        <link rel="stylesheet" href="{{ asset('css/milligram.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        <!-- <link rel="stylesheet" href="{{ asset('css/milligram.css') }}"> -->
+        {{-- <link rel="stylesheet" href="{{ asset('css/app.css') }}"> --}}
         @stack('styles')
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
         <script src="{{ asset('js/ajax.js') }}" defer></script>
         <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
         @stack('scripts')
     </head>
-    <body>
+    <body class="d-flex flex-column min-vh-100 bg-light">
         <main>
-            <header>
-                <div class="column">
-                    <h1><a href="{{ url('/auction') }}">AuctionEase</a></h1>
-                </div>
+            <nav class="navbar navbar-expand-lg navbar-white bg-white border-bottom sticky-top shadow-sm">
+                <div class="container">
+                    <a class="navbar-brand fw-bold text-primary d-flex align-items-center" href="{{ url('/') }}">
+                        <i class="bi bi-hammer me-2"></i>AuctionEase
+                    </a>
 
-                <div class="column">
-                    <div class="auth-links float-right">
-                        @auth
-                            <a href="{{ route('auction.create') }}" class="button">Criar um Leilão</a>
-                            <span>{{ Auth::user()->name }}</span>
-                            <span>Your credit is {{ Auth::user()->credit }}$</span>
-                            <a href="{{ route('user.show',Auth::user()) }}">Profile</a>
-                            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                                @csrf
-                                <button type="submit" class="button button-danger button-outline">Logout</button>
-                            </form>
-                            <a href="{{ route('users.index') }}" class="button">Admin</a>
-                        @else
-                            <a href="{{ route('login') }}" class="button">Login</a>
-                            <a href="{{ route('register') }}" class="button button-outline">Register</a>
-                        @endauth
+                    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item">
+                                <a class="nav-link {{ Route::is('auctions.index') ? 'active fw-bold' : '' }}" href="{{ route('auctions.index') }}">Auctions</a>
+                            </li>
+                        </ul>
+                    
+                        <ul class="navbar-nav align-items-center gap-2">
+                            @guest
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('login') }}">Login</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="btn btn-primary px-4 rounded-pill" href="{{ route('register') }}">Get Started</a>
+                                </li>
+                            @else
+                                {{-- Create Auction Button --}}
+                                <li class="nav-item me-2">
+                                    <a href="{{ route('auction.create') }}" class="btn btn-primary rounded-pill px-3">
+                                        <i class="bi bi-plus-lg"></i> Create
+                                    </a>
+                                </li>
+                            
+                                {{-- User Credit (Clickable to go to Wallet) --}}
+                                <li class="nav-item me-2">
+                                    <a href="{{ route('user.show', Auth::user()) }}" class="btn btn-light border rounded-pill text-success fw-bold" title="Wallet Balance">
+                                        €{{ number_format(Auth::user()->credit, 2) }}
+                                    </a>
+                                </li>
+                            
+                                {{-- User Dropdown --}}
+                                <li class="nav-item dropdown">
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown">
+                                        @if(Auth::user()->url)
+                                            <img src="{{ Auth::user()->getProfileImage() }}" class="rounded-circle object-fit-cover border" width="32" height="32">
+                                        @else
+                                            <div class="rounded-circle bg-secondary-subtle d-flex align-items-center justify-content-center border" style="width: 32px; height: 32px;">
+                                                <i class="bi bi-person-fill text-secondary"></i>
+                                            </div>
+                                        @endif
+                                        <span class="fw-medium">{{ Auth::user()->name }}</span>
+                                    </a>
+                                
+                                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                                        <li>
+                                            <a class="dropdown-item" href="{{ route('user.show', Auth::user()) }}">
+                                                <i class="bi bi-person me-2"></i>Profile
+                                            </a>
+                                        </li>
+                                        @if(Auth::user()->is_admin)
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('users.index') }}">
+                                                    <i class="bi bi-shield-lock me-2"></i>Administration
+                                                </a>
+                                            </li>
+                                        @endif
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <a class="dropdown-item text-danger" href="{{ route('logout') }}"
+                                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                                <i class="bi bi-box-arrow-right me-2"></i>Logout
+                                            </a>
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                                @csrf
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </li>
+                            @endguest
+                        </ul>
                     </div>
                 </div>
-            </header>
+            </nav>
 
             <section id="content">
                 @yield('content')
             </section>
         </main>
-        <footer class="bg-dark text-light py-4 mt-auto">
-        <div class="container">
-            <div class="d-flex flex-wrap justify-content-between align-items-center">
-                <div class="col-md-6 mb-3 mb-md-0">
-                    <span class="text-muted">&copy; {{ date('Y') }} AuctionEase. Todos os direitos reservados.</span>
-                </div>
+        <footer class="bg-dark border-top py-4 mt-auto">
+            <div class="container text-center text-ligth small">
+                <p class="mb-0 text-white small">&copy; {{ date('Y') }} AuctionEase. All rights reserved.</p>
             </div>
-        </div>
-    </footer>
+        </footer>
     <script>
         const baseUrl = "{{ url('/') }}";
     </script>

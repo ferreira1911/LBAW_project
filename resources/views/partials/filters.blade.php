@@ -1,82 +1,71 @@
-<form method="GET" action="{{ route('auctions.search') }}" id="filter-form" class="card p-4 mb-4 shadow-sm">
-
-    <!-- Header -->
-    <div class="d-flex align-items-center mb-3">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round" class="me-2">
-            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
-        </svg>
-        <h5 class="mb-0">Filtros</h5>
-    </div>
-
-    {{-- Search --}}
-    <div class="mb-3">
-        <label for="query" class="form-label">Pesquisar</label>
-        <div class="input-group">
-            <span class="input-group-text bg-light">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8" />
-                    <path d="m21 21-4.3-4.3" />
-                </svg>
-            </span>
-            <input type="search" name="query" id="query" class="form-control"
-                   placeholder="Pesquisar leilões..."
-                   value="{{ request('query') }}">
+<form method="GET" action="{{ route('auctions.search') }}" id="filter-form" class="card shadow-sm border-0">
+    <div class="card-body p-4">
+        
+        {{-- Header --}}
+        <div class="d-flex align-items-center mb-4 border-bottom pb-3">
+            <h5 class="mb-0 fw-bold text-secondary">
+                <i class="bi bi-funnel-fill me-2"></i>Filters
+            </h5>
         </div>
-    </div>
 
-    {{-- Category --}}
-    <div class="mb-3">
-        <label for="category-select" class="form-label">Categoria</label>
-        <select name="category" id="category-select" class="form-select" onchange="this.form.submit()">
-            <option value="">Todas as Categorias</option>
-            @foreach($categories as $category)
-                <option value="{{ $category->id }}" 
-                    {{ request('category') == $category->id ? 'selected' : '' }}>
-                    {{ $category->name }}
-                </option>
-            @endforeach
-        </select>
-    </div>
-
-    {{-- Price Range --}}
-    <div class="mb-3">
-        <label class="form-label">Preço (€)</label>
-        <div class="d-flex align-items-center gap-2">
-            <input type="number" name="min_price"
-                   class="form-control" placeholder="Min"
-                   value="{{ request('min_price') }}" min="0">
-
-            <span class="fw-bold">—</span>
-
-            <input type="number" name="max_price"
-                   class="form-control" placeholder="Max"
-                   value="{{ request('max_price') }}" min="0">
+        {{-- Search --}}
+        <div class="mb-4">
+            <label for="query" class="form-label fw-bold small text-uppercase">Search</label>
+            <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">
+                    <i class="bi bi-search text-muted"></i>
+                </span>
+                <input type="search" name="query" id="query" class="form-control border-start-0 ps-0" 
+                       placeholder="Keywords..." 
+                       value="{{ request('query') }}">
+            </div>
         </div>
-    </div>
 
-    {{-- Sort --}}
-    <div class="mb-4">
-        <label for="sort-select" class="form-label">Ordenar por</label>
-        <select name="sort" id="sort-select" class="form-select" onchange="this.form.submit()">
-            <option value="">Padrão</option>
-            <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Preço: Baixo para Alto</option>
-            <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Preço: Alto para Baixo</option>
-            <option value="ending_soon" {{ request('sort') == 'ending_soon' ? 'selected' : '' }}>A Terminar em Breve</option>
-        </select>
-    </div>
+        {{-- Category --}}
+        <div class="mb-4">
+            <label for="category-select" class="form-label fw-bold small text-uppercase">Category</label>
+            <select name="category" id="category-select" class="form-select" onchange="this.form.submit()">
+                <option value="">All Categories</option>
+                @foreach($categories as $category)
+                    <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
 
-    {{-- Buttons --}}
-    <div class="d-flex gap-3">
-        <button type="submit" class="btn btn-primary px-4">
-            Aplicar filtros
-        </button>
+        {{-- Price Range --}}
+        <div class="mb-4">
+            <label class="form-label fw-bold small text-uppercase">Price Range (€)</label>
+            <div class="d-flex align-items-center gap-2">
+                <input type="number" name="min_price" class="form-control" placeholder="Min" 
+                       value="{{ request('min_price') }}" min="0">
+                <span class="text-muted fw-bold">—</span>
+                <input type="number" name="max_price" class="form-control" placeholder="Max" 
+                       value="{{ request('max_price') }}" min="0">
+            </div>
+        </div>
 
-        <a href="{{ route('auctions.index') }}" class="btn btn-outline-secondary">
-            Limpar filtros
-        </a>
+        {{-- Sort --}}
+        <div class="mb-4">
+            <label for="sort-select" class="form-label fw-bold small text-uppercase">Sort By</label>
+            <select name="sort" id="sort-select" class="form-select" onchange="this.form.submit()">
+                <option value="">Default</option>
+                <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Price: Low to High</option>
+                <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Price: High to Low</option>
+                <option value="ending_soon" {{ request('sort') == 'ending_soon' ? 'selected' : '' }}>Ending Soon</option>
+            </select>
+        </div>
+
+        {{-- Actions --}}
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary fw-bold">
+                Apply Filters
+            </button>
+            <a href="{{ route('auctions.index') }}" class="btn btn-outline-secondary btn-sm">
+                Clear All
+            </a>
+        </div>
+
     </div>
 </form>

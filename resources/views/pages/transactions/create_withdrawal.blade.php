@@ -1,129 +1,80 @@
 @extends('layouts.app')
 
-@section('title', 'Levantar Crédito')
+@section('title', 'Withdraw Funds')
 
 @section('content')
-<div class="container">
-    <h2>Levantar Crédito</h2>
-    <p>Submeta um pedido para levantar fundos da sua carteira. Os pedidos são revistos por um administrador.</p>
-    
-    <div class="edit-form">
-        <form method="POST" action="{{ route('withdrawal.store') }}">
-            @csrf
-
-            <fieldset>
-                <legend>Detalhes do Levantamento</legend>
-
-                <div class="current-balance">
-                    Saldo disponível para levantamento:
-                    <strong>${{ number_format(Auth::user()->credit, 2) }}</strong>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            
+            {{-- Card Container --}}
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h4 class="mb-0 fw-bold">
+                        <i class="bi bi-cash-stack me-2"></i> Withdraw Funds
+                    </h4>
                 </div>
 
-                {{-- Valor a levantar --}}
-                <label for="amount">Valor a Levantar ($)</label>
-                <input
-                    id="amount"
-                    type="number"
-                    name="amount"
-                    value="{{ old('amount') }}"
-                    max="{{ Auth::user()->credit }}"
-                    step="0.01"
-                    placeholder="e.g., 50.00"
-                    required
-                >
-                @error('amount')
-                    <span class="error">{{ $message }}</span>
-                @enderror
+                <div class="card-body p-4">
+                    
+                    {{-- Available Balance Alert --}}
+                    <div class="alert alert-info d-flex align-items-center mb-4 shadow-sm" role="alert">
+                        <i class="bi bi-wallet-fill fs-2 me-3"></i>
+                        <div>
+                            <div class="small text-uppercase fw-bold opacity-75">Available Balance</div>
+                            <div class="fs-4 fw-bold">€{{ number_format(Auth::user()->credit, 2) }}</div>
+                        </div>
+                    </div>
 
-                <hr>
+                    <p class="text-muted small mb-4">
+                        Submit a request to withdraw funds. Requests are usually processed within 24 hours.
+                    </p>
 
-                {{-- Método de levantamento --}}
-                <div class="column">
-                    <label class="radio-label">
-                        <input type="radio"
-                               id="method_mbway"
-                               name="method"
-                               value="mbway"
-                               onchange="toggleMethod()"
-                               {{ old('method', 'mbway') == 'mbway' ? 'checked' : '' }}>
-                        MB WAY
-                    </label>
+                    <form method="POST" action="{{ route('withdrawal.store') }}">
+                        @csrf
+
+                        {{-- Amount Input --}}
+                        <div class="mb-4">
+                            <label for="amount" class="form-label fw-bold">Amount to Withdraw</label>
+                            <div class="input-group">
+                                <span class="input-group-text">€</span>
+                                <input
+                                    id="amount"
+                                    type="number"
+                                    class="form-control @error('amount') is-invalid @enderror"
+                                    name="amount"
+                                    value="{{ old('amount') }}"
+                                    max="{{ Auth::user()->credit }}"
+                                    min="1"
+                                    step="0.01"
+                                    placeholder="50.00"
+                                    required
+                                    autofocus
+                                >
+                                @error('amount')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-text text-muted">
+                                Maximum allowed: €{{ number_format(Auth::user()->credit, 2) }}
+                            </div>
+                        </div>
+
+                        {{-- Actions --}}
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg fw-bold">
+                                <i class="bi bi-send me-2"></i> Submit Request
+                            </button>
+                            <a href="{{ route('user.show', Auth::user()) }}" class="btn btn-link text-decoration-none text-muted">
+                                Cancel
+                            </a>
+                        </div>
+
+                    </form>
                 </div>
-                <div class="column">
-                    <label class="radio-label">
-                        <input type="radio"
-                               id="method_iban"
-                               name="method"
-                               value="iban"
-                               onchange="toggleMethod()"
-                               {{ old('method') == 'iban' ? 'checked' : '' }}>
-                        Transferência Bancária (IBAN)
-                    </label>
-                </div>
+            </div>
 
-                @error('method')
-                    <span class="error">{{ $message }}</span>
-                @enderror
-
-                {{-- MB WAY --}}
-                <div id="mbway-container" style="display: none;">
-                    <label for="mbway_phone">Número de Telemóvel (MB WAY)</label>
-                    <input
-                        type="tel"
-                        id="mbway_phone"
-                        name="mbway_phone"
-                        placeholder="9xxxxxxxx"
-                        value="{{ old('mbway_phone') }}"
-                        pattern="9[0-9]{8}">
-                    @error('mbway_phone')
-                        <span class="error">{{ $message }}</span>
-                    @enderror
-                </div>
-
-                {{-- IBAN --}}
-                <div id="iban-container" style="display: none;">
-                    <label for="iban">IBAN</label>
-                    <input
-                        type="text"
-                        id="iban"
-                        name="iban"
-                        placeholder="PT50..."
-                        value="{{ old('iban') }}">
-                    @error('iban')
-                        <span class="error">{{ $message }}</span>
-                    @enderror
-                </div>
-
-            </fieldset>
-
-            <button type="submit" class="button-primary">Submeter Pedido</button>
-            <a href="{{ route('user.show', Auth::user()) }}" class="button button-outline">Cancelar</a>
-        </form>
+        </div>
     </div>
 </div>
-
-
-<script>
-    function toggleMethod() {
-        const selectedMethod = document.querySelector('input[name="method"]:checked').value;
-        const mbwayContainer = document.getElementById('mbway-container');
-        const ibanContainer = document.getElementById('iban-container');
-        const mbwayInput = document.getElementById('mbway_phone');
-        const ibanInput = document.getElementById('iban');
-
-        if (selectedMethod === 'mbway') {
-            mbwayContainer.style.display = 'block';
-            ibanContainer.style.display = 'none';
-            mbwayInput.required = true;
-            ibanInput.required = false;
-        } else {
-            mbwayContainer.style.display = 'none';
-            ibanContainer.style.display = 'block';
-            mbwayInput.required = false;
-            ibanInput.required = true;
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', toggleMethod);
-</script>
 @endsection

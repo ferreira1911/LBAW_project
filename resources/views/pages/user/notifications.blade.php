@@ -1,56 +1,57 @@
 @extends('layouts.app')
 
-@section('title', 'Notificações')
+@section('title', 'Notifications')
 
 @section('content')
-<div class="bg-light py-5" style="min-height: calc(100vh - 150px);">
-    <div class="container">
-        
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-8">
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold mb-0">
+                    Notifications
+                    @if(isset($unreadCount) && $unreadCount > 0)
+                        <span class="badge bg-danger rounded-pill fs-6 ms-2">
+                            {{ $unreadCount }} New
+                        </span>
+                    @endif
+                </h2>
+                
+                @if($notifications->count() > 0)
+                    {{-- Optional: Add a "Mark all as read" button here in the future --}}
+                @endif
+            </div>
 
-                {{-- Cabeçalho --}}
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2 class="fw-bold text-dark m-0">
-                        Notificações 
-                        {{-- Contador opcional de não lidas --}}
-                        @if(isset($unreadCount) && $unreadCount > 0)
-                            <span class="badge bg-danger rounded-pill fs-6 ms-2">{{ $unreadCount }}</span>
-                        @endif
-                    </h2>
-                    
-                </div>
-
-                {{-- Lista de Notificações --}}
-                <div class="notifications-list">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-0">
                     @forelse ($notifications as $notification)
-                        {{-- Inclui o Partial que criámos --}}
+                        
                         @include('partials.notification', ['notification' => $notification])
+
                     @empty
-                        {{-- Estado Vazio (Empty State) --}}
-                        <div class="text-center py-5">
-                            <div class="mb-4 text-muted opacity-25">
-                                
-                                <i class="far fa-bell-slash fa-4x"></i>
+                        
+                        <div class="text-center py-5 px-3">
+                            <div class="mb-3 text-muted opacity-25">
+                                <i class="bi bi-bell-slash display-1"></i>
                             </div>
-                            <h4 class="fw-bold text-secondary">Tudo limpo!</h4>
-                            <p class="text-muted mb-4">Não tens notificações novas de momento.</p>
+                            <h4 class="fw-bold text-secondary">All caught up!</h4>
+                            <p class="text-muted mb-4">You have no new notifications at the moment.</p>
                             
-                            <a href="{{ route('auctions.index') }}" class="btn btn-outline-primary rounded-pill px-4">
-                                Explorar Leilões
+                            <a href="{{ route('auctions.index') }}" class="btn btn-primary rounded-pill px-4">
+                                <i class="bi bi-search me-2"></i>Explore Auctions
                             </a>
                         </div>
+
                     @endforelse
                 </div>
-
-                {{-- Paginação --}}
-                @if($notifications->hasPages())
-                    <div class="mt-5 d-flex justify-content-center">
-                        {{ $notifications->links('pagination::bootstrap-5') }}
-                    </div>
-                @endif
-
             </div>
+
+            @if($notifications->hasPages())
+                <div class="mt-4 d-flex justify-content-center">
+                    {{ $notifications->links('pagination::bootstrap-5') }}
+                </div>
+            @endif
+
         </div>
     </div>
 </div>

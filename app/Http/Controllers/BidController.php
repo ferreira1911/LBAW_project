@@ -10,6 +10,11 @@ use Illuminate\Database\QueryException;
 class BidController extends Controller
 {
     public function store(Request $request, Auction $auction){
+        
+        $request->validate([
+            'amount' => 'required|numeric|min:0.01'
+        ]);
+
         try {
 
             $auction->bids()->create([
@@ -18,21 +23,17 @@ class BidController extends Controller
                 'date' => now(),
             ]);
 
-            $auction->current_price = $request->amount;
-            $auction->save();
-
             return redirect()->route('auction.show', $auction)->with('success', 'Your bid was placed successfully!');
 
         } catch (QueryException $e) {
 
-            $rawErrorMessage = $e->errorInfo[2] ?? 'An error occurred while placing the bid.';
-            $cleanMessage = $rawErrorMessage;
+            $cleanMessage = 'An error occurred while placing the bid.';
 
-            if (preg_match('/ERROR:\s*(.*?)\s*CONTEXT:/s', $rawErrorMessage, $matches)) {
+            if (isset($e->errorInfo[2]) && preg_match('/ERROR:\s*(.*?)(?:\n|$)/', $e->errorInfo[2], $matches)) {
                 $cleanMessage = $matches[1];
             }
 
-            return back()->withInput()->withErrors(['message' => trim($cleanMessage)]);
+            return back()->withInput()->withErrors(['amount' => $cleanMessage]);
         }
     }
 }
