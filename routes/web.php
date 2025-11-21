@@ -12,6 +12,7 @@ use App\Http\Controllers\MailController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\BidController;
 
 // Home
 Route::redirect('/', '/login');
@@ -42,8 +43,10 @@ Route::controller(AuctionController::class)->group(function () {
     Route::get('/auction/{auction}', 'show')->whereNumber('auction')->name('auction.show');
     Route::get('/auction/{auction}/edit', 'edit')->whereNumber('auction')->name('auction.edit');
     Route::put('/auction/{auction}', 'update')->whereNumber('auction')->name('auction.update');
-    Route::post('/auction/{auction}/bid', 'bid')->whereNumber('auction')->name('auction.bid');
+    Route::post('/auction/{auction}/cancel', 'cancel')->name('auction.cancel');
 });
+
+Route::post('/auctions/{auction}/bids', [BidController::class, 'store'])->name('bids.store')->middleware('auth');
 
 Route::controller(UserController::class)->group(function () {
     Route::get('/users', 'index')->name('users.index');

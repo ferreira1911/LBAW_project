@@ -48,7 +48,7 @@ use Illuminate\Support\Str;
                                 Não existem resultados para "<strong>{{ $searchQuery }}</strong>".<br>
                                 Tente verificar a ortografia ou usar termos mais genéricos.
                             </p>
-                            <a href="{{ route('home') }}" class="btn btn-outline-primary rounded-0 px-4">
+                            <a href="{{ route('auctions.index') }}" class="btn btn-outline-primary rounded-0 px-4">
                                 Voltar à Home Page
                             </a>
                         </div>
