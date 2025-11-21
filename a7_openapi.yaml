@@ -219,7 +219,7 @@ paths:
     get:
       operationId: R201
       summary: 'R201: List Auctions (Home)'
-      description: 'Homepage showing active auctions. Access: PUB'
+      description: 'Homepage showing active auctions and featured auctions. Access: PUB'
       tags:
         - 'M02: Auction Discovery & Management'
       responses:
@@ -255,7 +255,7 @@ paths:
           name: sort
           schema:
             type: string
-            enum: [relevance, ending_soon, price_asc, price_desc]
+            enum: [ending_soon, price_asc, price_desc]
       responses:
         '200':
           description: 'Ok. Show Search Results UI'
