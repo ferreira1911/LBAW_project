@@ -84,4 +84,5 @@ Route::controller(TransactionController::class)->middleware('auth')->group(funct
 
 Route::controller(NotificationController::class)->group(function(){
     Route::get('/notifications','index')->name('notifications.index');
+    Route::post('/notifications/{notification}/markAsRead', 'markAsRead')->name('notifications.markAsRead');
 });

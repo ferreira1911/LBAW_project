@@ -39,10 +39,20 @@ php artisan clear-compiled
 php artisan config:clear
 
 # Add cron job into cronfile
-echo “* * * * * cd /var/www && php artisan schedule:run >> /dev/null 2>&1" >> cronfile
+echo "* * * * * cd /var/www && php artisan schedule:run >> /dev/null 2>&1" > /etc/cron.d/laravel
+chmod 0644 /etc/cron.d/laravel
+crontab /etc/cron.d/laravel
+service cron start
+
+
 
 # Install cron job
 crontab cronfile
+
+while true; do
+    php artisan schedule:run >> /dev/null 2>&1
+    sleep 60
+done &
 
 # Remove temporary file
 rm cronfile
