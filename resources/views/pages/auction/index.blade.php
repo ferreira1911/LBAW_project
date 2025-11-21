@@ -3,7 +3,7 @@
 @section('title', 'Auctions')
 
 @section('content')
-<div class="container-fluid py-4">
+<div class="container py-5">
     <div class="row">
 
         <aside class="col-12 col-md-3 mb-4">
