@@ -15,7 +15,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\BidController;
 
 // Home
-Route::redirect('/', '/login');
+Route::view('/', 'welcome')->name('home');
 
 
 // Authentication
