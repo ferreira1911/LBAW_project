@@ -21,6 +21,19 @@
             <p>Buy Now Price: <strong>${{ number_format($auction->buy_now_price, 2) }}</strong></p>
         @endif
     </div>
+    
+    {{--
+    @if ($auction->images->count())
+    <div class="auction-gallery" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        @foreach ($auction->images as $image)
+        <img src="{{ $image->getUrl() }}" 
+            alt="{{ $auction->title }}" 
+            style="width: 150px; border-radius: 8px; object-fit: cover;">
+        @endforeach
+    </div>
+    @else
+    <p>No images available.</p>
+    @endif --}}
 
     @auth
         @if ($auction->status === 'Active' && $auction->owner_id !== Auth::id())

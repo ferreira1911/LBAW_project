@@ -9,7 +9,7 @@
         <a href="{{ route('auctions.index') }}" class="button button-secondary">Back to Auctions</a>
     </div>
 
-    <form action="{{ route('auction.store') }}" method="POST" class="auction-form">
+    <form action="{{ route('auction.store') }}" method="POST" class="auction-form" enctype="multipart/form-data">
         @csrf
 
         <div class="form-group">
@@ -65,6 +65,11 @@
             @error('category_id')
                 <p class="error">{{ $message }}</p>
             @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="file">Auction Image</label>
+            <input type="file" name="file" id="file" accept="image/*">
         </div>
 
         <button type="submit" class="button button-primary">Create Auction</button>

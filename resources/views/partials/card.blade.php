@@ -1,46 +1,58 @@
-<div class="auction-card {{ $auction->is_featured ? 'featured' : '' }}">
+<div class="card h-100 shadow-sm border-0 rounded-0 auction-card-hover {{ $auction->is_featured ? 'border-warning' : '' }}">
     
-    @if ($auction->is_featured)
-        <span class="badge featured-badge">Destaque</span>
-    @endif
+    <div class="position-relative">
+        @if ($auction->is_featured)
+            <span class="position-absolute top-0 end-0 badge bg-warning text-dark m-3 shadow-sm z-2 rounded-0">
+                <i class="fas fa-star me-1"></i> Destaque
+            </span>
+        @endif
 
-    {{-- Imagem --}}
-    <a href="{{ route('auction.show', $auction) }}" class="auction-image-link">
-        <div class="auction-image-placeholder">
+        <a href="{{ route('auction.show', $auction) }}" class="d-flex align-items-center justify-content-center h-100 text-decoration-none text-muted" style="height: 220px; background-color: #f8f9fa;">
             @if ($auction->picture)
-                <img src="{{ asset('storage/' . $auction->picture) }}" alt="{{ $auction->title }}">
+                <img src="{{ asset('storage/' . $auction->picture) }}" alt="{{ $auction->title }}" class="w-100 h-100 object-fit-cover">
             @else
-                <span>{{ $auction->category->name ?? 'Item' }}</span>
+                <div class="text-center opacity-50">
+                    <i class="fas fa-image fa-3x mb-2"></i>
+                    <div class="small fw-bold text-uppercase ls-1">{{ $auction->category->name ?? 'Item' }}</div>
+                </div>
             @endif
-        </div>
-    </a>
+        </a>
+    </div>
 
-    {{-- Conteúdo --}}
-    <div class="auction-content">
+    <div class="card-body d-flex flex-column p-4">
         
-
-        <h3 class="auction-title">
-            <a href="{{ route('auction.show', $auction) }}">
-                {{ Str::limit($auction->title, 40) }}
-            </a>
-        </h3>
-
-        <div class="auction-stats">
-            <div class="price-box">
-                <span class="label">Preço Atual</span>
-                <span class="price">{{ number_format($auction->current_price, 2) }} €</span>
-            </div>
-            <div class="bids-box">
-                <span class="label">Licitações</span>
-                <span class="value">{{ $auction->bids->count() }}</span>
-            </div>
+        <div class="mb-2">
+            <span class="badge bg-light text-secondary border rounded-0">{{ $auction->category->name ?? 'Geral' }}</span>
         </div>
 
-        @php
-            $isEndingSoon = $auction->end_date->diffInHours(now()) < 24;
-        @endphp
-        <div class="auction-timer {{ $isEndingSoon ? 'ending-soon' : '' }}">
-            Termina em {{ $auction->end_date->diffForHumans(null, true, true) }}
+        <h5 class="card-title fw-bold mb-3 fs-5">
+            <a href="{{ route('auction.show', $auction) }}" class="text-dark text-decoration-none stretched-link">
+                {{ Str::limit($auction->title, 45) }}
+            </a>
+        </h5>
+
+        <p class="card-text text-muted small mb-4 flex-grow-1">
+            {{ Str::limit($auction->description, 80) }}
+        </p>
+
+        <div class="d-flex justify-content-between align-items-end border-top pt-3 mt-auto">
+            <div>
+                <small class="text-muted fw-bold" style="font-size: 0.75rem;">LICITAÇÃO ATUAL</small>
+                <div class="fs-4 fw-bolder text-primary">
+                    {{ number_format($auction->current_price, 2) }} €
+                </div>
+            </div>
+            <div class="text-end">
+                <div class="badge bg-primary-subtle text-primary mb-1 rounded-0">
+                    {{ $auction->bids->count() }} <i class="fas fa-gavel ms-1"></i>
+                </div>
+                @php
+                    $isEndingSoon = $auction->end_date->diffInHours(now()) < 24;
+                @endphp
+                <div class="small {{ $isEndingSoon ? 'text-danger fw-bold' : 'text-muted' }}">
+                    <i class="far fa-clock me-1"></i> {{ $auction->end_date->diffForHumans(null, true, true) }}
+                </div>
+            </div>
         </div>
     </div>
 </div>

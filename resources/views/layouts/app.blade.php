@@ -7,6 +7,8 @@
 
         <title>@yield('title', config('app.name', 'Laravel'))</title>
 
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('css/milligram.css') }}">
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -14,6 +16,7 @@
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
+        <script src="{{ asset('js/ajax.js') }}" defer></script>
         <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
         @stack('scripts')
     </head>
@@ -35,6 +38,7 @@
                                 @csrf
                                 <button type="submit" class="button button-danger button-outline">Logout</button>
                             </form>
+                            <a href="{{ route('users.index') }}" class="button">Admin</a>
                         @else
                             <a href="{{ route('login') }}" class="button">Login</a>
                             <a href="{{ route('register') }}" class="button button-outline">Register</a>
@@ -56,5 +60,8 @@
             </div>
         </div>
     </footer>
+    <script>
+        const baseUrl = "{{ url('/') }}";
+    </script>
     </body>
 </html>

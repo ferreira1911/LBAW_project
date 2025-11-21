@@ -45,6 +45,11 @@ class AuctionController extends Controller
             'description' => 'required|string',
         ]);
         $auction->update($validated);
+        
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->store('images/auction', 'public');
+            $auction->image_path = $path;
+        }
 
         return redirect()->route('auction.show', $auction)->with('success', 'Auction updated!');
     }
@@ -74,6 +79,11 @@ class AuctionController extends Controller
             'is_buy_now_active' => false,
             'is_featured' => false,     
         ]);
+        
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->store('images/auction', 'public');
+            $auction->image_path = $path;
+        }
 
         return redirect()->route('auction.show', $auction)
                         ->with('success', 'Auction created successfully!');

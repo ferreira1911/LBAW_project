@@ -15,6 +15,8 @@ class FileController extends Controller
     static $systemTypes = [
         'profile' => ['png', 'jpg', 'jpeg', 'gif'],
         'post' => ['mp3', 'mp4', 'gif', 'png', 'jpg', 'jpeg'],
+        'auction' => ['png', 'jpg', 'jpeg']
+
     ];
 
     // --- Private Helpers ---
@@ -36,6 +38,9 @@ class FileController extends Controller
                 break;
             case 'post':
                 // other models
+                break;
+            case 'auction':
+                $fileName = \App\Models\Auction::find($id)->picture ?? null;
                 break;
             default:
                 return null;
@@ -95,6 +100,15 @@ class FileController extends Controller
                 break;
             case 'post':
                 break;
+            case 'auction':
+                $auction = \App\Models\Auction::findOrFail($id);
+                if ($auction) {
+                    $auction->picture = $fileName;
+                    $auction->save();
+                } else {
+                    $error = "unknown auction";
+                }
+                break;
             default:
                 return redirect()->back()->with('error', 'Error: Unsupported upload object');
         }
@@ -126,6 +140,13 @@ class FileController extends Controller
                     break;
                 case 'post':
                     // Lógica para apagar ficheiros de posts
+                    break;
+                case 'auction':
+                    $auction = \App\Models\Auction::find($id);
+                    if ($auction) {
+                        $auction->picture = null;
+                        $auction->save();
+                    }
                     break;
             }
         }
