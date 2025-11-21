@@ -9,10 +9,26 @@
         <a href="{{ route('auction.show', $auction) }}" class="button button-secondary">Back to Auction</a>
     </div>
 
+    @if ($auction->images->count())
+        <div class="current-images" style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1rem;">
+            @foreach ($auction->images as $img)
+                <div style="position: relative; display: inline-block; margin-right: 8px;">
+                    <img src="{{ asset('images/auction/' . $img->path) }}" alt="Auction Image" height="100" style="border: 1px solid #ccc; border-radius: 4px; display:block;">
+                    <form action="{{ route('auction.image.destroy', ['auction' => $auction->id, 'image' => $img->id]) }}" method="POST" style="margin-top:6px; text-align:center;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="button button-danger" onclick="return confirm('Delete this image?')">Delete</button>
+                    </form>
+                </div>
+            @endforeach
+        </div>
+    @endif
+
     <form action="{{ route('auction.update', $auction) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
+        {{-- Title --}}
         <div class="form-group">
             <label for="title">Title</label>
             <input type="text" name="title" id="title" value="{{ old('title', $auction->title) }}" required>
@@ -21,6 +37,7 @@
             @enderror
         </div>
 
+        {{-- Description --}}
         <div class="form-group">
             <label for="description">Description</label>
             <textarea name="description" id="description" required>{{ old('description', $auction->description) }}</textarea>
@@ -28,10 +45,17 @@
                 <p class="error">{{ $message }}</p>
             @enderror
         </div>
+
         
+
+        {{-- Upload New Images --}}
         <div class="form-group">
-            <label for="file">Change Auction Image</label>
-            <input type="file" name="file" id="file" accept="image/*">
+            <label for="images">Upload New Images</label>
+            <input type="file" name="images[]" id="images" multiple accept="image/*">
+            <p><small>You can upload multiple images. Leave blank to keep existing ones.</small></p>
+            @error('images.*')
+                <p class="error">{{ $message }}</p>
+            @enderror
         </div>
 
         <button type="submit" class="button button-primary">Update Auction</button>

@@ -68,8 +68,8 @@
         </div>
 
         <div class="form-group">
-            <label for="file">Auction Image</label>
-            <input type="file" name="file" id="file" accept="image/*">
+            <label for="files">Auction Images</label>
+            <input type="file" name="images[]" id="images" accept="image/*" multiple>
         </div>
 
         <button type="submit" class="button button-primary">Create Auction</button>

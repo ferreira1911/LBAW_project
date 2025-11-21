@@ -64,6 +64,11 @@ class Auction extends Model
         return $this->hasMany(Bid::class, 'auction_id');
     }
 
+    public function images(): HasMany
+    {
+        return $this->hasMany(AuctionImage::class, 'auction_id');
+    }   
+
     /** Get all reviews for this auction */
     public function reviews(): HasMany
     {

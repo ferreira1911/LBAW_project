@@ -22,18 +22,19 @@
         @endif
     </div>
     
-    {{--
     @if ($auction->images->count())
     <div class="auction-gallery" style="display: flex; gap: 1rem; flex-wrap: wrap;">
         @foreach ($auction->images as $image)
-        <img src="{{ $image->getUrl() }}" 
+        <img src="{{ asset('images/auction/' . $image->path) }}" 
             alt="{{ $auction->title }}" 
             style="width: 150px; border-radius: 8px; object-fit: cover;">
         @endforeach
     </div>
     @else
     <p>No images available.</p>
-    @endif --}}
+    @endif
+
+
 
     @auth
         @if ($auction->status === 'Active' && $auction->owner_id !== Auth::id())
