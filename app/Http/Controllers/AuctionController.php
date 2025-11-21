@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Auction;
+use App\Models\AuctionImage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Storage;
 
 
 class AuctionController extends Controller
@@ -40,22 +42,41 @@ class AuctionController extends Controller
 
     public function update(Request $request, Auction $auction){
         $this->authorize('update', $auction);
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'images.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
+
         $auction->update($validated);
-        
-        if ($request->hasFile('file')) {
-            $path = $request->file('file')->store('images/auction', 'public');
-            $auction->image_path = $path;
+
+        if ($request->hasFile('images')) {
+            $folderPath = 'images/auction';
+            foreach ($request->file('images') as $index => $file) {
+                $fileName = $file->hashName();
+                $file->storeAs($folderPath, $fileName, FileController::$diskName);
+
+                \App\Models\AuctionImage::create([
+                    'auction_id' => $auction->id,
+                    'path' => $fileName,
+                ]);
+
+                if ($index === 0) {
+                    $auction->picture = $fileName;
+                    $auction->save();
+                }
+            }
         }
 
-        return redirect()->route('auction.show', $auction)->with('success', 'Auction updated!');
+
+        return redirect()->route('auction.show', $auction)
+                        ->with('success', 'Auction updated successfully!');
     }
 
 
-    function store(Request $request){
+
+    public function store(Request $request){
         $this->authorize('create', Auction::class);
 
         $request->validate([
@@ -64,7 +85,8 @@ class AuctionController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
             'starting_price' => 'required|numeric|min:0',
-            'category_id' => 'required|exists:category,id',
+            'category_id' => 'required|exists:categories,id',
+            'images.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // multiple images
         ]);
 
         $auction = Auction::create([
@@ -73,22 +95,37 @@ class AuctionController extends Controller
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
             'starting_price' => $request->starting_price,
-            'current_price' => $request->starting_price, 
+            'current_price' => $request->starting_price,
             'owner_id' => auth()->id(),
             'category_id' => $request->category_id,
             'is_buy_now_active' => false,
-            'is_featured' => false,     
+            'is_featured' => false,
         ]);
-        
-        if ($request->hasFile('file')) {
-            $path = $request->file('file')->store('images/auction', 'public');
-            $auction->image_path = $path;
+
+        if ($request->hasFile('images')) {
+            $folderPath = 'images/auction';
+            foreach ($request->file('images') as $index => $file) {
+                $fileName = $file->hashName();
+                $file->storeAs($folderPath, $fileName, FileController::$diskName);
+
+                \App\Models\AuctionImage::create([
+                    'auction_id' => $auction->id,
+                    'path' => $fileName,
+                ]);
+
+                if ($index === 0) {
+                    $auction->picture = $fileName;
+                    $auction->save();
+                }
+            }
         }
+
 
         return redirect()->route('auction.show', $auction)
                         ->with('success', 'Auction created successfully!');
-
     }
+
+
 
     function create(){
         $this->authorize('create', Auction::class);
@@ -162,5 +199,32 @@ class AuctionController extends Controller
 
         return redirect()->route('auction.show', $auction)->with('success', 'The auction has been successfully cancelled.');
     }
+
+
+    public function destroyImage(Auction $auction, $imageId)
+    {
+        $this->authorize('update', $auction);
+
+        $image = AuctionImage::find($imageId);
+        if (!$image || $image->auction_id !== $auction->id) {
+            return redirect()->back()->with('failure', 'Image not found.');
+        }
+
+        // Delete file from storage (use same folder used when storing files)
+        $folderPath = 'images/auction';
+        Storage::disk(FileController::$diskName)->delete($folderPath . '/' . $image->path);
+
+        // If this was the auction's main picture, pick another or null
+        if ($auction->picture === $image->path) {
+            $next = $auction->images()->where('id', '!=', $image->id)->first();
+            $auction->picture = $next ? $next->path : null;
+            $auction->save();
+        }
+
+        $image->delete();
+
+        return redirect()->back()->with('success', 'Image deleted successfully.');
+    }
+
 
 }

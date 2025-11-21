@@ -80,9 +80,10 @@
                         </div>
 
                         <div class="mb-4">
-                            <label for="file" class="form-label fw-bold">Auction Image</label>
-                            <input type="file" class="form-control @error('file') is-invalid @enderror" id="file" name="file" accept="image/*">
-                            @error('file')
+                            <label for="images" class="form-label fw-bold">Auction Images</label>
+                            <input type="file" class="form-control @error('images') is-invalid @enderror" id="images" name="images[]" accept="image/*" multiple>
+                            <div class="form-text">You can select multiple images.</div>
+                            @error('images')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>

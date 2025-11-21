@@ -18,6 +18,29 @@
             {{-- Edit Form Card --}}
             <div class="card shadow-sm border-0 mb-5">
                 <div class="card-body p-4">
+
+                    @if ($auction->images->count())
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Current Images</label>
+                            <div class="d-flex flex-wrap gap-3">
+                                @foreach ($auction->images as $img)
+                                    <div class="card border shadow-sm" style="width: 120px;">
+                                        <img src="{{ asset('images/auction/' . $img->path) }}" class="card-img-top object-fit-cover" height="100" alt="Auction Image">
+                                        <div class="card-body p-2 text-center bg-light">
+                                            <form action="{{ route('auction.image.destroy', ['auction' => $auction->id, 'image' => $img->id]) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm w-100" onclick="return confirm('Delete this image?')">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
                     <form action="{{ route('auction.update', $auction) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
@@ -42,10 +65,10 @@
 
                         {{-- Image Upload --}}
                         <div class="mb-4">
-                            <label for="file" class="form-label fw-bold">Change Auction Image</label>
-                            <input type="file" class="form-control @error('file') is-invalid @enderror" id="file" name="file" accept="image/*">
-                            <div class="form-text">Leave empty to keep the current image.</div>
-                            @error('file')
+                            <label for="images" class="form-label fw-bold">Upload New Images</label>
+                            <input type="file" class="form-control @error('images.*') is-invalid @enderror" id="images" name="images[]" multiple accept="image/*">
+                            <div class="form-text">You can select multiple images to add to the gallery.</div>
+                            @error('images.*')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>

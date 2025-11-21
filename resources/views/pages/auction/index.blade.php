@@ -22,7 +22,7 @@
             <div class="row g-3">
                 @forelse($auctions as $auction)
                     <div class="col-12 col-sm-6 col-lg-4">
-                        @include('partials.card', ['auction' => $auction])
+                        @include('partials.card', ['auction' => $auction], ['showFeatured' => true])
                     </div>
                 @empty
                     <div class="col-12">

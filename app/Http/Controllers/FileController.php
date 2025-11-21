@@ -114,11 +114,11 @@ class FileController extends Controller
         }
 
         if ($error) {
-            return redirect()->back()->with('error', `Error: {$error}`);
+            return redirect()->back()->with('error', "Error: {$error}");
         }
 
         $folderPath = 'images/' . $type;
-        $request->file->storeAs($folderPath, $fileName, self::$diskName);
+        $file->storeAs($folderPath, $fileName, self::$diskName);
         
         return redirect()->back()->with('success', 'Success: upload completed!');
     }

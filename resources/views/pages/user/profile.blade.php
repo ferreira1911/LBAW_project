@@ -51,12 +51,19 @@
                     </p>
                 </div>
 
-                {{-- Owner Actions (Edit Profile) --}}
+                {{-- Owner Actions --}}
                 @if (Auth::id() === $user->id)
-                    <div class="d-grid">
+                    <div class="d-grid gap-2">
                         <a href="{{ route('user.edit', $user) }}" class="btn btn-outline-primary">
                             <i class="bi bi-pencil-square me-2"></i>Edit Profile
                         </a>
+                        <a href="{{ route('notifications.index') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-bell me-2"></i>Notifications
+                        </a>
+                        <a href="{{ route('user.destroy', $user) }}" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete your profile?');">
+                            <i class="bi bi-trash me-2"></i>Delete Profile
+                        </a>
+                    
                     </div>
                 @endif
             </div>

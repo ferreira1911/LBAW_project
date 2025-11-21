@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\BidController;
 
@@ -44,6 +45,8 @@ Route::controller(AuctionController::class)->group(function () {
     Route::get('/auction/{auction}/edit', 'edit')->whereNumber('auction')->name('auction.edit');
     Route::put('/auction/{auction}', 'update')->whereNumber('auction')->name('auction.update');
     Route::post('/auction/{auction}/cancel', 'cancel')->name('auction.cancel');
+    Route::delete('/auction/{auction}/image/{image}', 'destroyImage')->whereNumber('auction')->name('auction.image.destroy');
+    Route::post('/auction/{auction}/bid', 'bid')->whereNumber('auction')->name('auction.bid');
 });
 
 Route::post('/auctions/{auction}/bids', [BidController::class, 'store'])->name('bids.store')->middleware('auth');
@@ -56,8 +59,10 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/user/{user}', 'show')->name('user.show');
     Route::get('/user/{user}/edit', 'edit')->name('user.edit');
     Route::post('/user/{user}', 'update')->name('user.update');
-    Route::post('/user/{user}/destroy', 'destroy')->name('user.destroy');
+    Route::get('/user/{user}/destroy', 'destroy')->name('user.destroy');
 });
+
+
 
 Route::post('/file/upload', [FileController::class, 'upload']);
 
@@ -76,4 +81,10 @@ Route::controller(TransactionController::class)->middleware('auth')->group(funct
     
     // Ver uma transação específica
     Route::get('/wallet/{transaction}', 'show')->name('transaction.show');
+});
+
+
+Route::controller(NotificationController::class)->group(function(){
+    Route::get('/notifications','index')->name('notifications.index');
+    Route::post('/notifications/{notification}/markAsRead', 'markAsRead')->name('notifications.markAsRead');
 });
