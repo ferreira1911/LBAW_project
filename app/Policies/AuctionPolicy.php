@@ -34,4 +34,9 @@ class AuctionPolicy
     {
         return $user->id === $auction->owner_id;
     }
+
+    public function cancel(User $user, Auction $auction): bool
+    {
+        return $user->id === $auction->owner_id && in_array($auction->status, ['Active', 'Pending']) && !$auction->bids()->exists();
+    }
 }

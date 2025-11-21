@@ -39,7 +39,7 @@
         @if ($auction->status === 'Active' && $auction->owner_id !== Auth::id())
             <div class="mt-4 p-4 border rounded-lg shadow-sm">
                 <h3 class="text-lg font-bold mb-3">Place Your Bid</h3>
-                <form method="POST" action="{{ route('auction.bid', $auction) }}">
+                <form method="POST" action="{{ route('bids.store', $auction) }}">
                     @csrf
                     <div class="form-group">
                         <label for="amount" class="block text-sm font-medium text-gray-700">Bid Amount (€)</label>
