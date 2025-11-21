@@ -112,7 +112,7 @@ class UserController extends Controller
             auth()->logout();
         }
 
-        return redirect('/auction')->with('success', 'User profile deleted successfully.');
+        return redirect()->route('auctions.index')->with('success', 'User profile deleted successfully.');
     }
 
     public function getUsers(Request $request)
