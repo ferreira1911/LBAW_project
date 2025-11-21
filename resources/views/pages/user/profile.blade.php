@@ -114,8 +114,8 @@
                                     <div class="d-flex align-items-center">
                                         {{-- Thumbnail (Fallback Logic) --}}
                                         <div class="rounded bg-light me-3 d-flex align-items-center justify-content-center text-secondary" style="width: 60px; height: 60px;">
-                                            @if($auction->picture)
-                                                <img src="{{ asset('storage/' . $auction->picture) }}" class="w-100 h-100 object-fit-cover rounded" alt="">
+                                            @if(isset($auction->images) && $auction->images->count() > 0)
+                                                <img src="{{ $auction->images->first()->getUrl() }}" class="w-100 h-100 object-fit-cover" alt="{{ $auction->title }}">
                                             @else
                                                 <i class="bi bi-image fs-4"></i>
                                             @endif

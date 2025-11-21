@@ -85,7 +85,7 @@ class AuctionController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
             'starting_price' => 'required|numeric|min:0',
-            'category_id' => 'required|exists:categories,id',
+            'category_id' => 'required|exists:category,id',
             'images.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // multiple images
         ]);
 
