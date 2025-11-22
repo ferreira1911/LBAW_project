@@ -32,19 +32,9 @@ class NotificationController extends Controller
 	 */
 	public function markAsRead(Notification $notification)
 	{
-		if (Auth::id() !== $notification->user_id) {
-			abort(403);
-		}
+		$notification->update(['is_read' => true]);
 
-		try {
-			$notification->is_read = true;
-			$notification->save();
-		} catch (\Exception $e) {
-			Log::error('Failed marking notification as read', ['id' => $notification->id, 'error' => $e->getMessage()]);
-			return back()->with('failure', 'Ocorreu um erro ao marcar a notificação como lida.');
-		}
-
-		return back()->with('success', 'Notificação marcada como lida.');
+    	return response()->json(['success' => true]);
 	}
 
 	/**

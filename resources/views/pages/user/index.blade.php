@@ -92,15 +92,11 @@
                                         <i class="bi bi-pencil"></i>
                                     </a>
                                     
-                                    {{-- Delete/Block Button (Optional - only if not yourself) --}}
-                                    @if(Auth::id() !== $user->id)
-                                        <form action="{{ route('user.destroy', $user) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this user?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete User">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
+                                    
+                                    @if(Auth::id() !== $user->id)                                        
+                                        <a href="{{ route('user.destroy', $user) }}" class="btn btn-sm btn-outline-danger" title="Delete User">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
                                     @endif
                                 </td>
                             </tr>

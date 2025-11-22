@@ -242,4 +242,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Also re-run normalization when restoring from bfcache (back/forward navigation)
 window.addEventListener('pageshow', normalizeCheckboxesToServer);
-  
+
+

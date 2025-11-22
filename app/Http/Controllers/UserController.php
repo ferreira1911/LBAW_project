@@ -20,6 +20,8 @@ class UserController extends Controller
      */
 public function index(Request $request)
     {
+        $this->authorize('viewAny', Auth::user());
+
         $query = User::where('is_deleted', false);
 
         if ($request->has('search') && $request->get('search') != '') {
@@ -147,14 +149,14 @@ public function index(Request $request)
     }
 
     public function create(){
-        //$this->authorize('create',Auth::user());
+        $this->authorize('create',Auth::user());
         return view('pages.user.create');
     }
 
     public function store(Request $request)
     {
         
-        //$this->authorize('create', User::class);
+        $this->authorize('create', User::class);
 
         
         $validated = $request->validate([
