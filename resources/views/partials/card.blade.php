@@ -58,11 +58,11 @@
                 <div class="badge bg-primary-subtle text-primary mb-1">
                     {{ $auction->bids->count() }} <i class="bi bi-hammer ms-1"></i>
                 </div>
-                @php
-                    $isEndingSoon = $auction->end_date->diffInHours(now()) < 24;
-                @endphp
-                <div class="small {{ $isEndingSoon ? 'text-danger fw-bold' : 'text-muted' }}">
-                    <i class="bi bi-clock me-1"></i> {{ $auction->end_date->diffForHumans(null, true, true) }}
+                <div class="auction-timer small text-muted" 
+                    data-end="{{ $auction->end_date->toIso8601String() }}">
+    
+                    <i class="far fa-clock me-1"></i>
+                    <span class="timer-text">{{ $auction->end_date->diffForHumans() }}</span>
                 </div>
             </div>
         </div>

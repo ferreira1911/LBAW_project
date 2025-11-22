@@ -95,3 +95,31 @@ document.addEventListener('DOMContentLoaded', () => {
     // Carregamento Inicial
     loadUsers();
 });
+
+
+function markAsRead(id) {
+    const url = `${baseUrl}/notifications/${id}/markAsRead`;
+    
+    fetch(`${url}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
+        }
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            
+            const notificationElement = document.getElementById(`notification-${id}`);
+            if (notificationElement) {
+                notificationElement.classList.remove('bg-light');
+                const markAsReadBtn = notificationElement.querySelector('button');
+                if (markAsReadBtn) {
+                    markAsReadBtn.remove();
+                }
+            }
+        }
+    })
+    .catch(err => console.error(err));
+}

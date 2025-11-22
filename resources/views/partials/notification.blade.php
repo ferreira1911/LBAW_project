@@ -15,7 +15,7 @@
     $isOwner = Auth::id() === $notification->auction->owner_id;
 @endphp
 
-<div class="card mb-3 border-0 {{ $bgClass }}">
+<div id = "notification-{{ $notification->id }}" class="card mb-3 border-0 {{ $bgClass }}">
     <div class="card-body p-3">
         <div class="d-flex align-items-start">
             
@@ -85,12 +85,10 @@
 
                 @if(!$notification->is_read)
                     <div class="text-end">
-                        <form action="{{ route('notifications.markAsRead', $notification) }}" method="POST" class="d-inline">
-                            @csrf
-                            <button type="submit" class="btn btn-link btn-sm p-0 text-decoration-none text-muted small" title="Mark as read">
-                                <i class="bi bi-check2-all me-1"></i>Mark as read
-                            </button>
-                        </form>
+                        <button class="btn btn-link btn-sm p-0 text-decoration-none text-muted small"
+                            onclick="markAsRead({{ $notification->id }})">
+                            <i class="bi bi-check2-all me-1"></i>Mark as read
+                        </button>
                     </div>
                 @endif
             </div>

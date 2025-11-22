@@ -86,6 +86,15 @@
                         <h2 class="display-6 fw-bold text-primary mb-0">
                             €{{ number_format($auction->current_price ?? $auction->starting_price, 2) }}
                         </h2>
+                    </div>´
+
+                    <div class="text-end auction-timer" data-end="{{ $auction->end_date->toIso8601String() }}">
+                        <p class="text-muted mb-0 text-uppercase small fw-bold">
+                            <i class="bi bi-stopwatch"></i> Time Left
+                        </p>
+                        <div class="fs-5 fw-bold timer-text text-dark">
+                            {{ $auction->end_date->diffForHumans() }}
+                        </div>
                     </div>
 
                     {{-- Dates --}}
