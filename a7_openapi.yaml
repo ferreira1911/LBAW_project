@@ -13,12 +13,11 @@ servers:
 
 externalDocs:
   description: Find more info here.
-  url: https://github.com/your-repo/auctionease
+  url: https://gitlab.up.pt/lbaw/lbaw2526/lbaw25172
 
 tags:
   - name: 'M01: Authentication and Individual Profile'
   - name: 'M02: Auction Discovery & Management'
-  - name: 'M03: Reviews & Auction Following'
   - name: 'M04: Bidding & Transactions'
   - name: 'M05: Administration & Moderation'
 
@@ -124,11 +123,11 @@ paths:
         '302':
           description: 'Redirect to home after success.'
 
-  /user/{id}:
+  /users/{id}:
     get:
       operationId: R106
       summary: 'R106: View User Profile'
-      description: 'Show the individual user profile. If owner or admin, shows wallet balance. Access: USR, ADM'
+      description: 'Show the individual user profile. Access: USR, ADM'
       tags:
         - 'M01: Authentication and Individual Profile'
       parameters:
@@ -140,25 +139,6 @@ paths:
       responses:
         '200':
           description: 'Ok. Show User Profile UI'
-
-  /user/{id}/edit:
-    get:
-      operationId: R107
-      summary: 'R107: Edit Profile Form'
-      description: 'Show form to edit user profile. Access: OWN, ADM'
-      tags:
-        - 'M01: Authentication and Individual Profile'
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-      responses:
-        '200':
-          description: 'Ok. Show Edit Profile UI'
-
-  /user/{id} (Update):
     post:
       operationId: R108
       summary: 'R108: Update Profile Action'
@@ -195,7 +175,24 @@ paths:
         '302':
           description: 'Redirect to profile page.'
 
-  /user/{id}/destroy:
+  /users/{id}/edit:
+    get:
+      operationId: R107
+      summary: 'R107: Edit Profile Form'
+      description: 'Show form to edit user profile. Access: OWN, ADM'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Show Edit Profile UI'
+
+  /users/{id}/destroy:
     post:
       operationId: R109
       summary: 'R109: Delete Account'
@@ -211,6 +208,49 @@ paths:
       responses:
         '302':
           description: 'Redirect to home.'
+  
+  /file/upload:
+    post:
+      operationId: R601
+      summary: 'R601: Generic File Upload'
+      description: 'Upload files for Profile or Auction via generic handler. Access: USR'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                type:
+                  type: string
+                  enum: [profile, auction]
+                  description: 'Context of the upload'
+                id:
+                  type: integer
+                  description: 'ID of the User or Auction associated with the file'
+              required:
+                - file
+                - type
+                - id
+      responses:
+        '302':
+          description: 'Redirect back with success or error message.'
+  
+  /notifications:
+    get:
+      operationId: R602
+      summary: 'R602: List Notifications'
+      description: 'Show user notifications. Access: USR'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+      responses:
+        '200':
+          description: 'Ok. Show Notifications UI'
 
   # ==============================================
   # M02: Auction Discovery & Management
@@ -260,7 +300,7 @@ paths:
         '200':
           description: 'Ok. Show Search Results UI'
 
-  /auction/{id}:
+  /auctions/{id}:
     get:
       operationId: R203
       summary: 'R203: View Auction Details'
@@ -276,8 +316,33 @@ paths:
       responses:
         '200':
           description: 'Ok. Show Auction Details UI'
+    put:
+      operationId: R206
+      summary: 'R206: Update Auction'
+      description: 'Update auction details. Access: OWN (Seller)'
+      tags:
+        - 'M02: Auction Discovery & Management'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '302':
+          description: 'Redirect to auction page.'
 
-  /auction/create:
+  /auctions/create:
     get:
       operationId: R204
       summary: 'R204: Create Auction Form'
@@ -323,35 +388,8 @@ paths:
       responses:
         '302':
           description: 'Redirect to the created auction page.'
-
-  /auction/{id} (Update):
-    put:
-      operationId: R206
-      summary: 'R206: Update Auction'
-      description: 'Update auction details. Access: OWN (Seller)'
-      tags:
-        - 'M02: Auction Discovery & Management'
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-      responses:
-        '302':
-          description: 'Redirect to auction page.'
   
-  /auction/{id}/cancel:
+  /auctions/{id}/cancel:
     post:
       operationId: R207
       summary: 'R207: Cancel Auction'
@@ -368,7 +406,7 @@ paths:
         '302':
           description: 'Redirect to auction page with success message.'
 
-  /auction/{id}/image/{image}:
+  /auctions/{id}/images/{image}:
     delete:
       operationId: R208
       summary: 'R208: Delete Auction Image'
@@ -521,7 +559,7 @@ paths:
         '200':
           description: 'Ok. Show Create User UI'
 
-  /user/store:
+  /users/store:
     post:
       operationId: R502
       summary: 'R502: Admin Store User'
@@ -578,39 +616,3 @@ paths:
             application/json:
               schema:
                 type: object
-
-  # ==============================================
-  # M06: Utilities
-  # ==============================================
-
-  /file/upload:
-    post:
-      operationId: R601
-      summary: 'R601: Generic File Upload'
-      description: 'Upload files for Profile or Auction via generic handler. Access: USR'
-      tags:
-        - 'M06: Utilities'
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  format: binary
-                type:
-                  type: string
-                  enum: [profile, auction]
-                  description: 'Context of the upload'
-                id:
-                  type: integer
-                  description: 'ID of the User or Auction associated with the file'
-              required:
-                - file
-                - type
-                - id
-      responses:
-        '302':
-          description: 'Redirect back with success or error message.'
