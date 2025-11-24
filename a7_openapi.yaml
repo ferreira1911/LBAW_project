@@ -350,6 +350,47 @@ paths:
       responses:
         '302':
           description: 'Redirect to auction page.'
+  
+  /auction/{id}/cancel:
+    post:
+      operationId: R207
+      summary: 'R207: Cancel Auction'
+      description: 'Cancel an active auction. Access: OWN, ADM'
+      tags:
+        - 'M02: Auction Discovery & Management'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '302':
+          description: 'Redirect to auction page with success message.'
+
+  /auction/{id}/image/{image}:
+    delete:
+      operationId: R208
+      summary: 'R208: Delete Auction Image'
+      description: 'Remove a specific image from an auction gallery. Access: OWN, ADM'
+      tags:
+        - 'M02: Auction Discovery & Management'
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: 'Auction ID'
+        - in: path
+          name: image
+          required: true
+          schema:
+            type: integer
+          description: 'Image ID to be deleted'
+      responses:
+        '302':
+          description: 'Redirect back with success message.'
 
   # ==============================================
   # M03: Reviews & Auction Following
@@ -359,11 +400,11 @@ paths:
   # ==============================================
   # M04: Bidding & Transactions
   # ==============================================
-  /auction/{id}/bid:
+  /auctions/{id}/bids:
     post:
       operationId: R401
       summary: 'R401: Place Bid'
-      description: 'Place a bid. Validates credit and anti-sniping via Trigger. Access: USR'
+      description: 'Place a bid on a specific auction. Access: USR'
       tags:
         - 'M04: Bidding & Transactions'
       parameters:
@@ -372,6 +413,7 @@ paths:
           required: true
           schema:
             type: integer
+          description: 'Auction ID'
       requestBody:
         required: true
         content:
@@ -381,11 +423,15 @@ paths:
               properties:
                 amount:
                   type: number
+                  format: float
+                  description: 'Bid amount (must be higher than current price)'
               required:
                 - amount
       responses:
         '302':
-          description: 'Redirect. Success or failure message.'
+          description: 'Redirect back to auction page with success or error message.'
+        '422':
+            description: 'Validation Error (e.g. amount too low)'
 
   /wallet/add-credit:
     get:
@@ -533,6 +579,38 @@ paths:
               schema:
                 type: object
 
+  # ==============================================
+  # M06: Utilities
+  # ==============================================
 
-
-  
+  /file/upload:
+    post:
+      operationId: R601
+      summary: 'R601: Generic File Upload'
+      description: 'Upload files for Profile or Auction via generic handler. Access: USR'
+      tags:
+        - 'M06: Utilities'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                type:
+                  type: string
+                  enum: [profile, auction]
+                  description: 'Context of the upload'
+                id:
+                  type: integer
+                  description: 'ID of the User or Auction associated with the file'
+              required:
+                - file
+                - type
+                - id
+      responses:
+        '302':
+          description: 'Redirect back with success or error message.'

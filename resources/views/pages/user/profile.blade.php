@@ -54,13 +54,13 @@
                 {{-- Owner Actions --}}
                 @if (Auth::id() === $user->id)
                     <div class="d-grid gap-2">
-                        <a href="{{ route('user.edit', $user) }}" class="btn btn-outline-primary">
+                        <a href="{{ route('users.edit', $user) }}" class="btn btn-outline-primary">
                             <i class="bi bi-pencil-square me-2"></i>Edit Profile
                         </a>
                         <a href="{{ route('notifications.index') }}" class="btn btn-outline-secondary">
                             <i class="bi bi-bell me-2"></i>Notifications
                         </a>
-                        <a href="{{ route('user.destroy', $user) }}" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete your profile?');">
+                        <a href="{{ route('users.destroy', $user) }}" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete your profile?');">
                             <i class="bi bi-trash me-2"></i>Delete Profile
                         </a>
                     
@@ -110,7 +110,7 @@
                     @if($auctions->count() > 0)
                         <div class="list-group list-group-flush">
                             @foreach($auctions as $auction)
-                                <a href="{{ route('auction.show', $auction) }}" class="list-group-item list-group-item-action p-3 d-flex justify-content-between align-items-center">
+                                <a href="{{ route('auctions.show', $auction) }}" class="list-group-item list-group-item-action p-3 d-flex justify-content-between align-items-center">
                                     <div class="d-flex align-items-center">
                                         {{-- Thumbnail (Fallback Logic) --}}
                                         <div class="rounded bg-light me-3 d-flex align-items-center justify-content-center text-secondary" style="width: 60px; height: 60px;">
@@ -140,7 +140,7 @@
 
                                     @if(Auth::check() && Auth::id() === $user->id)
                                         <object> {{-- Object tag prevents nested link clicking issues --}}
-                                            <a href="{{ route('auction.edit', $auction) }}" class="btn btn-sm btn-outline-secondary">
+                                            <a href="{{ route('auctions.edit', $auction) }}" class="btn btn-sm btn-outline-secondary">
                                                 <i class="bi bi-pencil me-1"></i>Edit
                                             </a>
                                         </object>

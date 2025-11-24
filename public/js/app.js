@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             
             if (distance < 0) {
-                display.innerHTML = "Terminado";
+                display.innerHTML = "Finished";
                 timer.classList.add('text-danger', 'fw-bold');
                 timer.classList.remove('text-muted');
                 return;

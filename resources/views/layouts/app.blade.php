@@ -52,14 +52,14 @@
                             @else
                                 {{-- Create Auction Button --}}
                                 <li class="nav-item me-2">
-                                    <a href="{{ route('auction.create') }}" class="btn btn-primary rounded-pill px-3">
+                                    <a href="{{ route('auctions.create') }}" class="btn btn-primary rounded-pill px-3">
                                         <i class="bi bi-plus-lg"></i> Create
                                     </a>
                                 </li>
                             
                                 {{-- User Credit (Clickable to go to Wallet) --}}
                                 <li class="nav-item me-2">
-                                    <a href="{{ route('user.show', Auth::user()) }}" class="btn btn-light border rounded-pill text-success fw-bold" title="Wallet Balance">
+                                    <a href="{{ route('users.show', Auth::user()) }}" class="btn btn-light border rounded-pill text-success fw-bold" title="Wallet Balance">
                                         €{{ number_format(Auth::user()->credit, 2) }}
                                     </a>
                                 </li>
@@ -79,7 +79,7 @@
                                 
                                     <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
                                         <li>
-                                            <a class="dropdown-item" href="{{ route('user.show', Auth::user()) }}">
+                                            <a class="dropdown-item" href="{{ route('users.show', Auth::user()) }}">
                                                 <i class="bi bi-person me-2"></i>Profile
                                             </a>
                                         </li>

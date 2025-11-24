@@ -23,7 +23,7 @@ class BidController extends Controller
                 'date' => now(),
             ]);
 
-            return redirect()->route('auction.show', $auction)->with('success', 'Your bid was placed successfully!');
+            return redirect()->route('auctions.show', $auction)->with('success', 'Your bid was placed successfully!');
 
         } catch (QueryException $e) {
 

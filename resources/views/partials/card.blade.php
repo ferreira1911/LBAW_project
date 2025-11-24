@@ -3,7 +3,7 @@
     <div class="position-relative bg-light" style="height: 220px;">
         
         @if (Auth::check() && Auth::id() === $auction->owner_id)
-            <a href="{{ route('auction.edit', $auction) }}" 
+            <a href="{{ route('auctions.edit', $auction) }}" 
                class="position-absolute top-0 end-0 btn btn-sm btn-warning m-2 shadow-sm z-2 fw-bold">
                 <i class="bi bi-pencil-fill me-1"></i> Edit
             </a>
@@ -13,7 +13,7 @@
             </span>
         @endif
 
-        <a href="{{ route('auction.show', $auction) }}" class="d-flex align-items-center justify-content-center h-100 text-decoration-none text-secondary">
+        <a href="{{ route('auctions.show', $auction) }}" class="d-flex align-items-center justify-content-center h-100 text-decoration-none text-secondary">
             @php
                 $firstImg = $auction->images->first(); 
             @endphp
@@ -38,7 +38,7 @@
         </div>
 
         <h5 class="card-title fw-bold mb-2 text-truncate">
-            <a href="{{ route('auction.show', $auction) }}" class="text-dark text-decoration-none stretched-link">
+            <a href="{{ route('auctions.show', $auction) }}" class="text-dark text-decoration-none stretched-link">
                 {{ Str::limit($auction->title, 40) }}
             </a>
         </h5>

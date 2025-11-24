@@ -58,7 +58,7 @@ public function index(Request $request)
             ]);
         }
 
-        return redirect('/auction')->with('failure', 'This account has been deleted');
+        return redirect()->route('auctions.index')->with('failure', 'This account has been deleted');
     }
 
 
@@ -110,7 +110,7 @@ public function index(Request $request)
 
         $user->update($validated);
 
-        return redirect()->route('user.show', $user)->with('success', 'User profile updated successfully.');
+        return redirect()->route('users.show', $user)->with('success', 'User profile updated successfully.');
     }
     /**
      * Remove the specified resource from storage.

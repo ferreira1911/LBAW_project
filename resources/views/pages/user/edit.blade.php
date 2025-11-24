@@ -11,7 +11,7 @@
             <nav aria-label="breadcrumb" class="mb-4">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('auctions.index') }}" class="text-decoration-none">Home</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('user.show', $user) }}" class="text-decoration-none">My Profile</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('users.show', $user) }}" class="text-decoration-none">My Profile</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Edit</li>
                 </ol>
             </nav>
@@ -25,7 +25,7 @@
                         <h2 class="h3 fw-bold mb-0">Edit Profile</h2>
                     </div>
 
-                    <form method="POST" action="{{ route('user.update', $user) }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('users.update', $user) }}" enctype="multipart/form-data">
                         @csrf
                         
                         {{-- Profile Information Section --}}
@@ -115,7 +115,7 @@
 
                         {{-- Actions --}}
                         <div class="d-flex gap-2 justify-content-end">
-                            <a href="{{ route('user.show', $user) }}" class="btn btn-outline-secondary px-4">Cancel</a>
+                            <a href="{{ route('users.show', $user) }}" class="btn btn-outline-secondary px-4">Cancel</a>
                             <button type="submit" class="btn btn-primary px-4">
                                 <i class="bi bi-check-lg me-2"></i>Update Profile
                             </button>

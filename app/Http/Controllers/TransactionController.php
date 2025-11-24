@@ -73,7 +73,7 @@ class TransactionController extends Controller
             return redirect()->back()->with('failure', 'Ocorreu um erro ao processar o seu pedido.');
         }
 
-        return redirect()->route('user.show',$user)->with('success', 'Crédito adicionado com sucesso!');
+        return redirect()->route('users.show',$user)->with('success', 'Crédito adicionado com sucesso!');
     }
 
     /**
@@ -116,7 +116,7 @@ class TransactionController extends Controller
             return redirect()->back()->with('failure', 'Ocorreu um erro ao processar o seu pedido.');
         }
 
-        return redirect()->route('user.show', Auth::user())->with('success', 'Pedido de levantamento submetido!');
+        return redirect()->route('users.show', Auth::user())->with('success', 'Pedido de levantamento submetido!');
     }
 
     /**

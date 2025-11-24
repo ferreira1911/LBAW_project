@@ -16,7 +16,7 @@
 
             <div class="card shadow-sm border-0">
                 <div class="card-body p-4">
-                    <form action="{{ route('auction.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('auctions.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <div class="mb-3">

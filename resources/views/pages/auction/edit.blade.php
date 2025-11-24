@@ -10,7 +10,7 @@
             {{-- Header with Back Button --}}
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="fw-bold mb-0">Edit Auction</h2>
-                <a href="{{ route('auction.show', $auction) }}" class="btn btn-outline-secondary">
+                <a href="{{ route('auctions.show', $auction) }}" class="btn btn-outline-secondary">
                     <i class="bi bi-arrow-left me-1"></i> Back to Auction
                 </a>
             </div>
@@ -27,7 +27,7 @@
                                     <div class="card border shadow-sm" style="width: 120px;">
                                         <img src="{{ asset('images/auction/' . $img->path) }}" class="card-img-top object-fit-cover" height="100" alt="Auction Image">
                                         <div class="card-body p-2 text-center bg-light">
-                                            <form action="{{ route('auction.image.destroy', ['auction' => $auction->id, 'image' => $img->id]) }}" method="POST">
+                                            <form action="{{ route('auctions.images.destroy', ['auction' => $auction->id, 'image' => $img->id]) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-sm w-100" onclick="return confirm('Delete this image?')">
@@ -41,7 +41,7 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('auction.update', $auction) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('auctions.update', $auction) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
@@ -97,7 +97,7 @@
                             <small class="text-dark fw-bold">Note: You can only perform this action because this auction has received no bids yet.</small>
                         </p>
                         
-                        <form method="POST" action="{{ route('auction.cancel', $auction) }}">
+                        <form method="POST" action="{{ route('auctions.cancel', $auction) }}">
                             @csrf
                             <button type="submit" class="btn btn-outline-danger" 
                                     onclick="return confirm('Are you sure you want to cancel this auction? This action is irreversible.')">

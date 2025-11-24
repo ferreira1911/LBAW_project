@@ -44,24 +44,24 @@
                         @case('new-bid')
                             @if($isOwner)
                                 Good news! Someone placed a bid of <span class="fw-bold">€{{ number_format($notification->bid->amount ?? 0, 2) }}</span> 
-                                on your auction <a href="{{ route('auction.show', $notification->auction) }}" class="text-decoration-none fw-bold">{{ $notification->auction->title }}</a>.
+                                on your auction <a href="{{ route('auctions.show', $notification->auction) }}" class="text-decoration-none fw-bold">{{ $notification->auction->title }}</a>.
                             @else
                                 Activity alert! A new bid of <span class="fw-bold">€{{ number_format($notification->bid->amount ?? 0, 2) }}</span> 
-                                was placed on <a href="{{ route('auction.show', $notification->auction) }}" class="text-decoration-none fw-bold">{{ $notification->auction->title }}</a>.
+                                was placed on <a href="{{ route('auctions.show', $notification->auction) }}" class="text-decoration-none fw-bold">{{ $notification->auction->title }}</a>.
                             @endif
                             @break
 
                         @case('winner')
-                            Congratulations! You won the auction <a href="{{ route('auction.show', $notification->auction) }}" class="text-success text-decoration-none fw-bold">{{ $notification->auction->title }}</a>.
+                            Congratulations! You won the auction <a href="{{ route('auctions.show', $notification->auction) }}" class="text-success text-decoration-none fw-bold">{{ $notification->auction->title }}</a>.
                             The amount has been deducted from your wallet.
                             @break
 
                         @case('ended')
                             @if($isOwner)
-                                Your auction <a href="{{ route('auction.show', $notification->auction) }}" class="text-dark text-decoration-none fw-bold">{{ $notification->auction->title }}</a> has ended.
+                                Your auction <a href="{{ route('auctions.show', $notification->auction) }}" class="text-dark text-decoration-none fw-bold">{{ $notification->auction->title }}</a> has ended.
                                 Check if it was sold!
                             @else
-                                The auction <a href="{{ route('auction.show', $notification->auction) }}" class="text-dark text-decoration-none fw-bold">{{ $notification->auction->title }}</a> has ended.
+                                The auction <a href="{{ route('auctions.show', $notification->auction) }}" class="text-dark text-decoration-none fw-bold">{{ $notification->auction->title }}</a> has ended.
                             @endif
                             @break
 

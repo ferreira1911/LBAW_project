@@ -11,7 +11,7 @@
             <h1 class="fw-bold text-dark mb-0">User Management</h1>
             <p class="text-muted">Manage all registered users, administrators and their permissions.</p>
         </div>
-        <a href="{{ route('user.create') }}" class="btn btn-primary">
+        <a href="{{ route('users.create') }}" class="btn btn-primary">
             <i class="bi bi-person-plus-fill me-2"></i>Create New User
         </a>
     </div>
@@ -85,16 +85,16 @@
                                     @endif
                                 </td>
                                 <td class="text-end pe-4">
-                                    <a href="{{ route('user.show', $user) }}" class="btn btn-sm btn-outline-secondary me-1" title="View Profile">
+                                    <a href="{{ route('users.show', $user) }}" class="btn btn-sm btn-outline-secondary me-1" title="View Profile">
                                         <i class="bi bi-eye"></i>
                                     </a>
-                                    <a href="{{ route('user.edit', $user) }}" class="btn btn-sm btn-outline-primary me-1" title="Edit User">
+                                    <a href="{{ route('users.edit', $user) }}" class="btn btn-sm btn-outline-primary me-1" title="Edit User">
                                         <i class="bi bi-pencil"></i>
                                     </a>
                                     
                                     
                                     @if(Auth::id() !== $user->id)                                        
-                                        <a href="{{ route('user.destroy', $user) }}" class="btn btn-sm btn-outline-danger" title="Delete User">
+                                        <a href="{{ route('users.destroy', $user) }}" class="btn btn-sm btn-outline-danger" title="Delete User">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     @endif

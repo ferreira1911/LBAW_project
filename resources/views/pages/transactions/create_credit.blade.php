@@ -123,7 +123,7 @@
                             <button type="submit" class="btn btn-primary btn-lg fw-bold">
                                 <i class="bi bi-plus-circle me-2"></i> Add Credit
                             </button>
-                            <a href="{{ route('user.show', Auth::user()) }}" class="btn btn-link text-decoration-none text-muted">
+                            <a href="{{ route('users.show', Auth::user()) }}" class="btn btn-link text-decoration-none text-muted">
                                 Cancel
                             </a>
                         </div>

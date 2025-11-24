@@ -25,7 +25,7 @@
                         <h2 class="h3 fw-bold mb-0">Create New User</h2>
                     </div>
 
-                    <form method="POST" action="{{ route('user.store') }}">
+                    <form method="POST" action="{{ route('users.store') }}">
                         @csrf
 
                         {{-- Name --}}

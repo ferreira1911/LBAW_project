@@ -16,7 +16,7 @@
         
         {{-- Owner Edit Button --}}
         @can('update', $auction)
-            <a href="{{ route('auction.edit', $auction) }}" class="btn btn-outline-primary btn-sm">
+            <a href="{{ route('auctions.edit', $auction) }}" class="btn btn-outline-primary btn-sm">
                 <i class="bi bi-pencil me-1"></i> Edit Auction
             </a>
         @endcan
@@ -76,7 +76,7 @@
                         <span class="badge bg-secondary mb-2">{{ $auction->category->name }}</span>
                         <h1 class="h3 fw-bold mb-1">{{ $auction->title }}</h1>
                         <p class="text-muted small">
-                            Hosted by <a href="{{ route('user.show', $auction->owner) }}" class="text-decoration-none fw-bold">{{ $auction->owner->name }}</a>
+                            Hosted by <a href="{{ route('users.show', $auction->owner) }}" class="text-decoration-none fw-bold">{{ $auction->owner->name }}</a>
                         </p>
                     </div>
 
@@ -219,7 +219,7 @@
                                             <span class="badge bg-success me-2" title="Current Winner"><i class="bi bi-trophy-fill"></i></span>
                                         @endif
                                         <div>
-                                            <a href="{{ route('user.show', $bid->user) }}" class="fw-bold text-decoration-none text-dark">
+                                            <a href="{{ route('users.show', $bid->user) }}" class="fw-bold text-decoration-none text-dark">
                                                 {{ $bid->user->name }}
                                             </a>
                                             <div class="text-muted small" style="font-size: 0.75rem;">{{ $bid->date->format('M d, H:i') }}</div>

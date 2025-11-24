@@ -70,7 +70,7 @@ class AuctionController extends Controller
         }
 
 
-        return redirect()->route('auction.show', $auction)
+        return redirect()->route('auctions.show', $auction)
                         ->with('success', 'Auction updated successfully!');
     }
 
@@ -121,7 +121,7 @@ class AuctionController extends Controller
         }
 
 
-        return redirect()->route('auction.show', $auction)
+        return redirect()->route('auctions.show', $auction)
                         ->with('success', 'Auction created successfully!');
     }
 
@@ -197,7 +197,7 @@ class AuctionController extends Controller
         $auction->status = 'Cancelled';
         $auction->save();
 
-        return redirect()->route('auction.show', $auction)->with('success', 'The auction has been successfully cancelled.');
+        return redirect()->route('auctions.show', $auction)->with('success', 'The auction has been successfully cancelled.');
     }
 
 
