@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 function markAsRead(id) {
-    const url = `${baseUrl}/notifications/${id}/markAsRead`;
+    const url = `${baseUrl}/notifications/${id}/mark-read`;
     
     fetch(`${url}`, {
         method: 'POST',
