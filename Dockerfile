@@ -43,6 +43,20 @@ RUN composer install --optimize-autoloader --prefer-dist --no-progress --no-inte
 # Copy application source into the image (owned by www-data)
 COPY --chown=www-data:www-data . .
 
+# 5. Copy application source
+COPY --chown=www-data:www-data . .
+
+# -----------------------------------------------------------------------------
+# [CRÍTICO] CORREÇÃO DO ERRO "View path not found"
+# O Laravel precisa destas pastas, mas o Git ignora-as. Criamos manualmente.
+# -----------------------------------------------------------------------------
+RUN mkdir -p storage/framework/cache/data \
+             storage/framework/sessions \
+             storage/framework/testing \
+             storage/framework/views \
+             storage/logs \
+             bootstrap/cache
+
 # Copy configuration files into container
 # - PHP overrides (php.ini)
 # - Nginx site config
@@ -73,6 +87,8 @@ RUN chmod 0644 /etc/cron.d/laravel-cron
 
 # Apply cron job
 RUN crontab /etc/cron.d/laravel-cron
+
+RUN service cron start
 
 # Start command
 CMD sh /docker_run.sh
