@@ -14,12 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentSearch = searchInput.value; // Pega o valor inicial
 
     async function fetchUsers(page = 1, search = '') {
-        // 
-        // ⬇️ ERRO 1 CORRIGIDO AQUI ⬇️
-        // 
-        // 1. Usar a variável global 'baseUrl' que vem do seu layout Blade.
-        // 2. Apontar para o URL correto '/api/users' (da sua rota api.php).
-        //
         const apiUrl = `${baseUrl}/users/api`; 
         
         const queryParams = new URLSearchParams({
@@ -70,11 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await fetchUsers(currentPage, currentSearch);
         renderUsers(data.data, !reset);
 
-        // Toggle "Carregar Mais"
         loadMoreBtn.classList.toggle('d-none', data.current_page >= data.last_page);
     }
 
-    // Eventos
     searchButton.addEventListener('click', () => {
         currentSearch = searchInput.value.trim();
         loadUsers(true);
@@ -92,7 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
         loadUsers(false);
     });
 
-    // Carregamento Inicial
     loadUsers();
 });
 
