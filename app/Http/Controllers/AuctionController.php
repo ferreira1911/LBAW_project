@@ -31,7 +31,10 @@ class AuctionController extends Controller
 
         return view('pages.auction.show', [
             'auction' => $auction,
-            'bids' => $auction->bids()->orderBy('date', 'DESC')->get(),
+            'bids' => $auction->bids()
+                ->orderBy('amount', 'DESC')
+                ->orderBy('date', 'DESC')
+                ->get(),
         ]);
     }
 

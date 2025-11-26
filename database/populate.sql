@@ -1,59 +1,62 @@
 SET search_path TO lbaw25172;
 
+-- TRUNCATE ALL TABLES AND RESTART SEQUENCES TO GUARANTEE IDs MATCH
+TRUNCATE users, category, auction, bid, transactions, notifications, review, report, user_follows, feature_payment, auction_images RESTART IDENTITY CASCADE;
+
 ------------------------------------------------------------
 -- USERS
 ------------------------------------------------------------
 INSERT INTO users (email, name, description, credit, password, url, is_admin)
 VALUES
-('jharsent0@marketwatch.com', 'Junette Harsent', 'Phasellus in felis.', 683685700.12, 'eH7_XGkD"3sy}', 'https://blogspot.com/pulvinar/lobortis/est/phasellus/sit.json', true),
-('lgarvagh1@baidu.com', 'Leslie Garvagh', 'Morbi quis tortor id nulla ultrices aliquet. Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo.', 995880083.77, 'sK5(6"}Q', 'http://ebay.com/non/velit/nec/nisi.json', false),
-('sswiers2@weather.com', 'Sheryl Swiers', 'Morbi non quam nec dui luctus rutrum. Nulla tellus.', 129241874.11, 'iV4$UsE}oO0n5', 'https://soup.io/morbi/porttitor/lorem/id/ligula/suspendisse.aspx', false),
-('cland3@networkadvertising.org', 'Cassandry Land', 'Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo.', 626613560.95, 'xZ5%=J#D>SvpM0d', 'https://tinyurl.com/integer/tincidunt/ante.html', false),
-('vtongue4@sourceforge.net', 'Vivi Tongue', 'Proin at turpis a pede posuere nonummy. Integer non velit.', 975253510.12, 'tF9#$6H,GErwl/', 'http://nytimes.com/tellus/in/sagittis/dui.png', true),
-('hpallent5@boston.com', 'Heriberto Pallent', 'Morbi porttitor lorem id ligula. Suspendisse ornare consequat lectus.', 513657786.06, 'fF6<,h@/hl>', 'https://macromedia.com/duis/at/velit/eu/est.aspx', false),
-('lcorkish6@usnews.com', 'Lind Corkish', 'Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci.', 138105827.58, 'yZ5{k0j>1', 'http://youku.com/nulla/tellus/in.json', false),
-('dthomlinson7@weather.com', 'Danie Thomlinson', 'Duis bibendum.', 628979159.75, 'mK6\!M59c(D', 'http://latimes.com/at/lorem/integer/tincidunt/ante.png', false),
-('epeddel8@meetup.com', 'Erskine Peddel', 'Fusce posuere felis sed lacus.', 588846125.22, 'cM1%A<XN{y"CT', 'https://unblog.fr/orci/mauris/lacinia/sapien/quis/libero.xml', false),
-('onassau9@dion.ne.jp', 'Othilie Nassau', 'Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum.', 340981582.82, 'fU6*y\!Gg6cp9A_', 'http://vk.com/erat/fermentum/justo/nec/condimentum/neque.html', false),
-('hcollecotta@shinystat.com', 'Humfrey Collecott', 'Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla.', 580714059.52, 'qZ8$e}UL', 'https://canalblog.com/volutpat/quam/pede.jsp', false),
-('sgehrelsb@qq.com', 'Skip Gehrels', 'Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus.', 224608433.57, 'kB5/f0V$UgVPX', 'https://mapy.cz/accumsan.xml', false),
-('sbuggsc@dyndns.org', 'Svend Buggs', 'Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.', 960038605.24, 'vD2,\\y|f+<zi=|', 'http://ebay.com/vehicula/condimentum.xml', false),
-('lrockhilld@domainmarket.com', 'Lyell Rockhill', 'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien.', 465173846.36, 'wO2*NuV}''PNt3', 'http://angelfire.com/orci/mauris/lacinia/sapien/quis/libero.xml', false),
-('achinnerye@sogou.com', 'Anatollo Chinnery', 'Aliquam erat volutpat.', 536163196.07, 'pM9@a#t=G', 'http://msu.edu/curabitur/at/ipsum/ac/tellus/semper.jsp', false),
-('djagelsf@abc.net.au', 'Dougy Jagels', 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio. Curabitur convallis.', 868213327.54, 'nB0`251Ze6=\\', 'http://printfriendly.com/eros/suspendisse/accumsan/tortor.jpg', false),
-('fvang@youku.com', 'Freeman Van der Son', 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.', 619098709.85, 'qQ8$*0Sx}$L(aL7)', 'https://telegraph.co.uk/lacinia/erat.html', false),
-('hroadnighth@biglobe.ne.jp', 'Helaine Roadnight', 'Proin risus. Praesent lectus.', 783315355.71, 'lO9{MpH!Jp', 'https://newyorker.com/vestibulum/ante/ipsum.jpg', false),
-('eadamiaki@booking.com', 'Edythe Adamiak', 'Nulla nisl. Nunc nisl.', 551565597.06, 'lB4|ZOIfq', 'http://themeforest.net/vulputate.json', false),
-('idenisyukj@ifeng.com', 'Ingamar Denisyuk', 'Maecenas tincidunt lacus at velit.', 586356915.48, 'gJ0>QH)<Q)', 'https://bing.com/sed/augue/aliquam/erat/volutpat.html', true),
-('wseccombek@cisco.com', 'Wally Seccombe', 'Duis bibendum. Morbi non quam nec dui luctus rutrum.', 841399209.39, 'vM5*1}U#r&', 'https://admin.ch/elementum/in/hac/habitasse/platea/dictumst.aspx', false),
-('phyronsl@opera.com', 'Poul Hyrons', 'Phasellus sit amet erat.', 582130355.06, 'tQ2(3\(~', 'https://ibm.com/sagittis.js', false),
-('ocheasmanm@trellian.com', 'Olivie Cheasman', 'Aenean lectus. Pellentesque eget nunc.', 374429960.00, 'kT5{K_g4CEwxiI', 'http://dmoz.org/elit/proin/risus.json', false),
-('afairsn@123-reg.co.uk', 'Araldo Fairs', 'Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue.', 936244036.55, 'hU2#04A*', 'http://si.edu/in/quam/fringilla/rhoncus/mauris.json', false),
-('lbentono@hibu.com', 'Lukas Benton', 'Fusce consequat. Nulla nisl.', 51495344.68, 'xL0*Y{%`O!o''_', 'https://businessinsider.com/sapien/varius/ut/blandit/non.js', false),
-('fvasnetsovp@dot.gov', 'Fran Vasnetsov', 'Morbi a ipsum. Integer a nibh.', 637076152.23, 'bV1.B4gp9w', 'https://cdbaby.com/vestibulum/velit/id/pretium/iaculis.html', false),
-('gcrushq@so-net.ne.jp', 'Georgie Crush', 'Nulla facilisi. Cras non velit nec nisi vulputate nonummy.', 532994005.59, 'cW0`%adE,DY', 'https://google.nl/amet/sapien/dignissim/vestibulum.aspx', false),
-('lneylonr@who.int', 'Lindsay Neylon', 'Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue.', 612066211.56, 'wN5\t_wf', 'https://unicef.org/mauris.xml', false),
-('omartignons@weebly.com', 'Odey Martignon', 'In sagittis dui vel nisl. Duis ac nibh.', 140037353.32, 'qV4~uC&0', 'http://wiley.com/interdum/venenatis/turpis/enim/blandit.jpg', false),
-('bbeamant@meetup.com', 'Braden Beaman', 'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.', 119248141.12, 'fX9&lnX7BbVu(', 'https://nytimes.com/et/tempus/semper/est/quam/pharetra.jpg', false),
-('mleynhamu@netlog.com', 'Mamie Leynham', 'Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.', 931447290.74, 'qQ9''|F!/ATu8H|', 'http://stanford.edu/eget/elit/sodales/scelerisque/mauris.jsp', false),
-('sbohlinv@lulu.com', 'Shirlene Bohlin', 'Nullam sit amet turpis elementum ligula vehicula consequat.', 920683004.26, 'uO1*ip0HOy', 'http://mlb.com/sapien.json', false),
-('lschiesterlw@timesonline.co.uk', 'Lalo Schiesterl', 'Nulla tellus. In sagittis dui vel nisl.', 424638079.74, 'oN6$a0uzl', 'https://kickstarter.com/mauris.jsp', false),
-('rburkx@google.ru', 'Ramsay Burk', 'Integer ac neque. Duis bibendum.', 727551887.56, 'jJ8_ByQ&', 'https://arstechnica.com/in/lectus/pellentesque/at/nulla.xml', false),
-('tdriussiy@freewebs.com', 'Tiebold Driussi', 'Duis ac nibh.', 540751791.67, 'tV0>x|IkGnb', 'http://sina.com.cn/vestibulum/proin/eu/mi/nulla/ac.js', false),
-('sleschellez@usnews.com', 'Sherye Leschelle', 'Morbi porttitor lorem id ligula.', 972144328.37, 'yP0''N#,s9o', 'https://hexun.com/pellentesque.aspx', false),
-('wbaumert10@phpbb.com', 'Werner Baumert', 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam.', 551888119.90, 'iL8.<#J_{', 'http://yolasite.com/enim/sit/amet/nunc/viverra/dapibus.js', false),
-('mhunnicot11@ucoz.com', 'Melicent Hunnicot', 'Aenean auctor gravida sem. Praesent id massa id nisl venenatis lacinia.', 796323785.13, 'zN7/M8OGY3m', 'https://army.mil/elementum/nullam/varius/nulla/facilisi/cras.xml', false),
-('slindholm12@soundcloud.com', 'Sidney Lindholm', 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam. Suspendisse potenti.', 817879577.18, 'bV0/DBOI5', 'https://dyndns.org/et/ultrices/posuere/cubilia.html', false),
-('mgrimsley13@webnode.com', 'Mirelle Grimsley', 'Nam tristique tortor eu pede.', 726453149.93, 'cP4*X{2l,', 'http://howstuffworks.com/et/tempus/semper/est.jsp', false),
-('gscripps14@wisc.edu', 'Giustina Scripps', 'Suspendisse potenti. Nullam porttitor lacus at turpis.', 829835059.65, 'oW8&eWziy}SXIWT', 'http://archive.org/et/ultrices/posuere/cubilia/curae.js', false),
-('astede15@miibeian.gov.cn', 'Annabelle Stede', 'Proin risus.', 765591763.70, 'vC5!)H(2Jn!,~ASs', 'https://amazon.com/nisi/venenatis/tristique/fusce/congue/diam/id.js', false),
-('wtreace16@i2i.jp', 'Worthington Treace', 'In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.', 873067791.34, 'bR8*W_N\dl~G%BR/', 'https://hugedomains.com/curabitur/convallis/duis/consequat/dui.aspx', false),
-('ro17@whitehouse.gov', 'Rosanna O'' Dooley', 'Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.', 784071905.37, 'qP7{}I462t', 'http://elpais.com/lectus/pellentesque/at/nulla/suspendisse/potenti/cras.json', false),
-('mmapson18@unblog.fr', 'Mattias Mapson', 'Nullam porttitor lacus at turpis.', 57525783.18, 'yP8+.Db5Bvq*e.*I', 'https://mlb.com/ac.aspx', false),
-('brisdall19@statcounter.com', 'Beulah Risdall', 'Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim.', 81217045.99, 'xW2!Ds*OJ', 'http://examiner.com/rutrum/neque/aenean/auctor/gravida/sem/praesent.xml', false),
-('mcresswell1b@skype.com', 'Misha Cresswell', 'Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci.', 528736784.49, 'uA5|?=Nc', 'https://de.vu/lacinia/nisi/venenatis/tristique/fusce.jsp', false),
-('chatchman1c@tinyurl.com', 'Carey Hatchman', 'Maecenas tincidunt lacus at velit.', 545021304.27, 'dA9$gqV?\.''Cj', 'https://furl.net/quis/turpis/sed/ante/vivamus/tortor/duis.html', false),
-('dscandrite1d@scribd.com', 'Dulsea Scandrite', 'Proin risus. Praesent lectus.', 672296671.47, 'rJ3(1a,X', 'https://youtu.be/nisl/nunc/rhoncus/dui/vel/sem/sed.json', false);
+('jharsent0@marketwatch.com', 'Junette Harsent', 'Phasellus in felis.', 683685700.12, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, true),
+('lgarvagh1@baidu.com', 'Leslie Garvagh', 'Morbi quis tortor id nulla ultrices aliquet. Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo.', 995880083.77, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('sswiers2@weather.com', 'Sheryl Swiers', 'Morbi non quam nec dui luctus rutrum. Nulla tellus.', 129241874.11, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('cland3@networkadvertising.org', 'Cassandry Land', 'Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo.', 626613560.95, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('vtongue4@sourceforge.net', 'Vivi Tongue', 'Proin at turpis a pede posuere nonummy. Integer non velit.', 975253510.12, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, true),
+('hpallent5@boston.com', 'Heriberto Pallent', 'Morbi porttitor lorem id ligula. Suspendisse ornare consequat lectus.', 513657786.06, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('lcorkish6@usnews.com', 'Lind Corkish', 'Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci.', 138105827.58, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('dthomlinson7@weather.com', 'Danie Thomlinson', 'Duis bibendum.', 628979159.75, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('epeddel8@meetup.com', 'Erskine Peddel', 'Fusce posuere felis sed lacus.', 588846125.22, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('onassau9@dion.ne.jp', 'Othilie Nassau', 'Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum.', 340981582.82, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('hcollecotta@shinystat.com', 'Humfrey Collecott', 'Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla.', 580714059.52, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('sgehrelsb@qq.com', 'Skip Gehrels', 'Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus.', 224608433.57, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('sbuggsc@dyndns.org', 'Svend Buggs', 'Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.', 960038605.24, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('lrockhilld@domainmarket.com', 'Lyell Rockhill', 'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien.', 465173846.36, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('achinnerye@sogou.com', 'Anatollo Chinnery', 'Aliquam erat volutpat.', 536163196.07, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('djagelsf@abc.net.au', 'Dougy Jagels', 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio. Curabitur convallis.', 868213327.54, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('fvang@youku.com', 'Freeman Van der Son', 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.', 619098709.85, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('hroadnighth@biglobe.ne.jp', 'Helaine Roadnight', 'Proin risus. Praesent lectus.', 783315355.71, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('eadamiaki@booking.com', 'Edythe Adamiak', 'Nulla nisl. Nunc nisl.', 551565597.06, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('idenisyukj@ifeng.com', 'Ingamar Denisyuk', 'Maecenas tincidunt lacus at velit.', 586356915.48, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, true),
+('wseccombek@cisco.com', 'Wally Seccombe', 'Duis bibendum. Morbi non quam nec dui luctus rutrum.', 841399209.39, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('phyronsl@opera.com', 'Poul Hyrons', 'Phasellus sit amet erat.', 582130355.06, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('ocheasmanm@trellian.com', 'Olivie Cheasman', 'Aenean lectus. Pellentesque eget nunc.', 374429960.00, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('afairsn@123-reg.co.uk', 'Araldo Fairs', 'Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue.', 936244036.55, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('lbentono@hibu.com', 'Lukas Benton', 'Fusce consequat. Nulla nisl.', 51495344.68, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('fvasnetsovp@dot.gov', 'Fran Vasnetsov', 'Morbi a ipsum. Integer a nibh.', 637076152.23, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('gcrushq@so-net.ne.jp', 'Georgie Crush', 'Nulla facilisi. Cras non velit nec nisi vulputate nonummy.', 532994005.59, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('lneylonr@who.int', 'Lindsay Neylon', 'Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue.', 612066211.56, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('omartignons@weebly.com', 'Odey Martignon', 'In sagittis dui vel nisl. Duis ac nibh.', 140037353.32, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('bbeamant@meetup.com', 'Braden Beaman', 'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.', 119248141.12, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('mleynhamu@netlog.com', 'Mamie Leynham', 'Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.', 931447290.74, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('sbohlinv@lulu.com', 'Shirlene Bohlin', 'Nullam sit amet turpis elementum ligula vehicula consequat.', 920683004.26, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('lschiesterlw@timesonline.co.uk', 'Lalo Schiesterl', 'Nulla tellus. In sagittis dui vel nisl.', 424638079.74, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('rburkx@google.ru', 'Ramsay Burk', 'Integer ac neque. Duis bibendum.', 727551887.56, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('tdriussiy@freewebs.com', 'Tiebold Driussi', 'Duis ac nibh.', 540751791.67, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('sleschellez@usnews.com', 'Sherye Leschelle', 'Morbi porttitor lorem id ligula.', 972144328.37, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('wbaumert10@phpbb.com', 'Werner Baumert', 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam.', 551888119.90, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('mhunnicot11@ucoz.com', 'Melicent Hunnicot', 'Aenean auctor gravida sem. Praesent id massa id nisl venenatis lacinia.', 796323785.13, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('slindholm12@soundcloud.com', 'Sidney Lindholm', 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam. Suspendisse potenti.', 817879577.18, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('mgrimsley13@webnode.com', 'Mirelle Grimsley', 'Nam tristique tortor eu pede.', 726453149.93, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('gscripps14@wisc.edu', 'Giustina Scripps', 'Suspendisse potenti. Nullam porttitor lacus at turpis.', 829835059.65, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('astede15@miibeian.gov.cn', 'Annabelle Stede', 'Proin risus.', 765591763.70, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('wtreace16@i2i.jp', 'Worthington Treace', 'In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.', 873067791.34, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('ro17@whitehouse.gov', 'Rosanna O'' Dooley', 'Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.', 784071905.37, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('mmapson18@unblog.fr', 'Mattias Mapson', 'Nullam porttitor lacus at turpis.', 57525783.18, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('brisdall19@statcounter.com', 'Beulah Risdall', 'Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim.', 81217045.99, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('mcresswell1b@skype.com', 'Misha Cresswell', 'Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci.', 528736784.49, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('chatchman1c@tinyurl.com', 'Carey Hatchman', 'Maecenas tincidunt lacus at velit.', 545021304.27, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('dscandrite1d@scribd.com', 'Dulsea Scandrite', 'Proin risus. Praesent lectus.', 672296671.47, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false);
 ------------------------------------------------------------
 -- CATEGORIES
 ------------------------------------------------------------
@@ -146,7 +149,7 @@ INSERT INTO bid (amount, date, user_id, auction_id) VALUES (520.00, NOW() - INTE
 INSERT INTO bid (amount, date, user_id, auction_id) VALUES (580.00, NOW() - INTERVAL '2 days' + INTERVAL '3 hours', 8, 3);
 INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1320.00, NOW() - INTERVAL '2 days' + INTERVAL '3 hours', 15, 6);
 INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1450.00, NOW() - INTERVAL '1 day' + INTERVAL '6 hours', 7, 6);
-INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1600.00, NOW() - INTERVAL '18 hours', 15, 6);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1600.00, NOW() - INTERVAL '17 hours', 15, 6);
 INSERT INTO bid (amount, date, user_id, auction_id) VALUES (660.00, NOW() - INTERVAL '6 days' + INTERVAL '4 hours', 16, 7);
 INSERT INTO bid (amount, date, user_id, auction_id) VALUES (720.00, NOW() - INTERVAL '5 days' + INTERVAL '6 hours', 11, 7);
 INSERT INTO bid (amount, date, user_id, auction_id) VALUES (800.00, NOW() - INTERVAL '4 days' + INTERVAL '8 hours', 16, 7);
@@ -248,7 +251,7 @@ INSERT INTO bid (amount, date, user_id, auction_id) VALUES (968.00, NOW() - INTE
 INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1064.80, NOW() - INTERVAL '14 hours', 33, 41);
 INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1100.00, NOW() - INTERVAL '2 days' + INTERVAL '2 hours', 24, 42);
 INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1210.00, NOW() - INTERVAL '1 day' + INTERVAL '6 hours', 7, 42);
-INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1331.00, NOW() - INTERVAL '18 hours', 27, 42);
+INSERT INTO bid (amount, date, user_id, auction_id) VALUES (1331.00, NOW() - INTERVAL '17 hours', 27, 42);
 INSERT INTO bid (amount, date, user_id, auction_id) VALUES (275.00, NOW() - INTERVAL '3 days' + INTERVAL '3 hours', 24, 43);
 INSERT INTO bid (amount, date, user_id, auction_id) VALUES (302.50, NOW() - INTERVAL '2 days' + INTERVAL '6 hours', 36, 43);
 INSERT INTO bid (amount, date, user_id, auction_id) VALUES (332.75, NOW() - INTERVAL '1 day' + INTERVAL '7 hours', 24, 43);
@@ -257,6 +260,16 @@ INSERT INTO bid (amount, date, user_id, auction_id) VALUES (2662.00, NOW() - INT
 INSERT INTO bid (amount, date, user_id, auction_id) VALUES (440.00, NOW() - INTERVAL '2 days' + INTERVAL '3 hours', 24, 45);
 INSERT INTO bid (amount, date, user_id, auction_id) VALUES (484.00, NOW() - INTERVAL '1 day' + INTERVAL '6 hours', 9, 45);
 INSERT INTO bid (amount, date, user_id, auction_id) VALUES (532.40, NOW() - INTERVAL '16 hours', 24, 45);
+
+UPDATE auction a
+SET current_price = (
+    SELECT MAX(amount)
+    FROM bid b
+    WHERE b.auction_id = a.id
+)
+WHERE EXISTS (
+    SELECT 1 FROM bid b WHERE b.auction_id = a.id
+);
 
 ------------------------------------------------------------
 -- TRANSACTIONS
