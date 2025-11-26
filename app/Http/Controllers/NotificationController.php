@@ -17,12 +17,17 @@ class NotificationController extends Controller
 	{
 		$user = Auth::user();
 
+		$unreadCount = Notification::where('user_id', $user->id)
+            ->where('is_read', false)
+            ->count();
+
 		$notifications = Notification::where('user_id', $user->id)
 			->orderBy('created_date', 'desc')
 			->paginate(20);
 
 		return view('pages.user.notifications', [
 			'notifications' => $notifications,
+			'unreadCount' => $unreadCount,
 		]);
 	}
 
@@ -48,10 +53,18 @@ class NotificationController extends Controller
 			Notification::where('user_id', $user->id)->where('is_read', false)->update(['is_read' => true]);
 		} catch (\Exception $e) {
 			Log::error('Failed marking all notifications as read', ['user' => $user->id, 'error' => $e->getMessage()]);
-			return back()->with('failure', 'Ocorreu um erro ao marcar todas as notificações como lidas.');
+			
+			if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Error updating notifications'], 500);
+            }
+            return back()->with('failure', 'An error occurred while marking notifications as read.');
 		}
 
-		return back()->with('success', 'Todas as notificações foram marcadas como lidas.');
+		if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'All marked as read']);
+        }
+
+        return back()->with('success', 'All notifications marked as read.');
 	}
 
 	

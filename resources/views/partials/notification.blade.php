@@ -15,7 +15,7 @@
     $isOwner = Auth::id() === $notification->auction->owner_id;
 @endphp
 
-<div id = "notification-{{ $notification->id }}" class="card mb-3 border-0 {{ $bgClass }}">
+<div id="notification-{{ $notification->id }}" data-color="{{ $color }}" class="card mb-3 border-0 transition-all duration-300 {{ $bgClass }}" style="transition: all 0.3s ease;">
     <div class="card-body p-3">
         <div class="d-flex align-items-start">
             

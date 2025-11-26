@@ -17,8 +17,10 @@
                     @endif
                 </h2>
                 
-                @if($notifications->count() > 0)
-                    {{-- Optional: Add a "Mark all as read" button here in the future --}}
+                @if(isset($unreadCount) && $unreadCount > 0)
+                    <button onclick="markAllRead()" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-check2-all me-1"></i> Mark all as read
+                    </button>
                 @endif
             </div>
 
