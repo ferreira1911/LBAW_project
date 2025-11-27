@@ -124,7 +124,15 @@
 
                         @if ($auction->status === 'Active')
                             
-                            @if($auction->owner_id === Auth::id())
+                            @if(Auth::user()->is_admin)
+                                <div class="alert alert-warning border-0 d-flex align-items-center">
+                                    <i class="bi bi-shield-lock-fill me-2"></i>
+                                    <div>
+                                        <strong>Administrator:</strong> You are in viewing mode. Admins cannot participate in auctions.
+                                    </div>
+                                </div>
+
+                            @elseif($auction->owner_id === Auth::id())
                                 <div class="alert alert-info border-0 d-flex align-items-center">
                                     <i class="bi bi-info-circle-fill me-2"></i>
                                     <div>

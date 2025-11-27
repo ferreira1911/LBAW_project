@@ -23,7 +23,7 @@ class AuctionPolicy
 
     public function create(User $user): bool
     {
-        return Auth::check();
+        return !$user->is_admin;
     }
 
     public function delete(User $user, Auction $auction): bool

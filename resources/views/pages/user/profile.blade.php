@@ -72,8 +72,8 @@
         {{-- Right Column: Details & Auctions --}}
         <div class="col-md-8">
             
-            {{-- Wallet Section (Only visible to Owner or Admin) --}}
-            @if (!empty($canViewBalance) && $canViewBalance)
+            {{-- Wallet Section (Conditional) --}}
+            @if (!empty($canViewBalance) && $canViewBalance && !$user->is_admin)
                 <div class="card shadow-sm border-0 mb-4 bg-primary text-white">
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-center">
@@ -86,20 +86,24 @@
                                     </small>
                                 @endif
                             </div>
-                            <div class="d-flex gap-2">
-                                <a href="{{ route('credit.create') }}" class="btn btn-light fw-bold text-primary">
-                                    <i class="bi bi-plus-lg me-1"></i>Add Funds
-                                </a>
-                                <a href="{{ route('withdrawal.create') }}" class="btn btn-outline-light">
-                                    <i class="bi bi-cash-stack me-1"></i>Withdraw
-                                </a>
-                            </div>
+
+                            @if(Auth::id() === $user->id)
+                                <div class="d-flex gap-2">
+                                    <a href="{{ route('credit.create') }}" class="btn btn-light fw-bold text-primary">
+                                        <i class="bi bi-plus-lg me-1"></i>Add Funds
+                                    </a>
+                                    <a href="{{ route('withdrawal.create') }}" class="btn btn-outline-light">
+                                        <i class="bi bi-cash-stack me-1"></i>Withdraw
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
             @endif
 
             {{-- Auctions Section --}}
+            @if(!$user->is_admin)
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-white py-3 border-bottom">
                     <h5 class="fw-bold mb-0">
@@ -158,6 +162,7 @@
                     @endif
                 </div>
             </div>
+            @endif
 
         </div>
     </div>

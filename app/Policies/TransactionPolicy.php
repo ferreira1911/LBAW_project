@@ -28,8 +28,6 @@ class TransactionPolicy
      */
     public function create(User $user): bool
     {
-        // Any logged-in user can attempt to create a transaction (e.g., add credit).
-        // The controller will handle the logic.
-        return $user !== null;
+        return !$user->is_admin;
     }
 }

@@ -51,6 +51,7 @@
                                 </li>
                             @else
                                 {{-- Create Auction Button --}}
+                                @if(!Auth::user()->is_admin)
                                 <li class="nav-item me-2">
                                     <a href="{{ route('auctions.create') }}" class="btn btn-primary rounded-pill px-3">
                                         <i class="bi bi-plus-lg"></i> Create
@@ -63,6 +64,7 @@
                                         €{{ number_format(Auth::user()->credit, 2) }}
                                     </a>
                                 </li>
+                                @endif
                             
                                 {{-- User Dropdown --}}
                                 <li class="nav-item dropdown">
