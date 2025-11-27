@@ -410,3 +410,26 @@ VALUES
 (21, 22, NOW() - INTERVAL '1 day' + INTERVAL '30 minutes'),
 (22, 32, NOW() - INTERVAL '3 days' + INTERVAL '30 minutes'),
 (42, 23, NOW() - INTERVAL '2 days' + INTERVAL '30 minutes');
+
+------------------------------------------------------------
+-- AUCTION IMAGES (5)
+------------------------------------------------------------
+
+INSERT INTO auction_images (auction_id, path) VALUES 
+(5, 'vintagewatch1.png'),
+(5, 'vintagewatch2.png');
+
+INSERT INTO auction_images (auction_id, path) VALUES 
+(8, 'eletricguitar1.png'),
+(8, 'eletricguitar2.png');
+
+INSERT INTO auction_images (auction_id, path) VALUES 
+(17, 'localartist.jpg');
+
+INSERT INTO auction_images (auction_id, path) VALUES 
+(22, 'vintagerolex1.png'),
+(22, 'vintagerolex2.png');
+
+INSERT INTO auction_images (auction_id, path) VALUES 
+(42, 'movieposter1.png'),
+(42, 'movieposter2.png');
