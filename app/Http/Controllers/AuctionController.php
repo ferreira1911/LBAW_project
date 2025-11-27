@@ -29,9 +29,19 @@ class AuctionController extends Controller
     function show(Auction $auction) {
         $this->authorize('view', $auction);
 
+        $highestBid = $auction->bids()
+            ->orderBy('amount', 'DESC')
+            ->first();
+        
+        $bids = $auction->bids()
+            ->orderBy('amount', 'DESC')
+            ->orderBy('date', 'DESC')
+            ->paginate(5);
+
         return view('pages.auction.show', [
             'auction' => $auction,
-            'bids' => $auction->bids()->orderBy('date', 'DESC')->get(),
+            'bids' => $bids,
+            'highestBid' => $highestBid
         ]);
     }
 

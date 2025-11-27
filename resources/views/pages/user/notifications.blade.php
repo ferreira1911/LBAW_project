@@ -17,13 +17,15 @@
                     @endif
                 </h2>
                 
-                @if($notifications->count() > 0)
-                    {{-- Optional: Add a "Mark all as read" button here in the future --}}
+                @if(isset($unreadCount) && $unreadCount > 0)
+                    <button onclick="markAllRead()" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-check2-all me-1"></i> Mark all as read
+                    </button>
                 @endif
             </div>
 
             <div class="card shadow-sm border-0">
-                <div class="card-body p-0">
+                <div class="card-body p-4">
                     @forelse ($notifications as $notification)
                         
                         @include('partials.notification', ['notification' => $notification])

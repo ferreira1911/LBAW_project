@@ -14,12 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentSearch = searchInput.value; // Pega o valor inicial
 
     async function fetchUsers(page = 1, search = '') {
-        // 
-        // ⬇️ ERRO 1 CORRIGIDO AQUI ⬇️
-        // 
-        // 1. Usar a variável global 'baseUrl' que vem do seu layout Blade.
-        // 2. Apontar para o URL correto '/api/users' (da sua rota api.php).
-        //
         const apiUrl = `${baseUrl}/users/api`; 
         
         const queryParams = new URLSearchParams({
@@ -70,11 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await fetchUsers(currentPage, currentSearch);
         renderUsers(data.data, !reset);
 
-        // Toggle "Carregar Mais"
         loadMoreBtn.classList.toggle('d-none', data.current_page >= data.last_page);
     }
 
-    // Eventos
     searchButton.addEventListener('click', () => {
         currentSearch = searchInput.value.trim();
         loadUsers(true);
@@ -92,15 +84,17 @@ document.addEventListener('DOMContentLoaded', () => {
         loadUsers(false);
     });
 
-    // Carregamento Inicial
     loadUsers();
 });
 
 
 function markAsRead(id) {
     const url = `${baseUrl}/notifications/${id}/mark-read`;
+    const notificationElement = document.getElementById(`notification-${id}`);
     
-    fetch(`${url}`, {
+    const color = notificationElement.getAttribute('data-color');
+
+    fetch(url, {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -110,15 +104,36 @@ function markAsRead(id) {
     .then(r => r.json())
     .then(data => {
         if (data.success) {
+            notificationElement.classList.remove('bg-white', 'shadow-sm', 'border-start', 'border-4', `border-${color}`);
             
-            const notificationElement = document.getElementById(`notification-${id}`);
-            if (notificationElement) {
-                notificationElement.classList.remove('bg-light');
-                const markAsReadBtn = notificationElement.querySelector('button');
-                if (markAsReadBtn) {
-                    markAsReadBtn.remove();
-                }
-            }
+            notificationElement.classList.add('bg-light', 'text-muted');
+
+            const badge = notificationElement.querySelector('.badge');
+            if (badge) badge.remove();
+
+            const btn = notificationElement.querySelector('button');
+            if (btn) btn.parentElement.remove();
+        }
+    })
+    .catch(err => console.error(err));
+}
+
+function markAllRead() {
+    const url = `${baseUrl}/notifications/mark-all-read`;
+
+    if(!confirm('Are you sure you want to mark all notifications as read?')) return;
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
+        }
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success || data.message) {
+            window.location.reload(); 
         }
     })
     .catch(err => console.error(err));
