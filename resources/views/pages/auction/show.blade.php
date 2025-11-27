@@ -113,14 +113,12 @@
                     @auth
                         {{-- Logic Variables --}}
                         @php
-                            $highestBidRecord = $bids->first(); 
+                            $highestBidRecord = $highestBid; 
                             $highestBidAmount = $highestBidRecord ? $highestBidRecord->amount : $auction->starting_price;
                             
-                            // Regra: 10% do valor INICIAL + Valor Atual (como pediste)
                             $fixedIncrement = $auction->starting_price * 0.10;
                             $requiredMinBid = $highestBidAmount + $fixedIncrement;
                             
-                            // Verifica se é o vencedor atual
                             $isHighestBidder = $highestBidRecord && (int)$highestBidRecord->user_id === (int)Auth::id();
                         @endphp
 
@@ -213,24 +211,30 @@
                     @if ($bids->isNotEmpty())
                         <ul class="list-group list-group-flush">
                             @foreach ($bids as $bid)
-                                <li class="list-group-item d-flex justify-content-between align-items-center px-4 py-3 {{ $loop->first ? 'bg-success-subtle' : '' }}">
+                                <li class="list-group-item d-flex justify-content-between align-items-center px-4 py-3 {{ ($bids->currentPage() == 1 && $loop->first) ? 'bg-success-subtle' : '' }}">
                                     <div class="d-flex align-items-center">
-                                        @if($loop->first)
+                                        @if($bids->currentPage() == 1 && $loop->first)
                                             <span class="badge bg-success me-2" title="Current Winner"><i class="bi bi-trophy-fill"></i></span>
                                         @endif
                                         <div>
-                                            <a href="{{ route('users.show', $bid->user) }}" class="fw-bold text-decoration-none text-dark">
+                                            <span class="fw-bold text-dark">
                                                 {{ $bid->user->name }}
-                                            </a>
+                                            </span>
                                             <div class="text-muted small" style="font-size: 0.75rem;">{{ $bid->date->format('M d, H:i') }}</div>
                                         </div>
                                     </div>
-                                    <span class="fw-bold {{ $loop->first ? 'text-success' : 'text-dark' }}">
+                                    <span class="fw-bold {{ ($bids->currentPage() == 1 && $loop->first) ? 'text-success' : 'text-dark' }}">
                                         €{{ number_format($bid->amount, 2) }}
                                     </span>
                                 </li>
                             @endforeach
                         </ul>
+
+                        @if($bids->hasPages())
+                            <div class="p-3 d-flex justify-content-center">
+                                {{ $bids->links('pagination::bootstrap-5') }}
+                            </div>
+                        @endif
                     @else
                         <div class="text-center py-5 text-muted">
                             <i class="bi bi-hourglass-split display-6 opacity-25 mb-2 d-block"></i>
