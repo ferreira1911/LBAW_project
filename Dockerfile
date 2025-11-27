@@ -1,23 +1,6 @@
-# -----------------------------------------------------------------------------
-# LBAW Laravel Application Dockerfile
-#
-# Builds a production-ready container with:
-# - PHP 8.3 FPM (Laravel runtime)
-# - Nginx (web server)
-# - PostgreSQL support (pdo_pgsql extension)
-# - Composer (dependency manager)
-#
-# Copies Laravel source and configuration files into the container.
-# Entrypoint script starts php-fpm and nginx.
-# -----------------------------------------------------------------------------
-    
 FROM php:8.3-fpm
 
-# Install system dependencies and required PHP extensions
-# - nginx: web server
-# - libpq-dev: PostgreSQL client libraries (needed for pdo_pgsql)
-# - ca-certificates: enable HTTPS in PHP/cURL
-# Also remove default nginx site to avoid conflicts.
+# 1. Instalar dependências e CRON
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        nginx \
@@ -26,54 +9,49 @@ RUN apt-get update \
        zip \
        unzip \
        git \
+       cron \
     && docker-php-ext-install pdo_pgsql \
     && rm -rf /var/lib/apt/lists/* \
     && rm -f /etc/nginx/sites-enabled/default
 
-# Install Composer from its official image
+# 2. Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Set the working directory for the application code
+# 3. Definir diretoria
 WORKDIR /var/www
 
-# Install PHP dependencies inside the container
+# 4. Instalar dependências PHP
 COPY composer.json composer.lock ./
 RUN composer install --optimize-autoloader --prefer-dist --no-progress --no-interaction --no-scripts
 
-# Copy application source into the image (owned by www-data)
+# 5. Copiar código da app
 COPY --chown=www-data:www-data . .
 
-# Copy configuration files into container
-# - PHP overrides (php.ini)
-# - Nginx site config
-# - Production .env for Laravel
-# - Entrypoint script to launch php-fpm + nginx
+# 6. Criar pastas de storage e dar permissões (CRÍTICO)
+RUN mkdir -p storage/framework/cache/data \
+             storage/framework/sessions \
+             storage/framework/testing \
+             storage/framework/views \
+             storage/logs \
+             bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache
+
+# 7. Copiar configurações
 COPY ./etc/php/php.ini /usr/local/etc/php/conf.d/php.ini
 COPY ./etc/nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY .env.production /var/www/.env
-COPY docker_run.sh /docker_run.sh
 
-# Ensure entrypoint script is executable
+# 8. Configurar Script de Arranque
+COPY docker_run.sh /docker_run.sh
 RUN chmod +x /docker_run.sh
 
-# Expose HTTP port
+# 9. Configurar Cron Job (Apenas configurar, não iniciar)
+COPY ./etc/cron/laravel-cron /etc/cron.d/laravel-cron
+RUN chmod 0644 /etc/cron.d/laravel-cron \
+    && crontab /etc/cron.d/laravel-cron
+
 EXPOSE 80
 
-# Entrypoint: run php-fpm in background + nginx in foreground
+# O comando que vai arrancar tudo
 CMD ["/docker_run.sh"]
-
-# Install cron
-RUN apt-get update && apt-get install -y cron
-
-# Copy cron job
-COPY ./etc/cron/laravel-cron /etc/cron.d/laravel-cron
-
-# Set permissions
-RUN chmod 0644 /etc/cron.d/laravel-cron
-
-# Apply cron job
-RUN crontab /etc/cron.d/laravel-cron
-
-# Start command
-CMD sh /docker_run.sh
-

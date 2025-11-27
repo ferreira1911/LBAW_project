@@ -1,64 +1,36 @@
-#!/usr/bin/env bash
-# -------------------------------------------------------------------
-# docker_run.sh — Entrypoint script for LBAW Laravel + Nginx container
-#
-# This script prepares Laravel’s caches for production
-# and starts both PHP-FPM (background) and Nginx (foreground).
-# -------------------------------------------------------------------
-set -euo pipefail
+#!/bin/sh
+set -e
 
 cd /var/www
 
-# Ensure Laravel runtime directories exist
-mkdir -p storage/framework/{cache,sessions,views} bootstrap/cache
-chown -R www-data:www-data storage bootstrap/cache
-
-# Clear and cache Laravel configuration for faster boot
-php artisan config:clear
-php artisan route:clear
-php artisan view:clear
-php artisan cache:clear
-
-# Rebuild optimized caches
+# 1. Clear and Cache Configs (Production Optimization)
+echo "Caching configuration..."
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
-# Start PHP-FPM in background
-php-fpm -D
+# 2. Ensure Storage Permissions
+# (Critical for the 'View path not found' error)
+echo "Fixing permissions..."
+mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache
+chown -R www-data:www-data storage bootstrap/cache
+chmod -R 775 storage bootstrap/cache
 
-# Start nginx in foreground (keeps container alive)
-exec nginx -g "daemon off;"
+# 3. Setup Cron Job
+# We write the cron schedule to the file and redirect output to a log for debugging
+echo "Setting up Scheduler..."
+echo "* * * * * root cd /var/www && php artisan schedule:run >> /var/www/storage/logs/cron.log 2>&1" > /etc/cron.d/laravel-cron
+chmod 0644 /etc/cron.d/laravel-cron
+crontab /etc/cron.d/laravel-cron
 
-#!/bin/bash
-set -e
-
-cd /var/www
-env >> /var/www/.env
-php artisan clear-compiled
-php artisan config:clear
-
-# Add cron job into cronfile
-echo "* * * * * cd /var/www && php artisan schedule:run >> /dev/null 2>&1" > /etc/cron.d/laravel
-chmod 0644 /etc/cron.d/laravel
-crontab /etc/cron.d/laravel
+# 4. Start Cron Service
+echo "Starting Cron..."
 service cron start
 
+# 5. Start PHP-FPM (Background)
+echo "Starting PHP-FPM..."
+php-fpm -D
 
-
-# Install cron job
-crontab cronfile
-
-while true; do
-    php artisan schedule:run >> /dev/null 2>&1
-    sleep 60
-done &
-
-# Remove temporary file
-rm cronfile
-
-# Start cron
-cron
-
-php-fpm8.1 -D
+# 6. Start Nginx (Foreground - keeps container running)
+echo "Starting Nginx..."
 nginx -g "daemon off;"
