@@ -30,8 +30,7 @@ class UpdateAuctionStatuses extends Command
 
         // --- End auctions ---
         $ended = Auction::where('end_date', '<=', $now)
-            ->where('status', '=', 'Ending')
-            ->where('status', '!=', 'Ended')
+            ->whereIn('status', ['Active', 'Ending'])
             ->update(['status' => 'Ended']);
 
         $this->info("Updated: {$activated} activated, {$ending} ending, {$ended} ended.");

@@ -1,6 +1,6 @@
 FROM php:8.3-fpm
 
-# 1. Instalar dependências e CRON
+# 1. Instalar dependências do sistema e CRON
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        nginx \
@@ -17,14 +17,14 @@ RUN apt-get update \
 # 2. Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# 3. Definir diretoria
+# 3. Definir diretoria de trabalho
 WORKDIR /var/www
 
 # 4. Instalar dependências PHP
 COPY composer.json composer.lock ./
 RUN composer install --optimize-autoloader --prefer-dist --no-progress --no-interaction --no-scripts
 
-# 5. Copiar código da app
+# 5. Copiar código da aplicação
 COPY --chown=www-data:www-data . .
 
 # 6. Criar pastas de storage e dar permissões (CRÍTICO)
@@ -37,21 +37,17 @@ RUN mkdir -p storage/framework/cache/data \
     && chmod -R 775 storage bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache
 
-# 7. Copiar configurações
+# 7. Copiar configurações (PHP, Nginx, Env)
 COPY ./etc/php/php.ini /usr/local/etc/php/conf.d/php.ini
 COPY ./etc/nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY .env.production /var/www/.env
 
 # 8. Configurar Script de Arranque
 COPY docker_run.sh /docker_run.sh
+# Garante que o script é executável (mesmo vindo do Windows)
 RUN chmod +x /docker_run.sh
-
-# 9. Configurar Cron Job (Apenas configurar, não iniciar)
-COPY ./etc/cron/laravel-cron /etc/cron.d/laravel-cron
-RUN chmod 0644 /etc/cron.d/laravel-cron \
-    && crontab /etc/cron.d/laravel-cron
 
 EXPOSE 80
 
-# O comando que vai arrancar tudo
+# O comando que arranca tudo (chama o script abaixo)
 CMD ["/docker_run.sh"]
