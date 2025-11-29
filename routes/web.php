@@ -70,6 +70,7 @@ Route::controller(UserController::class)->group(function () {
 // Wallet / Transactions
 Route::controller(TransactionController::class)->middleware('auth')->group(function () {
     Route::get('/wallet', 'index')->name('transactions.index');
+    Route::post('/wallet/filter','filter')->name('transactions.filter');
     
     Route::get('/wallet/add-credit', 'createCredit')->name('credit.create');
     Route::post('/wallet/add-credit', 'storeCredit')->name('credit.store');

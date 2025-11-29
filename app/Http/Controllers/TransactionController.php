@@ -14,17 +14,28 @@ class TransactionController extends Controller
     /**
      * Mostra o histórico de transações do utilizador (o seu "extrato bancário").
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
-        $transactions = Transaction::where('buyer_id', $user->id)
-            ->orWhere('seller_id', $user->id)
-            ->with(['auction', 'buyer', 'seller'])
-            ->orderBy('date', 'desc')
-            ->paginate(15);
+        $type = $request->query('type');
+
+        $query = Transaction::where(function($q) use ($user) {
+            $q->where('buyer_id', $user->id)
+              ->orWhere('seller_id', $user->id);
+        });
+
+        if ($type) {
+            $query->where('type', $type);
+        }
+
+        $transactions = $query->with(['auction', 'buyer', 'seller'])
+                              ->orderBy('date', 'desc')
+                              ->paginate(15)
+                              ->withQueryString();
 
         return view('pages.transactions.index', [
             'transactions' => $transactions,
+            'currentType' => $type
         ]);
     }
 
@@ -122,8 +133,9 @@ class TransactionController extends Controller
     /**
      * Mostra os detalhes de uma transação específica.
      */
-    public function show(Transaction $transaction)
+    public function filter(Request $request)
     {
-        $this->authorize('view', $transaction);
+        $type = $request->input('type');
+        return redirect()->route('transactions.index', ['type' => $type]);
     }
 }
