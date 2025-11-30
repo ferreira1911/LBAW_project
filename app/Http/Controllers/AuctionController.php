@@ -237,4 +237,15 @@ class AuctionController extends Controller
     }
 
 
+    public function administration() {
+        //$this->authorize('viewDashboard', Auth::user());
+
+        $auctions = Auction::whereIn('status',['Active','Ending'])
+                            ->orderBy('end_date','ASC')
+                            ->paginate(15);
+        return view('pages.auction.administration',[
+            'auctions' => $auctions,
+        ]);
+    }
+
 }

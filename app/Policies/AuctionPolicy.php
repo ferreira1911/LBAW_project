@@ -32,11 +32,15 @@ class AuctionPolicy
     }
     public function update(User $user, Auction $auction)
     {
-        return $user->id === $auction->owner_id;
+        return $user->id === $auction->owner_id || $user->is_admin;
     }
 
     public function cancel(User $user, Auction $auction): bool
     {
         return $user->id === $auction->owner_id && in_array($auction->status, ['Active', 'Pending']) && !$auction->bids()->exists();
+    }
+
+    public function viewDashboard(User $user){
+        return $user->isAdmin();
     }
 }

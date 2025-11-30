@@ -42,6 +42,7 @@ Route::controller(AuctionController::class)->group(function () {
     Route::get('/auctions/create', 'create')->name('auctions.create');
     Route::post('/auctions', 'store')->name('auctions.store');
     Route::get('/auctions/search', 'search')->name('auctions.search');
+    Route::get('/auctions/admin','administration')->name('auctions.admin');
     
     Route::get('/auctions/{auction}', 'show')->whereNumber('auction')->name('auctions.show');
     Route::get('/auctions/{auction}/edit', 'edit')->whereNumber('auction')->name('auctions.edit');
@@ -70,6 +71,7 @@ Route::controller(UserController::class)->group(function () {
 // Wallet / Transactions
 Route::controller(TransactionController::class)->middleware('auth')->group(function () {
     Route::get('/wallet', 'index')->name('transactions.index');
+    Route::post('/wallet/filter','filter')->name('transactions.filter');
     
     Route::get('/wallet/add-credit', 'createCredit')->name('credit.create');
     Route::post('/wallet/add-credit', 'storeCredit')->name('credit.store');
