@@ -4,6 +4,8 @@
 
 @section('content')
 <div class="container py-5">
+
+    @include('partials.admin-tabs')
     
     {{-- Header --}}
     <div class="d-flex justify-content-between align-items-center mb-4">
