@@ -140,6 +140,16 @@ CREATE TABLE user_follows (
 );
 
 ------------------------------------------------------------
+-- PASSWORD RESETS
+------------------------------------------------------------
+CREATE TABLE password_reset_tokens (
+    email TEXT NOT NULL,
+    token TEXT NOT NULL,
+    created_at TIMESTAMP,
+    PRIMARY KEY (email)
+);
+
+------------------------------------------------------------
 -- FEATURE 
 ------------------------------------------------------------
 
