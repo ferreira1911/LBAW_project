@@ -72,6 +72,11 @@
                             <a href="{{ route('register') }}" class="text-decoration-none fw-bold">Register here</a>
                         </div>
 
+                        <div class="text-center mt-4">
+                            <p class="mb-0 text-muted">Forgot your password?</p>
+                            <a href="{{ route('password.request') }}" class="text-decoration-none fw-bold">Get it here</a>
+                        </div>
+
                         @if (session('status'))
                             <div class="alert alert-success mt-3" role="alert">
                                 {{ session('status') }}
