@@ -73,33 +73,66 @@
                                     </div>
                                 </td>
                                 <td>
-                                    @if($user->is_admin)
+                                    @if($user->isAdmin())
                                         <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill">Admin</span>
                                     @else
                                         <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill">User</span>
                                     @endif
                                 </td>
                                 <td>
-                                    @if(!$user->is_blocked)
-                                        <span class="badge bg-success-subtle text-success rounded-pill"><i class="bi bi-check-circle me-1"></i>Active</span>
+                                    {{-- STATUS COLUMN --}}
+                                    @if($user->isBlocked())
+                                        <span class="badge bg-danger-subtle text-danger rounded-pill">
+                                            <i class="bi bi-slash-circle me-1"></i>Blocked
+                                        </span>
                                     @else
-                                        <span class="badge bg-danger-subtle text-danger rounded-pill"><i class="bi bi-slash-circle me-1"></i>Blocked</span>
+                                        <span class="badge bg-success-subtle text-success rounded-pill">
+                                            <i class="bi bi-check-circle me-1"></i>Active
+                                        </span>
                                     @endif
                                 </td>
                                 <td class="text-end pe-4">
-                                    <a href="{{ route('users.show', $user) }}" class="btn btn-sm btn-outline-secondary me-1" title="View Profile">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-                                    <a href="{{ route('users.edit', $user) }}" class="btn btn-sm btn-outline-primary me-1" title="Edit User">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                    
-                                    
-                                    @if(Auth::id() !== $user->id)                                        
-                                        <a href="{{ route('users.destroy', $user) }}" class="btn btn-sm btn-outline-danger" title="Delete User">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    @endif
+                                    <div class="d-flex justify-content-end align-items-center gap-1">
+                                        {{-- View --}}
+                                        <a href="{{ route('users.show', $user) }}" class="btn btn-sm btn-outline-secondary" title="View Profile">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        
+                                        {{-- Edit --}}
+                                        <a href="{{ route('users.edit', $user) }}" class="btn btn-sm btn-outline-primary" title="Edit User">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+
+                                        {{-- BLOCK / UNBLOCK ACTIONS --}}
+                                        @if($user->isBlocked())
+                                            @can('unblock', $user)
+                                                <form action="{{ route('users.unblock', $user) }}" method="POST" class="d-inline">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button type="submit" class="btn btn-sm btn-outline-success" title="Unblock User">
+                                                        <i class="bi bi-unlock"></i>
+                                                    </button>
+                                                </form>
+                                            @endcan
+                                        @else
+                                            @can('block', $user)
+                                                <form action="{{ route('users.block', $user) }}" method="POST" class="d-inline">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button type="submit" class="btn btn-sm btn-outline-warning" title="Block User" onclick="return confirm('Are you sure you want to block this user? They will lose access immediately.')">
+                                                        <i class="bi bi-slash-circle"></i>
+                                                    </button>
+                                                </form>
+                                            @endcan
+                                        @endif
+
+                                        {{-- Delete --}}
+                                        @if(Auth::id() !== $user->id)                            
+                                            <a href="{{ route('users.destroy', $user) }}" class="btn btn-sm btn-outline-danger" title="Delete User">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        @endif
+                                    </div>
                                 </td>
                             </tr>
                         @empty

@@ -31,6 +31,7 @@ CREATE TABLE users (
     held_credit NUMERIC(12,2) DEFAULT 0 CHECK (held_credit >= 0),
     is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
     is_admin BOOLEAN DEFAULT FALSE,
+    is_blocked BOOLEAN NOT NULL DEFAULT FALSE,
     password TEXT NOT NULL,
     remember_token TEXT,
     url TEXT
@@ -418,7 +419,13 @@ DECLARE
     user_credit_val NUMERIC(12,2);
     min_increment NUMERIC(12,2);
     current_high_bidder_id INT;
+    user_is_blocked BOOLEAN;
 BEGIN
+    SELECT is_blocked INTO user_is_blocked FROM users WHERE id = NEW.user_id;
+
+    IF user_is_blocked THEN
+        RAISE EXCEPTION 'Blocked users cannot place bids.';
+    END IF;
     
     SELECT 
         a.status, a.owner_id, a.current_price, a.starting_price, u.credit

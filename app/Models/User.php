@@ -13,11 +13,19 @@ class User extends Authenticatable
     public $timestamps = false;
 
     protected $fillable = [
-        'name', 'email', 'password', 'description', 'url', 'is_deleted', 'is_admin','credit','held_credit',
+        'name', 'email', 'password', 'description', 'url', 'is_deleted', 'is_admin','credit','held_credit','is_blocked',
     ];
 
     protected $hidden = [
         'password', 'remember_token',
+    ];
+
+    protected $casts = [
+        'is_admin' => 'boolean',
+        'is_deleted' => 'boolean',
+        'is_blocked' => 'boolean',
+        'credit' => 'decimal:2', 
+        'held_credit' => 'decimal:2',
     ];
 
     // Define all relationships
@@ -85,6 +93,10 @@ class User extends Authenticatable
 
     public function getProfileImage() {
         return FileController::get('profile', $this->id);
+    }
+
+    public function isBlocked() : bool {
+        return $this->is_blocked;
     }
 
 }

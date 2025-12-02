@@ -189,4 +189,22 @@ public function index(Request $request)
                          ->with('success', 'Utilizador criado com sucesso!');
     }
 
+    public function block(User $user)
+    {
+        $this->authorize('block', $user);
+
+        $user->update(['is_blocked' => true]);
+
+        return back()->with('success', 'User blocked successfully.');
+    }
+
+    public function unblock(User $user)
+    {
+        $this->authorize('unblock', $user);
+
+        $user->update(['is_blocked' => false]);
+
+        return back()->with('success', 'User unblocked successfully.');
+    }
+
 }

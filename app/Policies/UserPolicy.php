@@ -12,7 +12,7 @@ class UserPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->is_admin;
+        return $user->isAdmin();
     }
 
     /**
@@ -43,6 +43,28 @@ class UserPolicy
     {
         
         return $currentUser->id === $userToView->id || $currentUser->is_admin;
+    }
+
+    public function block(User $currentUser, User $targetUser): bool
+    {
+        if (! $currentUser->isAdmin()) {
+            return false;
+        }
+
+        if ($targetUser->isAdmin()) {
+            return false;
+        }
+
+        if ($currentUser->id === $targetUser->id) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function unblock(User $currentUser, User $targetUser): bool
+    {
+        return $currentUser->isAdmin();
     }
 
 }

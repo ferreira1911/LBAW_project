@@ -68,6 +68,9 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/users/{user}/edit', 'edit')->name('users.edit');
     Route::post('/users/{user}', 'update')->name('users.update');
     Route::get('/users/{user}/destroy', 'destroy')->name('users.destroy');
+
+    Route::patch('/users/{user}/block', 'block')->name('users.block');
+    Route::patch('/users/{user}/unblock', 'unblock')->name('users.unblock');
 });
 
 // Wallet / Transactions
