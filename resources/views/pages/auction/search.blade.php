@@ -9,7 +9,7 @@
 @section('content')
 <div class="container py-4">
 
-    {{-- Breadcrumb --}}
+    
     <nav aria-label="breadcrumb" class="mb-4">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('auctions.index') }}" class="text-decoration-none">Home</a></li>
@@ -17,7 +17,7 @@
         </ol>
     </nav>
 
-    {{-- Header --}}
+    
     <div class="mb-5 border-bottom pb-3">
         <h1 class="h2 fw-bold text-dark mb-2">
             @if ($searchQuery)
@@ -32,13 +32,13 @@
     </div>
 
     <div class="row">
-        {{-- Sidebar (Filters) --}}
+        
         <aside class="col-lg-3 mb-5 mb-lg-0">
-            {{-- Reutilizamos o partial de filtros, que já deve ter a estrutura correta --}}
+            
             @include('partials.filters', ['categories' => $categories])
         </aside>
 
-        {{-- Results Grid --}}
+        
         <section class="col-lg-9">
             <div class="row g-3">
                 @forelse ($auctions as $auction)
@@ -54,7 +54,7 @@
                                 We couldn't find any auctions matching "<strong>{{ $searchQuery }}</strong>".<br>
                                 Try checking for typos or using more general keywords.
                             </p>
-                            <a href="{{ route('auctions.index') }}" class="btn btn-outline-primary px-4">
+                            <a href="{{ route('auctions.search') }}" class="btn btn-outline-primary px-4">
                                 <i class="bi bi-arrow-left me-2"></i>Clear Search
                             </a>
                         </div>
@@ -62,7 +62,7 @@
                 @endforelse
             </div>
 
-            {{-- Pagination --}}
+            
             <div class="d-flex justify-content-center mt-5">
                 {{ $auctions->appends(request()->query())->links() }}
             </div>

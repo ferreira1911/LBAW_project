@@ -15,14 +15,26 @@ class AuctionController extends Controller
 {
 
     function index(){
-        $auctions = Auction::where('status','Active')
+        $featuredAuctions = Auction::where('status','Active')
                     ->where('is_featured',true)
                     ->orderBy('end_date','ASC')
                     ->paginate(9);
-        $categories = Category::all();
+
+        $myActiveBids = collect();
+        
+        if (Auth::check()) {
+            $myActiveBids = Auction::where('status', 'Active')
+                ->whereHas('bids', function($query) {
+                    $query->where('user_id', Auth::id());
+                })
+                ->where('owner_id','!=', Auth::user()->id)
+                ->orderBy('end_date', 'asc')
+                ->get();
+        }
+
         return view('pages.auction.index', [
-            'auctions' => $auctions,
-            'categories' => $categories,
+            'featuredAuctions' => $featuredAuctions,
+            'myActiveBids' => $myActiveBids,
         ]);
     }
 
