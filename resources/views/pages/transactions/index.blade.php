@@ -30,21 +30,25 @@
                                 <small class="text-white-50 text-uppercase fw-bold ls-1">Available Balance</small>
                                 <div class="display-5 fw-bold my-2">{{ number_format(Auth::user()->credit, 2) }} €</div>
                             </div>
-                            <i class="fas fa-wallet fa-3x text-white-50"></i>
+                        </div>
+                        <div class="small text-white-50">
+                            <i class="bi bi-check-circle-fill me-1"></i> Ready to use
                         </div>
                     </div>
-                    <div class="position-absolute top-0 end-0 bg-white opacity-10 rounded-circle" style="width: 150px; height: 150px; margin-right: -30px; margin-top: -30px;"></div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="card border-0 shadow-sm rounded-4 bg-white h-100">
                     <div class="card-body p-4 d-flex align-items-center">
-                        <div class="me-3 p-3 rounded-circle bg-light text-secondary">
-                            <i class="fas fa-lock fa-2x"></i>
+                        <div class="me-4 p-4 rounded-circle bg-light text-secondary">
+                            <i class="bi bi-piggy-bank fs-2"></i>
                         </div>
                         <div>
                             <small class="text-muted text-uppercase fw-bold ls-1">Held Balance (Active Bids)</small>
                             <div class="fs-2 fw-bold text-dark">{{ number_format(Auth::user()->held_credit, 2) }} €</div>
+                            <p class="mb-0 text-muted small">
+                                This amount is temporarily locked in active auctions.
+                            </p>
                         </div>
                     </div>
                 </div>

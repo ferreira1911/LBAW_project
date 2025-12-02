@@ -20,6 +20,9 @@ use App\Http\Controllers\BidController;
 // Home
 Route::view('/', 'welcome')->name('home');
 
+// Blocked Account Page
+Route::view('/account/blocked', 'auth.blocked')->name('account.blocked');
+
 // Authentication
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
