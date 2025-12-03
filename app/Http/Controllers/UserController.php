@@ -126,7 +126,7 @@ public function index(Request $request)
             auth()->logout();
         }
 
-        return redirect()->route('auctions.index')->with('success', 'User profile deleted successfully.');
+        return back()->with('success', 'User profile deleted successfully.');
     }
 
     public function getUsers(Request $request)

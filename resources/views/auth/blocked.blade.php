@@ -44,7 +44,7 @@
                         </p>
 
                         <div class="d-grid gap-2 col-md-8 mx-auto">
-                            <a href="mailto:support@lbaw-auction.com?subject=Account%20Blocked%20Appeal%20-%20ID%20{{ session('blocked_user_id') ?? 'Unknown' }}" 
+                            <a href="#" 
                                class="btn btn-dark btn-lg rounded-pill fw-bold">
                                 <i class="bi bi-envelope-fill me-2"></i> Contact Support
                             </a>

@@ -6,10 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Auction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
+use App\Models\Bid;
 
 class BidController extends Controller
 {
     public function store(Request $request, Auction $auction){
+        $this->authorize('create', Bid::class);
         
         $request->validate([
             'amount' => 'required|numeric|min:0.01'

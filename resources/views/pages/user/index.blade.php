@@ -108,7 +108,6 @@
                                             @can('unblock', $user)
                                                 <form action="{{ route('users.unblock', $user) }}" method="POST" class="d-inline">
                                                     @csrf
-                                                    @method('PATCH')
                                                     <button type="submit" class="btn btn-sm btn-outline-success" title="Unblock User">
                                                         <i class="bi bi-unlock"></i>
                                                     </button>
@@ -118,7 +117,6 @@
                                             @can('block', $user)
                                                 <form action="{{ route('users.block', $user) }}" method="POST" class="d-inline">
                                                     @csrf
-                                                    @method('PATCH')
                                                     <button type="submit" class="btn btn-sm btn-outline-warning" title="Block User" onclick="return confirm('Are you sure you want to block this user? They will lose access immediately.')">
                                                         <i class="bi bi-slash-circle"></i>
                                                     </button>
@@ -128,9 +126,14 @@
 
                                         {{-- Delete --}}
                                         @if(Auth::id() !== $user->id)                            
-                                            <a href="{{ route('users.destroy', $user) }}" class="btn btn-sm btn-outline-danger" title="Delete User">
-                                                <i class="bi bi-trash"></i>
-                                            </a>
+                                            <form action="{{ route('users.destroy', $user) }}" method="POST" style="display: inline-block;">
+                                                @csrf
+                                                @method('DELETE')
+                                                
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete User" onclick="return confirm('Are you sure you want to delete this user?');">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
                                         @endif
                                     </div>
                                 </td>
