@@ -13,13 +13,6 @@
             <h1 class="fw-bold text-dark mb-0">Auction Management</h1>
             <p class="text-muted">Manage all auctions, monitor statuses and prices.</p>
         </div>
-        {{-- Sinceridade: Removi o botão de Create aqui se o Admin não deve criar leilões.
-             Se quiseres manter para debug, descomenta. --}}
-        {{-- 
-        <a href="{{ route('auctions.create') }}" class="btn btn-primary">
-            <i class="bi bi-plus-lg me-2"></i>Create New Auction
-        </a> 
-        --}}
     </div>
 
     {{-- Search Bar --}}

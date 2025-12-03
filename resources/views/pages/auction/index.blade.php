@@ -19,11 +19,11 @@
                     <i class="fas fa-th-large me-2"></i> Browse Auctions
                 </a>
                 
-                @auth
+                @can ('create', App\Models\Auction::class)
                     <a href="{{ route('auctions.create') }}" class="btn btn-primary btn-lg rounded-pill px-4 shadow-sm">
                         <i class="fas fa-plus me-2"></i> Create Auction
                     </a>
-                @endauth
+                @endcan
             </div>
         </div>
 
