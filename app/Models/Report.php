@@ -13,7 +13,7 @@ class Report extends Model
 
     protected $table = 'report';
 
-    // Map 'create_date' to 'created_at' and disable 'updated_at'
+    
     const CREATED_AT = 'create_date';
     const UPDATED_AT = null;
 

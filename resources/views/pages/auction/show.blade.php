@@ -97,7 +97,7 @@
                         </div>
                     </div>
 
-                    {{-- Dates --}}
+                    
                     <div class="row text-muted small mb-4">
                         <div class="col-6">
                             <i class="bi bi-calendar-check me-1"></i> Starts: <br>
@@ -109,9 +109,9 @@
                         </div>
                     </div>
 
-                    {{-- Bidding Section --}}
+                    
                     @auth
-                        {{-- Logic Variables --}}
+                        
                         @php
                             $highestBidRecord = $highestBid; 
                             $highestBidAmount = $highestBidRecord ? $highestBidRecord->amount : $auction->starting_price;
@@ -251,7 +251,13 @@
                     @endif
                 </div>
             </div>
-
+            @auth
+            <div class="mt-4 pt-3 border-top text-center">
+                    <a href="{{ route('report.create', ['auction_id' => $auction->id,'reported_user_id' => $auction->owner_id]) }}" class="text-danger text-decoration-none small fw-bold opacity-75">
+                        <i class="fas fa-flag me-1"></i> Report this Auction
+                    </a>
+            </div>
+            @endauth
         </div>
     </div>
 </div>

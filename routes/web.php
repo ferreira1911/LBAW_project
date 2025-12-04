@@ -16,7 +16,7 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\BidController;
-
+use App\Http\Controllers\ReportController;
 // Home
 Route::view('/', 'welcome')->name('home');
 
@@ -106,4 +106,13 @@ Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink
 Route::controller(ResetPasswordController::class)->group(function () {
     Route::get('/reset-password/{token}', 'showResetForm')->name('password.reset');
     Route::post('/reset-password', 'reset')->name('password.update');
+});
+
+Route::controller(ReportController::class)->group(function () {
+    
+    Route::get('/report/create', 'create')->name('report.create');
+    Route::get('/report/myReports', 'viewReports')->name('admin.myReports');
+    Route::post('/report', 'store')->name('report.store');
+    Route::get('/reports', 'index')->name('admin.reports');
+    Route::post('/reports/{report}/assign', 'assign')->name('report.assign');
 });
