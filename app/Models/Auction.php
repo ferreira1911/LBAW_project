@@ -70,9 +70,9 @@ class Auction extends Model
     }   
 
     /** Get all reviews for this auction */
-    public function reviews(): HasMany
+    public function reviews(): HasOne
     {
-        return $this->hasMany(Review::class, 'auction_id');
+        return $this->hasOne(Review::class, 'auction_id');
     }
 
     /** Get all notifications related to this auction */

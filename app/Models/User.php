@@ -4,7 +4,9 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Http\Controllers\FileController;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class User extends Authenticatable
 {
@@ -29,7 +31,8 @@ class User extends Authenticatable
     ];
 
     // Define all relationships
-    public function auctions() {
+    public function auctions(): HasMany
+    {
         return $this->hasMany(Auction::class, 'owner_id');
     }
 
@@ -38,27 +41,18 @@ class User extends Authenticatable
         return $this->hasMany(Auction::class, 'owner_id')->where('status', 'Active');
     }
 
-    protected function averageRating(): Attribute
+    public function bids(): HasMany
     {
-        return Attribute::make(
-            get: fn () => $this->hasManyThrough(
-                Review::class,
-                Auction::class,
-                'owner_id',   // Foreign key on 'auction' table
-                'auction_id'    // Foreign key on 'review' table
-            )->avg('rating') 
-        );
-    }
-
-    public function bids() {
         return $this->hasMany(Bid::class);
     }
 
-    public function reviews() {
+    public function reviews(): HasMany
+    {
         return $this->hasMany(Review::class);
     }
 
-    public function reportsMade() {
+    public function reportsMade(): HasMany 
+    {
         return $this->hasMany(Report::class, 'user_id');
     }
 
@@ -82,6 +76,18 @@ class User extends Authenticatable
         return $this->hasMany(FeaturePayment::class, 'user_id');
     }
 
+    protected function averageRating(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->hasManyThrough(
+                Review::class,
+                Auction::class,
+                'owner_id',   // Foreign key on 'auction' table
+                'auction_id'    // Foreign key on 'review' table
+            )->avg('rating') 
+        );
+    }
+
     public function isAdmin() : bool {
         return $this->is_admin;
     }
@@ -92,7 +98,10 @@ class User extends Authenticatable
     }
 
     public function getProfileImage() {
-        return FileController::get('profile', $this->id);
+        if ($this->url) {
+            return $this->url; 
+        }
+        return 'images/default_user.png'; 
     }
 
     public function isBlocked() : bool {

@@ -43,9 +43,11 @@ public function index(Request $request)
      */
     public function show(User $user)
     {
-        $canViewBalance = false;
-        if (Auth::check() && (Auth::id() === $user->id || Auth::user()->is_admin)) {
-            $canViewBalance = true;
+        $canViewBalance = request()->user()?->can('viewBalance', $user) ?? false;
+
+        if (!$canViewBalance) {
+            $user->credit = null;
+            $user->held_credit = null;
         }
 
         if (!$user->is_deleted) {
@@ -179,14 +181,14 @@ public function index(Request $request)
             User::create($dataToCreate);
 
         } catch (\Exception $e) {
-            Log::error('Falha ao criar utilizador (Admin): ' . $e->getMessage());
+            Log::error('Failed to create user.' . $e->getMessage());
             return redirect()->back()
-                             ->with('failure', 'Ocorreu um erro ao criar o utilizador.')
+                             ->with('failure', 'An error occurred while creating the user.')
                              ->withInput(); // Mantém os dados no formulário
         }
 
         return redirect()->route('users.index')
-                         ->with('success', 'Utilizador criado com sucesso!');
+                         ->with('success', 'User created successfully!');
     }
 
     public function block(User $user)

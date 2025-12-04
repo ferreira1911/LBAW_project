@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Auth;
 
 class UserPolicy
 {
@@ -13,6 +14,11 @@ class UserPolicy
     public function viewAny(User $user): bool
     {
         return $user->isAdmin();
+    }
+
+    public function view(User $user): bool
+    {
+        return Auth::check();
     }
 
     /**
