@@ -70,7 +70,7 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/users/{user}', 'show')->name('users.show');
     Route::get('/users/{user}/edit', 'edit')->name('users.edit');
     Route::post('/users/{user}', 'update')->name('users.update');
-    Route::delete('/users/{user}', 'destroy')->name('users.destroy');
+    Route::post('/users/{user}/delete', 'destroy')->name('users.destroy');
 
     Route::post('/users/{user}/block', 'block')->name('users.block');
     Route::post('/users/{user}/unblock', 'unblock')->name('users.unblock');

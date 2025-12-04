@@ -63,9 +63,15 @@
                         <a href="{{ route('transactions.index') }}" class="btn btn-outline-secondary">
                             <i class="bi bi-receipt me-2"></i>Transaction History
                         </a>
-                        <a href="{{ route('users.destroy', $user) }}" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete your profile?');">
-                            <i class="bi bi-trash me-2"></i>Delete Profile
-                        </a>
+                        <form action="{{ route('users.destroy', $user) }}" method="POST" 
+                            onsubmit="return confirm('Are you sure you want to delete your profile?');" 
+                            class="d-inline">
+                            @csrf
+
+                            <button type="submit" class="btn btn-outline-danger">
+                                <i class="bi bi-trash me-2"></i>Delete Profile
+                            </button>
+                        </form>
                     
                     </div>
                 @endif
