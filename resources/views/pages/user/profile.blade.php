@@ -39,7 +39,7 @@
                 <div class="mb-4">
                     <span class="badge bg-warning text-dark fs-6">
                         <i class="bi bi-star-fill me-1"></i>
-                        {{ isset($user->average_rating) ? number_format($user->average_rating, 1) : 'N/A' }} / 5.0
+                        {{ $user->getAverageRating() > 0 ? number_format($user->getAverageRating(), 1) : 'N/A' }} / 5.0
                     </span>
                 </div>
 
