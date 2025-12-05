@@ -13,7 +13,7 @@
                 </h1>
                 <p class="text-muted mb-0">Keep track of the auctions you are interested in.</p>
             </div>
-            <a href="{{ route('home') }}" class="btn btn-outline-primary rounded-pill px-4">
+            <a href="{{ route('auctions.search') }}" class="btn btn-outline-primary rounded-pill px-4">
                 Find More Auctions
             </a>
         </div>
@@ -33,7 +33,7 @@
                         </div>
                         <h4 class="fw-bold text-secondary">Your watchlist is empty.</h4>
                         <p class="text-muted mb-4">Start following auctions to track them here.</p>
-                        <a href="{{ route('home') }}" class="btn btn-primary rounded-pill px-5 fw-bold">
+                        <a href="{{ route('auctions.index') }}" class="btn btn-primary rounded-pill px-5 fw-bold">
                             Browse Auctions
                         </a>
                     </div>

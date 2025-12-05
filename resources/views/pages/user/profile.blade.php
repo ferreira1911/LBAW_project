@@ -112,6 +112,9 @@
                     <h5 class="fw-bold mb-0">
                         <i class="bi bi-hammer me-2 text-primary"></i>User Auctions
                     </h5>
+                    <a href="{{ route('user.watchlist') }}" class="fw-bold mb-0">
+                        <i class="bi bi-bookmark-fill me-2 text-success"></i>WatchList
+                    </a>
                 </div>
                 <div class="card-body p-0">
                     @if($auctions->count() > 0)
