@@ -53,7 +53,7 @@ Route::controller(AuctionController::class)->group(function () {
     Route::get('/auctions/{auction}', 'show')->whereNumber('auction')->name('auctions.show');
     Route::get('/auctions/{auction}/edit', 'edit')->whereNumber('auction')->name('auctions.edit');
     Route::put('/auctions/{auction}', 'update')->whereNumber('auction')->name('auctions.update');
-    
+    Route::post('/auction/{auction}/follow',  'toggleFollow')->name('auction.follow');
     Route::post('/auctions/{auction}/cancel', 'cancel')->name('auctions.cancel');
     Route::delete('/auctions/{auction}/images/{image}', 'destroyImage')->whereNumber('auction')->name('auctions.images.destroy');
 });
@@ -67,7 +67,7 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/users/api', 'getUsers')->name('users.api');
     Route::get('/users/create', 'create')->name('users.create');
     Route::post('/users', 'store')->name('users.store');
-    
+    Route::get('/my-watchlist',  'showWatchlist')->name('user.watchlist');
     Route::get('/users/{user}', 'show')->name('users.show');
     Route::get('/users/{user}/edit', 'edit')->name('users.edit');
     Route::post('/users/{user}', 'update')->name('users.update');

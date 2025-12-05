@@ -22,6 +22,29 @@
         @endcan
     </div>
 
+    @auth
+        {{-- Prevent owner from seeing the button --}}
+        @if(Auth::id() !== $auction->owner_id)
+
+            <form action="{{ route('auction.follow', $auction) }}" method="POST" class="d-inline">
+                @csrf
+
+                @if($auction->isFollowedBy(Auth::user()))
+                    {{-- State: Following (Click to Unfollow) --}}
+                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold shadow-sm" title="Remove from Watchlist">
+                        <i class="bi bi-heart-fill me-1"></i> Unfollow
+                    </button>
+                @else
+                    {{-- State: Not Following (Click to Follow) --}}
+                    <button type="submit" class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-bold shadow-sm" title="Add to Watchlist">
+                        <i class="bi bi-heart me-1"></i> Follow
+                    </button>
+                @endif
+            </form>
+
+        @endif
+        @endauth
+
     <div class="row g-4">
         
         {{-- Left Column: Images --}}
@@ -67,6 +90,7 @@
                 </div>
             </div>
         </div>
+
 
         {{-- Right Column: Details & Bidding --}}
         <div class="col-lg-5">

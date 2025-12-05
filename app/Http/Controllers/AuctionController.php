@@ -264,4 +264,23 @@ class AuctionController extends Controller
         ]);
     }
 
+    public function toggleFollow(Auction $auction)
+    {
+        $user = Auth::user();
+
+        
+        if ($auction->owner_id === $user->id) {
+            return back()->with('failure', 'You cannot follow your own auction.');
+        }
+
+        // The toggle method automatically attaches if missing, or detaches if exists
+        $user->followedAuctions()->toggle($auction->id);
+
+        // Check status to give correct feedback
+        $isFollowing = $user->followedAuctions()->where('followed_auction', $auction->id)->exists();
+        $message = $isFollowing ? 'Auction added to your Watchlist.' : 'Auction removed from your Watchlist.';
+
+        return back()->with('success', $message);
+    }
+
 }
