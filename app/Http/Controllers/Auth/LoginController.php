@@ -43,18 +43,8 @@ class LoginController extends Controller
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
 
-                $request->session()->flash('blocked_user_id', $user->id);
-
-                return redirect()->route('account.blocked');
-            }
-
-            if ($user->is_deleted) {
-                Auth::logout();
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
-
                 return back()->withErrors([
-                    'email' => 'This account has been deleted.',
+                    'email' => 'Your Account has been Blocked. Please contact Support.',
                 ])->onlyInput('email');
             }
 
