@@ -264,4 +264,23 @@ class AuctionController extends Controller
         ]);
     }
 
+    public function toggleFollow(Auction $auction)
+{
+    $user = Auth::user();
+    
+    if ($auction->owner_id === $user->id) {
+        return response()->json(['error' => 'Owner cannot follow auction'], 403);
+    }
+
+    $user->followedAuctions()->toggle($auction->id);
+
+    // Check the new state
+    $isFollowing = $user->followedAuctions()->where('followed_auction', $auction->id)->exists();
+
+    return response()->json([
+        'success' => true,
+        'following' => $isFollowing,
+        'message' => $isFollowing ? 'Followed' : 'Unfollowed'
+    ]);
+}
 }

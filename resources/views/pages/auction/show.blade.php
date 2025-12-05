@@ -22,6 +22,28 @@
         @endcan
     </div>
 
+    @auth
+    {{-- Prevent owner from seeing the button --}}
+    @if(Auth::id() !== $auction->owner_id)
+        @php
+            $isFollowing = $auction->isFollowedBy(Auth::user());
+        @endphp
+        <button type="button" 
+                class="btn follow-btn btn-sm rounded-pill px-3 fw-bold shadow-sm {{ $isFollowing ? 'btn-outline-danger' : 'btn-outline-secondary' }}"
+                data-following="{{ $isFollowing ? 'true' : 'false' }}"
+                data-auction-id="{{ $auction->id }}"
+                data-url="{{ route('auction.follow', $auction) }}"
+                title="{{ $isFollowing ? 'Remove from Watchlist' : 'Add to Watchlist' }}">
+            
+            <i class="bi {{ $isFollowing ? 'bi-heart-fill' : 'bi-heart' }} me-1"></i> 
+            
+            
+            <span class="btn-text">{{ $isFollowing ? 'Unfollow' : 'Follow' }}</span>
+        </button>
+
+        @endif
+    @endauth
+
     <div class="row g-4">
         
         {{-- Left Column: Images --}}
@@ -67,6 +89,7 @@
                 </div>
             </div>
         </div>
+
 
         {{-- Right Column: Details & Bidding --}}
         <div class="col-lg-5">
