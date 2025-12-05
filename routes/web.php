@@ -111,8 +111,11 @@ Route::controller(ResetPasswordController::class)->group(function () {
 Route::controller(ReportController::class)->group(function () {
     
     Route::get('/report/create', 'create')->name('report.create');
-    Route::get('/report/myReports', 'viewReports')->name('admin.myReports');
+    Route::get('/reports/myReports', 'indexAssigned')->name('admin.myReports');
     Route::post('/report', 'store')->name('report.store');
-    Route::get('/reports', 'index')->name('admin.reports');
+    Route::get('/reports', 'index')->name('reports.admin');
+    Route::get('/reports/{report}', 'show')->name('reports.show');
     Route::post('/reports/{report}/assign', 'assign')->name('report.assign');
+    Route::post('/reports/{report}/dismiss', 'dismiss')->name('report.dismiss');
+    Route::post('/reports/{report}/resolve', 'resolve')->name('report.resolve');
 });

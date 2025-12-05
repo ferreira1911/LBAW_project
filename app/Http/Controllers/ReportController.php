@@ -61,17 +61,6 @@ class ReportController extends Controller
         }
     }
 
-    public function viewReports()
-    {
-        $this->authorize('viewAny', Report::class);
-
-        $reports = Report::where('status','Pending')
-            ->orderBy('create_date','desc')
-            ->paginate(10);
-
-        return view('pages.reports.myReports', compact('reports'));
-    }
-
     public function index()
     {
         $this->authorize('viewAny', Report::class);
@@ -83,13 +72,25 @@ class ReportController extends Controller
         return view('pages.reports.index', compact('reports'));
     }
 
+    public function indexAssigned()
+    {
+        $this->authorize('viewAny', Report::class);
+
+        $reports = Report::with(['reporter', 'reportedUser', 'auction'])
+            ->where('admin_id', Auth::id())
+            ->orderBy('create_date', 'desc')
+            ->paginate(15);
+
+        return view('pages.reports.myReports', compact('reports'));
+    }
+
     /**
      * Assign the current admin to the report and update status.
      */
     public function assign(Request $request, Report $report)
     {
         // This policy check should ensure only Admins can perform this
-        $this->authorize('assign', Report::class);
+        $this->authorize('assign', $report);
 
         $report->update([
             'admin_id' => Auth::id(),
@@ -102,7 +103,7 @@ class ReportController extends Controller
     public function dismiss(Request $request, Report $report)
     {
         // This policy check should ensure only Admins can perform this
-        $this->authorize('dismiss', Report::class);
+        $this->authorize('dismiss', $report);
 
         $report->update([
             'status' => ReportStatus::Dismissed,
@@ -111,16 +112,25 @@ class ReportController extends Controller
         return back()->with('success', 'Report was Dismissed.');
     }
 
-    public function finish(Request $request, Report $report)
+    public function resolve(Request $request, Report $report)
     {
         // This policy check should ensure only Admins can perform this
-        $this->authorize('assign', Report::class);
+        $this->authorize('resolve', $report);
 
         $report->update([
             'status' => ReportStatus::Resolved,
         ]);
 
         return back()->with('success', 'Report was Resolved.');
+    }
+
+    function show(Report $report) {
+        $this->authorize('view', $report);
+
+        $report = Report::with(['reporter', 'reportedUser', 'auction', 'admin'])
+            ->find($report->id);
+
+        return view('pages.reports.show', compact('report'));
     }
 
 

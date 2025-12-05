@@ -27,11 +27,16 @@ class ReportPolicy
 
     public function assign(User $user): bool
     {
-        return !$user->is_admin;
+        return $user->is_admin;
     }
 
-    public function dismiss(User $user): bool
+    public function dismiss(User $user, Report $report)
     {
-        return !$user->is_admin;
+        return $user->is_admin && $user->id === $report->admin_id;
+    }
+
+    public function resolve(User $user, Report $report)
+    {
+        return $user->is_admin && $user->id === $report->admin_id;
     }
 }

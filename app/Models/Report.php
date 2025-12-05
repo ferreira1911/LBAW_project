@@ -38,7 +38,7 @@ class Report extends Model
     }
 
     /** Get the admin who handled the report */
-    public function handler(): BelongsTo
+    public function admin(): BelongsTo
     {
         return $this->belongsTo(User::class, 'admin_id');
     }
