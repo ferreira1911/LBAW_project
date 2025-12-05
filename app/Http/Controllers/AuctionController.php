@@ -6,9 +6,11 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Auction;
 use App\Models\AuctionImage;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 
 class AuctionController extends Controller
@@ -69,7 +71,16 @@ class AuctionController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'images.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'buy_now_price' => 'nullable|numeric|min:0',
         ]);
+
+        // Handle buy_now_price and is_buy_now_active
+        if (!empty($validated['buy_now_price']) && $validated['buy_now_price'] > 0) {
+            $validated['is_buy_now_active'] = true;
+        } else {
+            $validated['buy_now_price'] = null;
+            $validated['is_buy_now_active'] = false;
+        }
 
         $auction->update($validated);
 
@@ -108,8 +119,12 @@ class AuctionController extends Controller
             'end_date' => 'required|date|after:start_date',
             'starting_price' => 'required|numeric|min:0',
             'category_id' => 'required|exists:category,id',
+            'buy_now_price' => 'nullable|numeric|min:0',
             'images.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // multiple images
         ]);
+
+        // If buy_now_price is provided, enable is_buy_now_active
+        $isBuyNowActive = $request->filled('buy_now_price') && (float)$request->buy_now_price > 0;
 
         $auction = Auction::create([
             'title' => $request->title,
@@ -120,7 +135,8 @@ class AuctionController extends Controller
             'current_price' => $request->starting_price,
             'owner_id' => auth()->id(),
             'category_id' => $request->category_id,
-            'is_buy_now_active' => false,
+            'buy_now_price' => $request->buy_now_price,
+            'is_buy_now_active' => $isBuyNowActive,
             'is_featured' => false,
         ]);
 
@@ -262,6 +278,56 @@ class AuctionController extends Controller
         return view('pages.auction.administration',[
             'auctions' => $auctions,
         ]);
+    }
+
+    public function buyNow(Auction $auction)
+    {
+        $this->authorize('view', $auction);
+
+        $buyer = Auth::user();
+
+        // Check if auction is active and buy now is enabled
+        if ($auction->status !== 'Active' || !$auction->is_buy_now_active || !$auction->buy_now_price) {
+            return redirect()->back()->with('error', 'This auction is not available for buy now.');
+        }
+
+        // Check if buyer is the owner
+        if ($buyer->id === $auction->owner_id) {
+            return redirect()->back()->with('error', 'You cannot buy your own auction.');
+        }
+
+        // Check if buyer has enough credit
+        if ($buyer->credit < $auction->buy_now_price) {
+            return redirect()->back()->with('error', 'Insufficient credit. Please add funds to your wallet.');
+        }
+
+        try {
+            DB::transaction(function () use ($auction, $buyer) {
+                // Create transaction
+                $transaction = Transaction::create([
+                    'amount' => $auction->buy_now_price,
+                    'status' => 'Completed',
+                    'type' => 'auction-buy',
+                    'auction_id' => $auction->id,
+                    'buyer_id' => $buyer->id,
+                    'seller_id' => $auction->owner_id,
+                ]);
+
+                // Deduct credit from buyer
+                $buyer->decrement('credit', $auction->buy_now_price);
+
+                // Add credit to seller
+                $auction->owner->increment('credit', $auction->buy_now_price);
+
+                // End the auction
+                $auction->status = 'Ended';
+                $auction->save();
+            });
+
+            return redirect()->route('auctions.show', $auction)->with('success', 'Item purchased successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'An error occurred during the purchase. Please try again.');
+        }
     }
 
 }
