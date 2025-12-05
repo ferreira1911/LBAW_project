@@ -96,7 +96,7 @@ class User extends Authenticatable
     }
 
     public function isBlocked() : bool {
-        return $this->is_blocked;
+        return (bool) $this->is_blocked;
     }
 
 }

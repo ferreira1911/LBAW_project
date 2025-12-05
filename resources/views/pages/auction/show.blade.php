@@ -103,12 +103,12 @@
                                         Buy Now
                                     </button>
                                 @else
-                                    <button type="button" class="btn btn-primary btn-sm" 
-                                            data-bs-toggle="modal" 
-                                            data-bs-target="#buyNowModal"
-                                            {{ $auction->status !== 'Active' ? 'disabled' : '' }}>
-                                        Buy Now
-                                    </button>
+                                    <form action="{{ route('auctions.buyNow', $auction) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to buy this item for €' + {{ $auction->buy_now_price }} + '?');">
+                                        @csrf
+                                        <button type="submit" class="btn btn-primary btn-sm" {{ $auction->status !== 'Active' ? 'disabled' : '' }}>
+                                            Buy Now
+                                        </button>
+                                    </form>
                                 @endif
                             @else
                                 <a href="{{ route('login') }}" class="btn btn-primary btn-sm">
