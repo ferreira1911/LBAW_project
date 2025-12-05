@@ -16,6 +16,7 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\BidController;
+use App\Http\Controllers\CategoryController;
 
 // Home
 Route::view('/', 'welcome')->name('home');
@@ -106,4 +107,9 @@ Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink
 Route::controller(ResetPasswordController::class)->group(function () {
     Route::get('/reset-password/{token}', 'showResetForm')->name('password.reset');
     Route::post('/reset-password', 'reset')->name('password.update');
+});
+
+Route::controller(CategoryController::class)->group(function () {
+    Route::get('/categories/create', 'create')->name('categories.create');
+    Route::post('/categories/store', 'store')->name('categories.store');
 });
