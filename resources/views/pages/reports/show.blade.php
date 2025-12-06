@@ -141,7 +141,7 @@ $statusIcon = match($report->status->name) {
                                 @can('resolve', $report)
                                     <div class="mb-3">
                                         @if($report->auction)
-                                            @if($report->auction->status !== 'Cancelled') 
+                                            @if($report->auction->status !== 'Cancelled' && $report->auction->status !== 'Ended') 
                                                 <form action="{{ route('auctions.cancel', $report->auction) }}" method="POST">
                                                     @csrf
                                                     <button type="submit" class="btn btn-danger w-100 rounded-pill fw-bold mb-2" onclick="return confirm('Are you sure you want to CANCEL this auction? This cannot be undone.')">
@@ -150,7 +150,7 @@ $statusIcon = match($report->status->name) {
                                                 </form>
                                             @else
                                                 <div class="alert alert-danger py-2 text-center fw-bold rounded-pill mb-2 opacity-75">
-                                                    <i class="bi bi-ban me-2"></i>Auction is already Cancelled
+                                                    <i class="bi bi-ban me-2"></i>Auction is already Cancelled/Ended
                                                 </div>
                                             @endif
                                         @endif

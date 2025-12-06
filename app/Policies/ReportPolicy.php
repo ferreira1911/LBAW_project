@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\User;
+use App\Models\Auction;
 use App\Models\Report;
 
 use Illuminate\Support\Facades\Auth;
@@ -20,9 +21,12 @@ class ReportPolicy
         return $user->is_admin;
     }
 
-    public function create(User $user): bool
+    public function create(User $user, $target = null)
     {
-        return Auth::check() && !$user->is_admin;
+        return !$user->is_admin && !(
+            ($target instanceof Auction && $user->id === $target->owner_id) ||
+            ($target instanceof User && $user->id === $target->id)
+        );
     }
 
     public function assign(User $user): bool

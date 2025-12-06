@@ -21,19 +21,14 @@
 
                         <form action="{{ route('report.store') }}" method="POST">
                             @csrf
-
                             
-                            <div class="mb-4">
-                                    <input type="hidden" name="auction_id" value="{{ $auction_id }}">
-                                    <div class="p-3 bg-light border rounded-3 d-flex align-items-center">
-                                        <i class="fas fa-gavel me-3 text-secondary fa-lg"></i>
-                                        <div>
-                                            <small class="text-uppercase text-muted fw-bold" style="font-size: 0.7rem;">Reporting Auction</small>
-                                            <div class="fw-bold text-dark">ID #{{ $auction_id }}</div>
-                                        </div>
-                                    </div>
-                                
-                            </div>
+                            @if($auction_id)
+                                <input type="hidden" name="auction_id" value="{{ $auction_id }}">
+                            @endif
+
+                            @if($reported_user_id)
+                                <input type="hidden" name="reported_user_id" value="{{ $reported_user_id }}">
+                            @endif
 
                             
                             <div class="mb-4">

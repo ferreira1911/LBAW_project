@@ -14,17 +14,26 @@ class ReportController extends Controller
     {
         $this->authorize('create',Report::class);
 
-        $reports = Report::whereIn('status',['InReview','Pending'])
-            ->where('auction_id',$request->query('auction_id'))
-            ->where('user_id', Auth::user()->id)
-            ->exists();
-        // this will block any users that want to create another report on an auction that they already reported
-        if($reports){
-            return redirect()->back()->with('success','You already have a report for this Auction');
+        $userId = Auth::id();
+        $auctionId = $request->query('auction_id');
+        $reportedUserId = $request->query('reported_user_id');
+
+        $query = Report::whereIn('status', ['InReview', 'Pending'])
+                   ->where('user_id', $userId);
+        
+        if ($auctionId) {
+            $query->where('auction_id', $auctionId);
+        }else if ($reportedUserId) {
+            $query->where('reported_user_id', $reportedUserId);
         }
+
+        if($query->exists()){
+            return redirect()->back()->with('success','You already have a report for this Auction/User');
+        }
+        
         return view('pages.reports.create', [
-            'auction_id' => $request->query('auction_id'),
-            'reported_user_id' => $request->query('reported_user_id')
+            'auction_id' => $auctionId,
+            'reported_user_id' => $reportedUserId
         ]);
     }
 
@@ -46,8 +55,13 @@ class ReportController extends Controller
             Report::create($validated);
 
             
-            return redirect()->route('auctions.show', $validated['auction_id'])
-                ->with('success', 'Report submitted successfully.');
+            if (!empty($validated['auction_id'])) {
+                return redirect()->route('auctions.show', $validated['auction_id'])
+                    ->with('success', 'Report submitted successfully.');
+            } else {
+                return redirect()->route('users.show', $validated['reported_user_id'])
+                    ->with('success', 'Report submitted successfully.');
+            }
             
         } catch (QueryException $e) {
             

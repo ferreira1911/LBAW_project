@@ -251,13 +251,14 @@
                     @endif
                 </div>
             </div>
-            @auth
-            <div class="mt-4 pt-3 border-top text-center">
-                    <a href="{{ route('report.create', ['auction_id' => $auction->id,'reported_user_id' => $auction->owner_id]) }}" class="text-danger text-decoration-none small fw-bold opacity-75">
+            @can('create', [App\Models\Report::class, $auction])
+                <div class="mt-4 pt-3 border-top text-center">
+                    <a href="{{ route('report.create', ['auction_id' => $auction->id,'reported_user_id' => $auction->owner_id]) }}" 
+                    class="text-danger text-decoration-none small fw-bold opacity-75">
                         <i class="fas fa-flag me-1"></i> Report this Auction
                     </a>
-            </div>
-            @endauth
+                </div>
+            @endcan
         </div>
     </div>
 </div>
