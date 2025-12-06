@@ -80,6 +80,18 @@
                         </div>
 
                         <div class="mb-4">
+                            <label for="buy_now_price" class="form-label fw-bold">Buy Now Price (€) <span class="text-muted small">(Optional)</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text">€</span>
+                                <input type="number" class="form-control @error('buy_now_price') is-invalid @enderror" id="buy_now_price" name="buy_now_price" step="0.01" min="0" value="{{ old('buy_now_price') }}" >
+                                @error('buy_now_price')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-text">Set the price at which bidders can buy the item immediately.</div>
+                        </div>
+
+                        <div class="mb-4">
                             <label for="images" class="form-label fw-bold">Auction Images</label>
                             <input type="file" class="form-control @error('images') is-invalid @enderror" id="images" name="images[]" accept="image/*" multiple>
                             <div class="form-text">You can select multiple images.</div>
