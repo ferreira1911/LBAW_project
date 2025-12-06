@@ -39,7 +39,16 @@
                             <li class="nav-item">
                                 <a class="nav-link {{ Route::is('auctions.index') ? 'active fw-bold' : '' }}" href="{{ route('auctions.index') }}">Auctions</a>
                             </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link {{ Route::is('faq') ? 'active fw-bold' : '' }}" href="{{ route('faq') }}">FAQ</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link {{ Route::is('contact') ? 'active fw-bold' : '' }}" href="{{ route('contact') }}">Contact</a>
+                            </li>
                         </ul>
+
                     
                         <ul class="navbar-nav align-items-center gap-2">
                             @guest

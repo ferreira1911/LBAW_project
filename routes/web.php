@@ -18,8 +18,12 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\BidController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ContactController;
+
 // Home
 Route::view('/', 'welcome')->name('home');
+Route::view('/faq', 'pages.faq')->name('faq');
+
 
 // Blocked Account Page
 Route::view('/account/blocked', 'auth.blocked')->name('account.blocked');
@@ -125,3 +129,10 @@ Route::controller(ReportController::class)->group(function () {
     Route::post('/reports/{report}/dismiss', 'dismiss')->name('report.dismiss');
     Route::post('/reports/{report}/resolve', 'resolve')->name('report.resolve');
 });
+
+//Contact Form
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
+
+Route::view('/contact', 'pages.contact')->name('contact');
+
