@@ -59,7 +59,10 @@ Route::controller(AuctionController::class)->group(function () {
 });
 
 // Bids
-Route::post('/auctions/{auction}/bids', [BidController::class, 'store'])->name('bids.store')->middleware('auth');
+Route::controller(BidController::class)->group(function () {
+    Route::post('/auctions/{auction}/bids', 'store')->name('bids.store')->middleware('auth');
+    Route::get('/bidding-history', 'index')->name('bidding-history.index')->middleware('auth');
+});
 
 // Users
 Route::controller(UserController::class)->group(function () {

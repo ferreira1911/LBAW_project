@@ -38,4 +38,19 @@ class BidController extends Controller
             return back()->withInput()->withErrors(['amount' => $cleanMessage]);
         }
     }
+    public function index(Request $request)
+    {
+        $user = Auth::user();
+        
+        $bids = Bid::where('user_id', $user->id)
+            ->with(['auction.images', 'auction.owner'])
+            ->orderBy('date', 'desc')
+            ->paginate(15);
+
+        
+        return view('pages.user.bid-history', [
+            'bids' => $bids,
+            'user' => $user,
+        ]);
+    }
 }
