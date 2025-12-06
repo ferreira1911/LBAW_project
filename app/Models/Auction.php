@@ -104,4 +104,10 @@ class Auction extends Model
     {
         return $this->hasOne(FeaturePayment::class, 'auction_id');
     }
+
+    public function isFollowedBy(?User $user)
+    {
+        if (!$user) return false;
+        return $this->followers()->where('follower_id', $user->id)->exists();
+    }
 }

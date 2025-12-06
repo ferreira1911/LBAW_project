@@ -200,3 +200,90 @@ function markAllRead() {
     })
     .catch(err => console.error(err));
 }
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    
+    const followButtons = document.querySelectorAll('.follow-btn');
+    console.log(followButtons);
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+    if (!csrfToken) {
+        console.error('CSRF Token not found: Follow button will not work.');
+        return;
+    }
+
+    followButtons.forEach(button => {
+        button.addEventListener('click', async function(e) {
+            e.preventDefault();
+
+            
+            const url = this.dataset.url;
+            const isFollowing = this.dataset.following === 'true';
+            
+            
+            toggleButtonState(this, !isFollowing);
+
+            try {
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json', 
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({})
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                
+                const data = await response.json();
+                
+                const newState = data.following !== undefined ? data.following : !isFollowing;
+                this.dataset.following = newState.toString();
+                
+                
+                toggleButtonState(this, newState);
+
+            } catch (error) {
+                console.error('Follow action failed:', error);
+                
+                toggleButtonState(this, isFollowing);
+                alert('Something went wrong. Please try again.');
+            }
+        });
+    });
+
+   function toggleButtonState(button, following) {
+    const icon = button.querySelector('i');
+    const text = button.querySelector('.btn-text');
+
+    if (!icon || !text) {
+        console.error("Follow button structure is missing <i> or .btn-text");
+        return;
+    }
+
+    if (following) {
+        button.classList.remove('btn-outline-secondary');
+        button.classList.add('btn-outline-danger');
+
+        icon.classList.remove('bi-heart');
+        icon.classList.add('bi-heart-fill');
+
+        text.textContent = 'Unfollow';
+    } else {
+        button.classList.remove('btn-outline-danger');
+        button.classList.add('btn-outline-secondary');
+
+        icon.classList.remove('bi-heart-fill');
+        icon.classList.add('bi-heart');
+
+        text.textContent = 'Follow';
+    }
+}
+});

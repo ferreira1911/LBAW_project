@@ -193,4 +193,20 @@ public function index(Request $request)
         return back()->with('success', 'User unblocked successfully.');
     }
 
+    public function showWatchlist()
+    {
+        $user = Auth::user();
+
+        
+        $auctions = $user->followedAuctions()
+            ->with(['category', 'bids']) // Eager load for performance
+            ->whereIn('status',['Pending','Active','Ending'])
+            ->orderBy('end_date', 'asc')
+            ->paginate(12);
+
+        return view('pages.user.watchlist', [
+            'auctions' => $auctions
+        ]);
+    }
+
 }
