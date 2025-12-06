@@ -139,6 +139,41 @@ $statusIcon = match($report->status->name) {
                             {{-- Action Buttons (Only show if is In Review) --}}
                             @if(in_array($report->status->name, ['InReview']))
                                 @can('resolve', $report)
+                                    <div class="mb-3">
+                                        @if($report->auction)
+                                            @if($report->auction->status !== 'Cancelled') 
+                                                <form action="{{ route('auctions.cancel', $report->auction) }}" method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-danger w-100 rounded-pill fw-bold mb-2" onclick="return confirm('Are you sure you want to CANCEL this auction? This cannot be undone.')">
+                                                        <i class="bi bi-hammer me-2"></i>Cancel Auction (Punish)
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <div class="alert alert-danger py-2 text-center fw-bold rounded-pill mb-2 opacity-75">
+                                                    <i class="bi bi-ban me-2"></i>Auction is already Cancelled
+                                                </div>
+                                            @endif
+                                        @endif
+
+                                        @if($report->reportedUser)
+                                            @if(!$report->reportedUser->is_blocked) 
+                                                <form action="{{ route('users.block', $report->reportedUser) }}" method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-danger w-100 rounded-pill fw-bold mb-2" onclick="return confirm('Are you sure you want to BLOCK this user?')">
+                                                        <i class="bi bi-person-x-fill me-2"></i>Block User (Punish)
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <div class="alert alert-danger py-2 text-center fw-bold rounded-pill mb-2">
+                                                    <i class="bi bi-person-slash me-2"></i>User is already Blocked
+                                                </div>
+                                            @endif
+                                        @endif
+                                    </div>
+                                    
+                                    @if($report->auction || $report->reportedUser)
+                                        <hr class="border-secondary-subtle mb-4">
+                                    @endif
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
                                         {{-- Resolve Button --}}
                                         <form action="{{ route('report.resolve', $report) }}" method="POST" class="flex-grow-1">

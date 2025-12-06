@@ -97,7 +97,8 @@ class ReportController extends Controller
             'status' => ReportStatus::InReview,
         ]);
 
-        return back()->with('success', 'Report assigned to you successfully.');
+        return redirect()->route('admin.myReports')
+            ->with('success', 'Report assigned to you successfully.');
     }
 
     public function dismiss(Request $request, Report $report)
