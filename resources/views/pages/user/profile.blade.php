@@ -39,7 +39,7 @@
                 <div class="mb-4">
                     <span class="badge bg-warning text-dark fs-6">
                         <i class="bi bi-star-fill me-1"></i>
-                        {{ isset($user->average_rating) ? number_format($user->average_rating, 1) : 'N/A' }} / 5.0
+                        {{ $user->getAverageRating() > 0 ? number_format($user->getAverageRating(), 1) : 'N/A' }} / 5.0
                     </span>
                 </div>
 
@@ -52,23 +52,40 @@
                 </div>
 
                 {{-- Owner Actions --}}
-                @if (Auth::id() === $user->id)
+                @can('update', $user)
                     <div class="d-grid gap-2">
                         <a href="{{ route('users.edit', $user) }}" class="btn btn-outline-primary">
                             <i class="bi bi-pencil-square me-2"></i>Edit Profile
                         </a>
-                        <a href="{{ route('notifications.index') }}" class="btn btn-outline-secondary">
-                            <i class="bi bi-bell me-2"></i>Notifications
-                        </a>
-                        <a href="{{ route('transactions.index') }}" class="btn btn-outline-secondary">
-                            <i class="bi bi-receipt me-2"></i>Transaction History
-                        </a>
-                        <a href="{{ route('users.destroy', $user) }}" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete your profile?');">
-                            <i class="bi bi-trash me-2"></i>Delete Profile
-                        </a>
+                        @if (Auth::id() === $user->id)
+                            <a href="{{ route('notifications.index') }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-bell me-2"></i>Notifications
+                            </a>
+                            <a href="{{ route('transactions.index') }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-receipt me-2"></i>Transaction History
+                            </a>
+                        @endif
+                        <form action="{{ route('users.destroy', $user) }}" method="POST" 
+                            onsubmit="return confirm('Are you sure you want to delete your profile?');" 
+                            class="d-inline">
+                            @csrf
+
+                            <button type="submit" class="btn btn-outline-danger w-100">
+                                <i class="bi bi-trash me-2"></i>Delete Profile
+                            </button>
+                        </form>
                     
                     </div>
-                @endif
+                @endcan
+
+                @can('create', [App\Models\Report::class, $user])
+                        <div class="mt-3 text-center">
+                            <a href="{{ route('report.create', ['reported_user_id' => $user->id]) }}" 
+                            class="btn btn-outline-danger w-100 fw-bold">
+                                <i class="fas fa-flag me-2"></i>Report User
+                            </a>
+                        </div>
+                @endcan
             </div>
         </div>
 

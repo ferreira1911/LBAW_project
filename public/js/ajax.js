@@ -1,19 +1,28 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+    const tokenMeta = document.querySelector('meta[name="csrf-token"]');
+    const csrfToken = tokenMeta ? tokenMeta.getAttribute('content') : null;
+
+    
+    if (!csrfToken) {
+        console.error("ERRO: Meta tag 'csrf-token' não encontrada no layout!");
+    }
+
     const searchInput = document.getElementById('searchInput');
     const searchButton = document.getElementById('searchButton');
     const usersContainer = document.getElementById('usersContainer');
     const loadMoreBtn = document.getElementById('loadMoreBtn');
 
-    // Verifica se estamos na página correta (se os elementos existem)
+    // Verifica se estamos na página correta
     if (!searchInput || !searchButton || !usersContainer || !loadMoreBtn) {
-        // Não faz nada se não estiver na página de utilizadores
         return; 
     }
 
     let currentPage = 1;
-    let currentSearch = searchInput.value; // Pega o valor inicial
+    let currentSearch = searchInput.value;
 
     async function fetchUsers(page = 1, search = '') {
+        
         const apiUrl = `${baseUrl}/users/api`; 
         
         const queryParams = new URLSearchParams({
@@ -21,7 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
             search: search
         });
 
-        
         const response = await fetch(`${apiUrl}?${queryParams.toString()}`);
         const data = await response.json();
         return data;
@@ -39,15 +47,68 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = document.createElement('div');
             card.className = 'col';
             
-        
+            
+            const adminBorderClass = user.is_admin ? 'border-primary border-3' : 'border-0';
+
+            
+            const adminBadge = user.is_admin 
+                ? '<span class="badge bg-primary rounded-pill ms-2" style="font-size: 0.7em; vertical-align: middle;">Admin</span>' 
+                : ''; 
+            
+            let blockBtnHtml = '';
+            if (user.is_blocked) {
+                blockBtnHtml = `
+                    <form action="${baseUrl}/users/${user.id}/unblock" method="POST" class="d-inline">
+                        <input type="hidden" name="_token" value="${csrfToken}">
+                        <button type="submit" class="btn btn-sm btn-outline-success rounded-0" title="Unblock">
+                            <i class="bis bi-unlock"></i>
+                        </button>
+                    </form>`;
+            } else {
+                blockBtnHtml = `
+                    <form action="${baseUrl}/users/${user.id}/block" method="POST" class="d-inline">
+                        <input type="hidden" name="_token" value="${csrfToken}">
+                        <button type="submit" class="btn btn-sm btn-outline-warning rounded-0" title="Block" onclick="return confirm('Block this user?')">
+                            <i class="bis bi-ban"></i>
+                        </button>
+                    </form>`;
+            }
+
+            
+            
+            deleteBtnHtml = `
+                <form action="${baseUrl}/users/${user.id}/delete" method="POST" class="d-inline">
+                    <input type="hidden" name="_token" value="${csrfToken}">
+                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-0" title="Delete" onclick="return confirm('Delete this user?');">
+                        <i class="bis bi-trash"></i>
+                    </button>
+                </form>`;
+            
+
             card.innerHTML = `
-                <div class="card shadow-sm border-0 rounded-0 h-100">
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold">${user.name}</h5>
-                        <p class="card-text text-muted mb-1">${user.email}</p>
-                        <div class="mt-3 d-flex gap-2">
-                            <a href="${baseUrl}/user/${user.id}" class="btn btn-sm btn-outline-secondary rounded-0">Ver Perfil</a>
-                            <a href="${baseUrl}/user/${user.id}/edit" class="btn btn-sm btn-outline-primary rounded-0">Editar</a>
+                <div class="card shadow-sm ${adminBorderClass} rounded-0 h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title fw-bold m-0">
+                                ${user.name}
+                                ${adminBadge}
+                            </h5>
+                            ${user.is_blocked 
+                                ? '<span class="badge bg-danger text-white rounded-0">Blocked</span>' 
+                                : '<span class="badge bg-success text-white rounded-0">Active</span>'}
+                        </div>
+                        
+                        <p class="card-text text-muted small mb-3">${user.email}</p>
+
+                        <div class="mt-auto d-flex gap-2 pt-3 border-top">
+                            <a href="${baseUrl}/users/${user.id}" class="btn btn-sm btn-outline-secondary rounded-0" title="View">
+                                <i class="bis bi-eye"></i>
+                            </a>
+                            <a href="${baseUrl}/users/${user.id}/edit" class="btn btn-sm btn-outline-primary rounded-0" title="Edit">
+                                <i class="bis bi-pencil"></i>
+                            </a>
+                            ${blockBtnHtml}
+                            ${deleteBtnHtml}
                         </div>
                     </div>
                 </div>
@@ -84,6 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loadUsers(false);
     });
 
+    // Carregamento inicial
     loadUsers();
 });
 

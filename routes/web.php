@@ -17,7 +17,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\BidController;
 use App\Http\Controllers\CategoryController;
-
+use App\Http\Controllers\ReportController;
 // Home
 Route::view('/', 'welcome')->name('home');
 
@@ -71,7 +71,7 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/users/{user}', 'show')->name('users.show');
     Route::get('/users/{user}/edit', 'edit')->name('users.edit');
     Route::post('/users/{user}', 'update')->name('users.update');
-    Route::delete('/users/{user}', 'destroy')->name('users.destroy');
+    Route::post('/users/{user}/delete', 'destroy')->name('users.destroy');
 
     Route::post('/users/{user}/block', 'block')->name('users.block');
     Route::post('/users/{user}/unblock', 'unblock')->name('users.unblock');
@@ -112,4 +112,16 @@ Route::controller(ResetPasswordController::class)->group(function () {
 Route::controller(CategoryController::class)->group(function () {
     Route::get('/categories/create', 'create')->name('categories.create');
     Route::post('/categories/store', 'store')->name('categories.store');
+});
+
+Route::controller(ReportController::class)->group(function () {
+    
+    Route::get('/report/create', 'create')->name('report.create');
+    Route::get('/reports/myReports', 'indexAssigned')->name('admin.myReports');
+    Route::post('/report', 'store')->name('report.store');
+    Route::get('/reports', 'index')->name('reports.admin');
+    Route::get('/reports/{report}', 'show')->name('reports.show');
+    Route::post('/reports/{report}/assign', 'assign')->name('report.assign');
+    Route::post('/reports/{report}/dismiss', 'dismiss')->name('report.dismiss');
+    Route::post('/reports/{report}/resolve', 'resolve')->name('report.resolve');
 });

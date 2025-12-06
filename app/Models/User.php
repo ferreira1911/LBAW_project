@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Http\Controllers\FileController;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -40,16 +41,14 @@ class User extends Authenticatable
         return $this->hasMany(Auction::class, 'owner_id')->where('status', 'Active');
     }
 
-    protected function averageRating(): Attribute
+    public function getAverageRating(): float
     {
-        return Attribute::make(
-            get: fn () => $this->hasManyThrough(
-                Review::class,
-                Auction::class,
-                'owner_id',   // Foreign key on 'auction' table
-                'auction_id'    // Foreign key on 'review' table
-            )->avg('rating') 
-        );
+        $average = DB::table('review')
+            ->join('auction', 'auction.id', '=', 'review.auction_id')
+            ->where('auction.owner_id', $this->id)
+            ->avg('review.rating');
+
+        return $average ? round((float) $average, 1) : 0.0;
     }
 
     public function bids() {
