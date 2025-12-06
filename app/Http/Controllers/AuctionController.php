@@ -79,7 +79,7 @@ class AuctionController extends Controller
                 $fileName = $file->hashName();
                 $file->storeAs($folderPath, $fileName, FileController::$diskName);
 
-                \App\Models\AuctionImage::create([
+                AuctionImage::create([
                     'auction_id' => $auction->id,
                     'path' => $fileName,
                 ]);
@@ -130,7 +130,7 @@ class AuctionController extends Controller
                 $fileName = $file->hashName();
                 $file->storeAs($folderPath, $fileName, FileController::$diskName);
 
-                \App\Models\AuctionImage::create([
+                AuctionImage::create([
                     'auction_id' => $auction->id,
                     'path' => $fileName,
                 ]);

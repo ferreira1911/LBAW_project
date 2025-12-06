@@ -61,7 +61,7 @@
                                         {{-- Image Placeholder Logic --}}
                                         <div class="rounded bg-light d-flex align-items-center justify-content-center me-3 border overflow-hidden" style="width: 50px; height: 50px; flex-shrink: 0;">
                                             @if($auction->picture)
-                                                <img src="{{ asset($auction->picture) }}" alt="Auction" class="w-100 h-100 object-fit-cover">
+                                                <img src="{{ asset('images/auction/' . $auction->picture) }}" alt="Auction" class="w-100 h-100 object-fit-cover">
                                             @else
                                                 <i class="bi bi-image text-secondary"></i>
                                             @endif
@@ -127,7 +127,7 @@
 
                                         {{-- Cancel Action Logic (US503) --}}
                                         @if(in_array($auction->status, ['Active', 'Pending']))
-                                            @if($auction->bids_count === 0)
+                                            @can('cancel', $auction)
                                                 <form action="{{ route('auctions.cancel', $auction) }}" method="POST" class="d-inline">
                                                     @csrf
                                                     <button type="submit" class="btn btn-sm btn-outline-danger" title="Cancel Auction" onclick="return confirm('Are you sure you want to cancel this auction? This action is irreversible.')">
@@ -138,7 +138,7 @@
                                                 <button type="button" class="btn btn-sm btn-outline-secondary disabled" title="Cannot cancel: Auction has bids" aria-disabled="true" style="opacity: 0.5; cursor: not-allowed;">
                                                     <i class="bi bi-slash-circle"></i>
                                                 </button>
-                                            @endif
+                                            @endcan
                                         @endif
                                     </div>
                                 </td>
