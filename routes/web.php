@@ -125,3 +125,6 @@ Route::controller(ReportController::class)->group(function () {
     Route::post('/reports/{report}/dismiss', 'dismiss')->name('report.dismiss');
     Route::post('/reports/{report}/resolve', 'resolve')->name('report.resolve');
 });
+
+// About Us
+Route::view('/about', 'pages.about')->name('about');
