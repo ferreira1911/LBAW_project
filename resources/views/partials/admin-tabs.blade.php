@@ -51,8 +51,8 @@
 
                 <a href="{{ route('categories.create') }}" 
                    class="nav-link py-3 px-1 fw-bold d-flex align-items-center border-0 border-bottom border-3 
-                   {{ request()->routeIs('categories.create') || request()->routeIs('category.*') ? 'border-primary text-primary' : 'border-transparent text-secondary hover-text-primary' }}"
-                   style="margin-bottom: -1px; transition: all 0.2s ease;">
+                   {{ request()->routeIs('categories.create') || request()->routeIs('category.*') ? 'border-transparent text-primary' : 'border-transparent text-secondary hover-text-primary' }}"
+                   style="margin-bottom: -1px; transition: all 0.2s ease;border: transparent !important;">
                     <i class="bi bi-tags-fill me-2 fs-5"></i>
                     Category Management
                 </a>
