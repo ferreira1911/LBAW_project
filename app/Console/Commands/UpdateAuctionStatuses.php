@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Console\Commands;
-
+use App\Models\User;
 use Illuminate\Console\Command;
 use App\Models\Auction;
+use App\Events\EndingAuction;
+use App\Events\EndedAuction;
 use Carbon\Carbon;
 
 class UpdateAuctionStatuses extends Command
@@ -22,17 +24,51 @@ class UpdateAuctionStatuses extends Command
             ->update(['status' => 'Active']);
 
         // --- Mark auctions as ending soon (15 min left) ---
-        $ending = Auction::where('end_date', '<=', $now->copy()->addMinutes(15))
-            ->where('end_date', '>', $now) // still running
+        $ending = Auction::whereBetween('end_date', [$now, $now->copy()->addMinutes(15)])
             ->where('status', '=', 'Active')
-            ->where('status', '!=', 'Ending')
-            ->update(['status' => 'Ending']);
+            ->get();
+
+        foreach($ending as $auc){
+            $auc->update(['status' => 'Ending']);
+            $recipients = $auc->bids()
+                ->select('user_id')
+                ->distinct()
+                ->pluck('user_id');
+            $recipients->push($auc->owner_id);
+
+            $uniqueIds = $recipients->unique();
+
+            $usersToNotify = User::whereIn('id', $uniqueIds)->get();
+
+            foreach ($usersToNotify as $recipient) {
+                event(new EndingAuction($recipient, $auc));
+            }
+        }
 
         // --- End auctions ---
         $ended = Auction::where('end_date', '<=', $now)
             ->whereIn('status', ['Active', 'Ending'])
-            ->update(['status' => 'Ended']);
+            ->get();
 
+        foreach($ended as $ea){
+            $ea->update(['status' => 'Ended']);
+            $recipients = $ea->bids()
+                ->select('user_id')
+                ->distinct()
+                ->pluck('user_id');
+            $recipients->push($ea->owner_id);
+
+            $uniqueIds = $recipients->unique();
+
+            $usersToNotify = User::whereIn('id', $uniqueIds)->get();
+
+            foreach ($usersToNotify as $recipient) {
+                event(new EndedAuction($recipient, $ea));
+            }
+        }
+            
         $this->info("Updated: {$activated} activated, {$ending} ending, {$ended} ended.");
     }
 }
+
+
