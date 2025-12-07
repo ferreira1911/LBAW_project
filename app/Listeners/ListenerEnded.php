@@ -17,18 +17,18 @@ class ListenerEnded implements ShouldQueue
      */
     public function handle(EndedAuction $event): void
     {
-      
         $auction = $event->auction;
         
-        $receiverId = $auction->owner_id;
-
-
+        $receiverId = $event->user_to_be_notified;
+        
+        
         Notification::create([
             'user_id'      => $receiverId,        
             'type'         => 'ended',          
-            'auction_id'   => $auction->id,  
+            'auction_id'   => $auction->id,   
             'is_read'      => false,
             'created_date' => now(),
         ]);
+        
     }
 }

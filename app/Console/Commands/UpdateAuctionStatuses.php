@@ -24,9 +24,11 @@ class UpdateAuctionStatuses extends Command
             ->update(['status' => 'Active']);
 
         // --- Mark auctions as ending soon (15 min left) ---
-        $ending = Auction::whereBetween('end_date', [$now, $now->copy()->addMinutes(15)])
-            ->where('status', '=', 'Active')
-            ->get();
+        $ending = Auction::where('status', 'Active')
+        ->where('status', '!=','Ending')
+        ->where('end_date', '>', $now)
+        ->where('end_date', '<=', $now->copy()->addMinutes(15))
+        ->get();
 
         foreach($ending as $auc){
             $auc->update(['status' => 'Ending']);

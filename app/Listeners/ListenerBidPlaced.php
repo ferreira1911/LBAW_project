@@ -20,8 +20,10 @@ class ListenerBidPlaced implements ShouldQueue
         $auction = $event->auction;
         
         $receiverId = $auction->owner_id;
+        
 
 
+        
         Notification::create([
             'user_id'      => $receiverId,        
             'type'         => 'new-bid',          
@@ -30,5 +32,6 @@ class ListenerBidPlaced implements ShouldQueue
             'is_read'      => false,
             'created_date' => now(),
         ]);
+    
     }
 }
