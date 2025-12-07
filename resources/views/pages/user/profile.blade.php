@@ -61,6 +61,9 @@
                             <a href="{{ route('notifications.index') }}" class="btn btn-outline-secondary">
                                 <i class="bi bi-bell me-2"></i>Notifications
                             </a>
+                            <a href="{{ route('won-auctions.index') }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-trophy-fill me-2"></i>Won Auctions
+                            </a>
                             <a href="{{ route('transactions.index') }}" class="btn btn-outline-secondary">
                                 <i class="bi bi-receipt me-2"></i>Transaction History
                             </a>

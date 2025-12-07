@@ -3,6 +3,7 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -99,5 +100,11 @@ class User extends Authenticatable
     public function isBlocked() : bool {
         return $this->is_blocked;
     }
+
+    public function wonAuctions(): HasManyThrough
+    {
+        return $this->hasManyThrough(Auction::class, Transaction::class, 'buyer_id', 'id','id','auction_id')->where('transactions.status', 'Completed')->where('transactions.type', 'auction-buy');
+    }
+
 
 }

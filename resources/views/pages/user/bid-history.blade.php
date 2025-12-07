@@ -35,6 +35,10 @@
                                         <img src="{{ $auction->images->first()->getUrl() }}" 
                                              alt="{{ $auction->title }}" 
                                              class="w-100 h-100 object-fit-cover rounded">
+                                    @elseif($auction->picture)
+                                        <img src="{{ asset('storage/' . $auction->picture) }}" 
+                                             alt="{{ $auction->title }}" 
+                                             class="w-100 h-100 object-fit-cover rounded">
                                     @else
                                         <i class="bi bi-image fs-4"></i>
                                     @endif

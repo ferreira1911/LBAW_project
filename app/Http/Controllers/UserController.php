@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\FileController;
+use App\Models\Auction;
 
 
 class UserController extends Controller
@@ -208,5 +209,21 @@ public function index(Request $request)
             'auctions' => $auctions
         ]);
     }
+
+    public function showWonAuctions()
+    {
+        $user = Auth::user();
+
+        $auctions = $user->wonAuctions()
+            ->with(['images', 'owner'])
+            ->orderByDesc('end_date')
+            ->paginate(15);
+
+        return view('pages.user.won-auctions', [
+        'auctions' => $auctions,
+        'user' => $user
+        ]);
+    }
+
 
 }

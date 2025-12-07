@@ -72,6 +72,7 @@ Route::controller(UserController::class)->group(function () {
     Route::post('/users', 'store')->name('users.store');
     Route::get('/my-watchlist',  'showWatchlist')->name('user.watchlist');
     Route::get('/users/{user}', 'show')->name('users.show');
+    Route::get('/won-auctions','showWonAuctions')->name('won-auctions.index')->middleware('auth');
     Route::get('/users/{user}/edit', 'edit')->name('users.edit');
     Route::post('/users/{user}', 'update')->name('users.update');
     Route::post('/users/{user}/delete', 'destroy')->name('users.destroy');
