@@ -33,7 +33,7 @@
             <div class="h-100 p-5 bg-light border rounded-3">
                 <h2>How it Works</h2>
                 <p>Our bidding system is real-time and secure. Place your bids, track your favorite items, and win huge deals.</p>
-                <button class="btn btn-outline-secondary" type="button">Read FAQ</button>
+                <a href="{{ route('faq') }}" class="btn btn-outline-secondary">Read FAQ</a>
             </div>
         </div>
     </div>

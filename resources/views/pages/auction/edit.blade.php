@@ -73,6 +73,19 @@
                             @enderror
                         </div>
 
+                        {{-- Buy Now Price --}}
+                        <div class="mb-4">
+                            <label for="buy_now_price" class="form-label fw-bold">Buy Now Price (€) <span class="text-muted small">(Optional)</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text">€</span>
+                                <input type="number" class="form-control @error('buy_now_price') is-invalid @enderror" id="buy_now_price" name="buy_now_price" step="0.01" min="0" value="{{ old('buy_now_price', $auction->buy_now_price) }}" placeholder="Leave empty to disable">
+                                @error('buy_now_price')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-text">Set the price at which bidders can buy the item immediately. Leave empty if you don't want to offer this option.</div>
+                        </div>
+
                         {{-- Submit Button --}}
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary btn-lg">

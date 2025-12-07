@@ -109,7 +109,37 @@
                         <h2 class="display-6 fw-bold text-primary mb-0">
                             €{{ number_format($auction->current_price ?? $auction->starting_price, 2) }}
                         </h2>
-                    </div>´
+                    </div>
+
+                    {{-- Buy Now Price Section --}}
+                    @if($auction->is_buy_now_active && $auction->buy_now_price)
+                        <div class="mb-4 p-3 bg-light rounded d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted mb-1 text-uppercase small fw-bold">Buy Now</p>
+                                <h4 class="fw-bold text-dark mb-0">
+                                    €{{ number_format($auction->buy_now_price, 2) }}
+                                </h4>
+                            </div>
+                            @auth
+                                @if(Auth::user()->id === $auction->owner_id)
+                                    <button type="button" class="btn btn-primary btn-sm" disabled title="You are the owner">
+                                        Buy Now
+                                    </button>
+                                @else
+                                    <form action="{{ route('auctions.buyNow', $auction) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to buy this item for €' + {{ $auction->buy_now_price }} + '?');">
+                                        @csrf
+                                        <button type="submit" class="btn btn-primary btn-sm" {{ $auction->status !== 'Active' ? 'disabled' : '' }}>
+                                            Buy Now
+                                        </button>
+                                    </form>
+                                @endif
+                            @else
+                                <a href="{{ route('login') }}" class="btn btn-primary btn-sm">
+                                    Buy Now
+                                </a>
+                            @endauth
+                        </div>
+                    @endif
 
                     <div class="text-end auction-timer" data-end="{{ $auction->end_date->toIso8601String() }}">
                         <p class="text-muted mb-0 text-uppercase small fw-bold">

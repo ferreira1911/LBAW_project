@@ -18,8 +18,12 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\BidController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ContactController;
+
 // Home
 Route::view('/', 'welcome')->name('home');
+Route::view('/faq', 'pages.faq')->name('faq');
+
 
 // Blocked Account Page
 Route::view('/account/blocked', 'auth.blocked')->name('account.blocked');
@@ -56,6 +60,7 @@ Route::controller(AuctionController::class)->group(function () {
     Route::post('/auction/{auction}/follow',  'toggleFollow')->name('auction.follow');
     Route::post('/auctions/{auction}/cancel', 'cancel')->name('auctions.cancel');
     Route::delete('/auctions/{auction}/images/{image}', 'destroyImage')->whereNumber('auction')->name('auctions.images.destroy');
+    Route::post('/auctions/{auction}/buy-now', 'buyNow')->name('auctions.buyNow')->middleware('auth');
 });
 
 // Bids
@@ -132,3 +137,11 @@ Route::controller(ReportController::class)->group(function () {
 
 // About Us
 Route::view('/about', 'pages.about')->name('about');
+
+
+//Contact Form
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
+
+Route::view('/contact', 'pages.contact')->name('contact');
+
