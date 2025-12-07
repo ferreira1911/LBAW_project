@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\AuctionCancelled;
+use App\Events\AuctionWinner;
+use App\Listeners\ListenerAuctionCancelled;
+use App\Listeners\ListenerAuctionWinner;
 use App\Listeners\ListenerEnded;
 use App\Events\EndedAuction;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -22,10 +26,13 @@ class EventServiceProvider extends ServiceProvider
         EndedAuction::class => [
             ListenerEnded::class,
         ],
+        AuctionWinner::class => [
+            ListenerAuctionWinner::class,
+        ],
+        AuctionCancelled::class => [
+            ListenerAuctionCancelled::class,
+        ],
     ];
-
-        
-
 
 
     public function boot()

@@ -18,15 +18,21 @@ class ListenerEnding implements ShouldQueue
     public function handle(EndingAuction $event): void
     {
       
-        $auction = $event->auction;
+        $exists = Notification::where('user_id', $event->user_to_be_notified)
+            ->where('auction_id', $event->auction->id)
+            ->where('type', 'ending') 
+            ->exists();
+
+       
+        if ($exists) {
+            return;
+        }
+
         
-        $receiverId = $auction->owner_id;
-
-
         Notification::create([
-            'user_id'      => $receiverId,        
-            'type'         => 'new-bid',          
-            'auction_id'   => $auction->id,  
+            'user_id'      => $event->user_to_be_notified->id,
+            'type'         => 'ending',
+            'auction_id'   => $event->auction->id,
             'is_read'      => false,
             'created_date' => now(),
         ]);

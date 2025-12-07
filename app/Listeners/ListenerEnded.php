@@ -19,7 +19,7 @@ class ListenerEnded implements ShouldQueue
     {
         $auction = $event->auction;
         
-        $receiverId = $event->user_to_be_notified;
+        $receiverId = $event->user_to_be_notified->id;
         
         
         Notification::create([

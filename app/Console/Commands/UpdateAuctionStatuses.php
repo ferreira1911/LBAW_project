@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Console\Commands;
+use App\Events\AuctionWinner;
 use App\Models\User;
 use Illuminate\Console\Command;
 use App\Models\Auction;
@@ -32,6 +33,7 @@ class UpdateAuctionStatuses extends Command
 
         foreach($ending as $auc){
             $auc->update(['status' => 'Ending']);
+
             $recipients = $auc->bids()
                 ->select('user_id')
                 ->distinct()
@@ -66,6 +68,13 @@ class UpdateAuctionStatuses extends Command
 
             foreach ($usersToNotify as $recipient) {
                 event(new EndedAuction($recipient, $ea));
+            }
+
+            $winningBid = $ea->highestBid;
+            if ($winningBid) {
+                
+                $winner = $winningBid->user;
+                event(new AuctionWinner($winner, $ea));
             }
         }
             

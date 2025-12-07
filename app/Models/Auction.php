@@ -31,6 +31,7 @@ class Auction extends Model
         'longitude',
         'picture',
         'is_buy_now_active',
+        'status',
     ];
 
     protected $casts = [
@@ -109,5 +110,10 @@ class Auction extends Model
     {
         if (!$user) return false;
         return $this->followers()->where('follower_id', $user->id)->exists();
+    }
+
+    public function highestBid(): HasOne
+    {
+        return $this->hasOne(Bid::class)->ofMany('amount', 'max');
     }
 }
