@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewMessage;
 use App\Models\Message;
 use App\Models\User;
 use App\Events\MessageSent; // We will create this next
@@ -97,6 +98,8 @@ class MessageController extends Controller
 
         // Load sender relationship so JS can display the name/avatar immediately
         $message->load('sender');
+
+        event(new NewMessage($message->receiver,$message['content']));
 
 
         // Always return JSON for CSR
