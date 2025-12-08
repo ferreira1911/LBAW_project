@@ -124,10 +124,10 @@ class TransactionController extends Controller
             });
         } catch (\Exception $e) {
             Log::error('Falha ao levantar crédito', ['user' => $user->id, 'error' => $e->getMessage()]);
-            return redirect()->back()->with('failure', 'Ocorreu um erro ao processar o seu pedido.');
+            return redirect()->back()->with('failure', 'An error occurred while processing your request.');
         }
 
-        return redirect()->route('users.show', Auth::user())->with('success', 'Pedido de levantamento submetido!');
+        return redirect()->route('users.show', Auth::user())->with('success', 'Withdrawal request submitted!');
     }
 
     /**

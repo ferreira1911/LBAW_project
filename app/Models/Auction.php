@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 class Auction extends Model
 {
@@ -122,7 +123,7 @@ class Auction extends Model
     public function feature(User $user)
     {
         if ($user->credit < self::FEATURE_COST) {
-            throw new \Exception("Insufficient funds. You need " . self::FEATURE_COST . "€ to feature this auction.");
+            throw new Exception("Insufficient funds. You need " . self::FEATURE_COST . "€ to feature this auction.");
         }
 
         return DB::transaction(function () use ($user) {
