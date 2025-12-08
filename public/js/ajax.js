@@ -287,3 +287,100 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 }
 });
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const chatContainer = document.getElementById('chat-container');
+    const chatForm = document.getElementById('chat-form');
+    const messageInput = document.getElementById('message-input');
+    
+
+    scrollToBottom();
+
+    chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const msgText = messageInput.value.trim();
+        
+        const receiverInput = chatForm.querySelector('input[name="receiver_id"]');
+        const receiverId = receiverInput ? receiverInput.value : null;
+
+        if (!msgText) return; // Não enviar vazios
+
+        messageInput.value = '';
+
+        try {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+            const url = chatForm.dataset.url;
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Importante para JSON
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({
+                    content: msgText,
+                    receiver_id: receiverId
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error("ERRO DO SERVIDOR:", errorData);
+                throw new Error(errorData.message || 'Erro ao enviar');
+            }
+
+            const data = await response.json();
+
+            if (data.message) {
+                 appendMessage(data.message.content, true);
+            }
+
+        } catch (error) {
+            console.error(error);
+            alert('Erro: ' + error.message);
+            messageInput.value = msgText;
+        }
+    });
+    // Helper: Append Message HTML
+    function appendMessage(text, isMe) {
+        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        const alignment = isMe ? 'justify-content-end' : 'justify-content-start';
+        const bgClass = isMe ? 'bg-primary text-white rounded-bottom-end-0' : 'bg-light text-dark border rounded-bottom-start-0';
+        const textMuted = isMe ? 'text-white-50' : 'text-muted';
+
+        const html = `
+            <div class="d-flex mb-3 ${alignment} animate-fade-in">
+                <div class="p-3 rounded-4 shadow-sm ${bgClass}" style="max-width: 75%;">
+                    <div class="message-content text-break">${escapeHtml(text)}</div>
+                    <div class="text-end mt-1">
+                        <small class="${textMuted}" style="font-size: 0.7rem;">${time}</small>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        chatContainer.insertAdjacentHTML('beforeend', html);
+        scrollToBottom();
+    }
+
+    function scrollToBottom() {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    // Security: Basic HTML escape to prevent XSS in the optimistic update
+    function escapeHtml(text) {
+        const map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+        return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+    }
+});

@@ -16,7 +16,8 @@ CREATE TYPE notification_type AS ENUM (
     'ended',
     'winner',
     'cancel',
-    'review'
+    'review',
+    'new-message'
 );
 
 ------------------------------------------------------------
@@ -168,6 +169,19 @@ CREATE TABLE auction_images (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE message (
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    content TEXT NOT NULL,
+    sent_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_read BOOLEAN DEFAULT FALSE,
+    sender_id INTEGER NOT NULL REFERENCES users(id),
+    receiver_id INTEGER NOT NULL REFERENCES users(id),
+    auction_id INTEGER REFERENCES auction(id)
+);
+
+CREATE INDEX idx_message_sender ON message (sender_id);
+CREATE INDEX idx_message_receiver ON message (receiver_id);
 
 
 -- * ====================================================
