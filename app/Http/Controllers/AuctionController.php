@@ -19,6 +19,7 @@ class AuctionController extends Controller
     function index(){
         $featuredAuctions = Auction::where('status','Active')
                     ->where('is_featured',true)
+                    ->where('featured_until', '>', now())
                     ->orderBy('end_date','ASC')
                     ->paginate(9);
 
@@ -121,6 +122,7 @@ class AuctionController extends Controller
             'category_id' => 'required|exists:category,id',
             'buy_now_price' => 'nullable|numeric|min:0',
             'images.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // multiple images
+            'should_feature' => 'nullable|boolean',
         ]);
 
         // If buy_now_price is provided, enable is_buy_now_active
@@ -156,6 +158,15 @@ class AuctionController extends Controller
                     $auction->save();
                 }
             }
+        }
+
+        if ($request->boolean('should_feature')) {
+             try {
+                 $auction->feature($request->user());
+             } catch (\Exception $e) {
+                 return redirect()->route('auctions.show', $auction)
+                     ->with('warning', 'Auction created, but featuring failed: ' . $e->getMessage());
+             }
         }
 
 
@@ -349,4 +360,18 @@ class AuctionController extends Controller
         }
     }
 
+    public function feature(Request $request, Auction $auction)
+    {
+        $this->authorize('feature', $auction);
+
+        try {
+            $auction->feature($request->user());
+
+            return redirect()->route('auctions.show', $auction->id)
+                ->with('success', 'Auction featured successfully! 100€ were deducted from your account.');
+
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+    }
 }
