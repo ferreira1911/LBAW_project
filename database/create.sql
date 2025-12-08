@@ -16,7 +16,8 @@ CREATE TYPE notification_type AS ENUM (
     'ended',
     'winner',
     'cancel',
-    'review'
+    'review',
+    'new-message'
 );
 
 ------------------------------------------------------------
@@ -169,6 +170,19 @@ CREATE TABLE auction_images (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE message (
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    content TEXT NOT NULL,
+    sent_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_read BOOLEAN DEFAULT FALSE,
+    sender_id INTEGER NOT NULL REFERENCES users(id),
+    receiver_id INTEGER NOT NULL REFERENCES users(id),
+    auction_id INTEGER REFERENCES auction(id)
+);
+
+CREATE INDEX idx_message_sender ON message (sender_id);
+CREATE INDEX idx_message_receiver ON message (receiver_id);
+
 
 -- * ====================================================
 -- * Index Creation
@@ -258,33 +272,7 @@ CREATE INDEX user_search_idx ON users USING GIN (tsvectors);
 --TRIGERS
 -----------------------------------------------------------------------------
 
-CREATE OR REPLACE FUNCTION notify_on_new_bid() 
-RETURNS TRIGGER AS $$
-BEGIN
-    INSERT INTO notifications (user_id, type, auction_id, bid_id)
-    SELECT
-        id_to_notify,
-        'new-bid' AS type,
-        NEW.auction_id,
-        NEW.id
-    FROM (
-        -- Select the auction owner
-        SELECT owner_id AS id_to_notify FROM auction WHERE id = NEW.auction_id
-        UNION
-        -- Select all users who have ever bid on this auction
-        SELECT user_id AS id_to_notify FROM bid WHERE auction_id = NEW.auction_id
-    ) AS recipients
 
-    WHERE id_to_notify <> NEW.user_id;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER on_new_bid_notification
-AFTER INSERT ON bid
-FOR EACH ROW
-EXECUTE FUNCTION notify_on_new_bid();
 
 ------------------------------------------------------------------------
 
@@ -294,16 +282,6 @@ RETURNS TRIGGER AS $$
 DECLARE
     winner_id INT;
 BEGIN
-    INSERT INTO notifications (user_id, type, auction_id)
-    SELECT
-        id_to_notify,
-        'ended' AS type,
-        NEW.id 
-    FROM (
-        SELECT NEW.owner_id AS id_to_notify
-        UNION
-        SELECT DISTINCT user_id FROM bid WHERE auction_id = NEW.id
-    ) AS recipients;
 
     -- get the winning bid
     SELECT 
@@ -314,9 +292,6 @@ BEGIN
     LIMIT 1;
 
     IF winner_id IS NOT NULL THEN
-        INSERT INTO notifications (user_id, type, auction_id)
-        VALUES (winner_id, 'winner', NEW.id);
-
         UPDATE users 
         SET credit = credit + NEW.current_price
         WHERE id = NEW.owner_id;
@@ -341,54 +316,11 @@ EXECUTE FUNCTION handle_auction_end();
 
 --------------------------------------------------------------------------------
 
-CREATE OR REPLACE FUNCTION send_notifications_on_auction_cancel()
-RETURNS TRIGGER AS $$
-BEGIN
-    INSERT INTO notifications (user_id, type, auction_id)
-    SELECT
-        id_to_notify,
-        'cancel' AS type,
-        NEW.id 
-    FROM (
-        SELECT DISTINCT user_id AS id_to_notify FROM bid WHERE auction_id = NEW.id
-        UNION
-        SELECT NEW.owner_id AS id_to_notify
-    ) AS recipients;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trigger_auction_cancelled
-AFTER UPDATE ON auction
-FOR EACH ROW
-WHEN (OLD.status IS DISTINCT FROM NEW.status AND NEW.status = 'Cancelled')
-EXECUTE FUNCTION send_notifications_on_auction_cancel();
 
 -----------------------------------------------------------------------------
 
-CREATE OR REPLACE FUNCTION review_send_notification()
-RETURNS TRIGGER AS $$
-DECLARE
-    
-BEGIN
-    INSERT INTO notifications (user_id, type, auction_id)
-    SELECT
-        id_to_notify,
-        'review' AS type,
-        NEW.id 
-    FROM (
-        SELECT owner_id AS id_to_notify FROM auction WHERE id = NEW.auction_id
-        UNION
-        SELECT id FROM users WHERE id = NEW.user_id
-    ) AS recipients;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
 
-CREATE TRIGGER send_review_notifications
-AFTER INSERT ON review
-FOR EACH ROW
-EXECUTE FUNCTION review_send_notification();
 
 
 -------------------------------------------------------------------------------------

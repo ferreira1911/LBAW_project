@@ -106,5 +106,8 @@ class User extends Authenticatable
         return $this->hasManyThrough(Auction::class, Transaction::class, 'buyer_id', 'id','id','auction_id')->where('transactions.status', 'Completed')->where('transactions.type', 'auction-buy');
     }
 
-
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'user_id');
+    }
 }
