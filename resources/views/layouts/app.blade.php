@@ -9,21 +9,24 @@
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
+        @auth
+            <meta name="user-id" content="{{ Auth::id() }}">
+        @endauth
         <!-- Styles -->
         <!-- <link rel="stylesheet" href="{{ asset('css/milligram.css') }}"> -->
-        {{-- <link rel="stylesheet" href="{{ asset('css/app.css') }}"> --}}
+        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
         @stack('styles')
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
         <script src="{{ asset('js/ajax.js') }}" defer></script>
-        <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
+        <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
         @stack('scripts')
     </head>
     <body class="d-flex flex-column min-vh-100 bg-light">
         <main>
+            <div id="notifications-container"></div>
             <nav class="navbar navbar-expand-lg navbar-white bg-white border-bottom sticky-top shadow-sm">
                 <div class="container">
                     <a class="navbar-brand fw-bold text-primary d-flex align-items-center" href="{{ url('/') }}">
@@ -158,5 +161,130 @@
     <script>
         const baseUrl = "{{ url('/') }}";
     </script>
+    @auth
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                
+                // 1. Configurar Pusher com Autenticação
+                Pusher.logToConsole = true; // Descomente para debug
+
+                var pusher = new Pusher('{{ config("broadcasting.connections.pusher.key") }}', {
+                    cluster: '{{ config("broadcasting.connections.pusher.options.cluster") }}',
+                    encrypted: true,
+                    authEndpoint: '/broadcasting/auth',
+                    auth: {
+                        headers: {
+                            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    }
+                });
+
+                // 2. Subscrever ao Canal Privado
+                var userId = "{{ Auth::id() }}";
+                
+                
+                var channelName = 'private-user.' + userId; 
+                
+                console.log("A conectar a: " + channelName);
+                var channel = pusher.subscribe(channelName);
+
+                channel.bind('notifications', function(data) {
+                    console.log("Evento recebido:", data);
+                    displayNotification(data.message);
+                });
+
+                channel.bind('new-message', function(data) {
+                    console.log("Message received:", data);
+
+                    const chatReceiverInput = document.querySelector('input[name="receiver_id"]');
+                    const chatContainer = document.getElementById('chat-container');
+
+                    const isChattingWithSender = chatReceiverInput && 
+                                                 parseInt(chatReceiverInput.value) === parseInt(data.sender_id);
+                    
+                    if (isChattingWithSender && chatContainer) {
+                        
+                        appendReceivedMessage(data.content, data.timestamp);
+                    } else {
+                        
+                        const notificationText = `New message from ${data.sender_name}: "${data.content.substring(0, 30)}..."`;
+                        displayNotificationMessage(notificationText, data.sender_id); 
+                    }
+                }); 
+
+                
+                function displayNotificationMessage(message,sender) {
+                    const container = document.getElementById('notifications-container');
+                    const notif = document.createElement('div');
+                    notif.className = 'notification';
+
+                    notif.innerHTML = `
+                        <a href="${baseUrl}/messages/${sender}" class="notification-link">
+                            <div class="message">${message}</div>
+                        </a>
+                        <span class="close-btn" onclick="this.parentElement.remove()">&times;</span>
+                    `;
+
+                    container.appendChild(notif);
+
+                    // Auto remover após 6 segundos
+                    setTimeout(() => {
+                        if(notif) {
+                            notif.classList.add('slide-out');
+                            notif.addEventListener('animationend', () => notif.remove());
+                        }
+                    }, 6000);
+                }
+
+                function displayNotification(message) {
+                    const container = document.getElementById('notifications-container');
+                    const notif = document.createElement('div');
+                    notif.className = 'notification';
+
+                    notif.innerHTML = `
+                        <a href="${baseUrl}/notifications" class="notification-link">
+                            <div class="message">${message}</div>
+                        </a>
+                        <span class="close-btn" onclick="this.parentElement.remove()">&times;</span>
+                    `;
+
+                    container.appendChild(notif);
+
+                    // Auto remover após 6 segundos
+                    setTimeout(() => {
+                        if(notif) {
+                            notif.classList.add('slide-out');
+                            notif.addEventListener('animationend', () => notif.remove());
+                        }
+                    }, 6000);
+                }
+
+                function appendReceivedMessage(text, timestamp) {
+                    const container = document.getElementById('chat-container');
+
+                    // Format time (assuming timestamp is ISO string or similar)
+                    const dateObj = timestamp ? new Date(timestamp) : new Date();
+                    const timeString = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                    const html = `
+                        <div class="d-flex mb-3 justify-content-start animate-fade-in">
+                            <div class="p-3 rounded-4 shadow-sm bg-light text-dark border rounded-bottom-start-0" 
+                                 style="max-width: 75%;">
+                                <div class="message-content text-break">${text}</div>
+                                <div class="text-end mt-1">
+                                    <small class="text-muted" style="font-size: 0.7rem;">${timeString}</small>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    container.insertAdjacentHTML('beforeend', html);
+                    
+                    // Scroll to bottom to see new message
+                    container.scrollTop = container.scrollHeight;
+                }   
+            }); 
+        </script>
+    @endauth
     </body>
 </html>

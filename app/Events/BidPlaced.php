@@ -31,7 +31,7 @@ class BidPlaced implements ShouldBroadcast
     }
 
     public function broadcastOn() {
-        return 'presense-user.' . $this->user_to_be_notified['id'];
+        return new PrivateChannel('user.' . $this->user_to_be_notified['id']);
     }
 
     public function broadcastAs() {

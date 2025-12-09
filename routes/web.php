@@ -20,7 +20,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\MessageController;
-
+use Illuminate\Support\Facades\Broadcast;
 
 // Home
 Route::view('/', 'welcome')->name('home');
@@ -163,3 +163,5 @@ Route::controller(MessageController::class)->group(function () {
     // Delete Message
     Route::delete('/messages/{message}', 'destroy')->name('messages.destroy');
 });
+
+
