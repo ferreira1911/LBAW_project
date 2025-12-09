@@ -22,72 +22,81 @@
         @endcan
     </div>
 
-    @auth
-    {{-- Prevent owner from seeing the button --}}
-    @if(Auth::id() !== $auction->owner_id)
-        @php
-            $isFollowing = $auction->isFollowedBy(Auth::user());
-        @endphp
-        <button type="button" 
-                class="btn follow-btn btn-sm rounded-pill px-3 fw-bold shadow-sm {{ $isFollowing ? 'btn-outline-danger' : 'btn-outline-secondary' }}"
-                data-following="{{ $isFollowing ? 'true' : 'false' }}"
-                data-auction-id="{{ $auction->id }}"
-                data-url="{{ route('auction.follow', $auction) }}"
-                title="{{ $isFollowing ? 'Remove from Watchlist' : 'Add to Watchlist' }}">
-            
-            <i class="bi {{ $isFollowing ? 'bi-heart-fill' : 'bi-heart' }} me-1"></i> 
-            
-            
-            <span class="btn-text">{{ $isFollowing ? 'Unfollow' : 'Follow' }}</span>
-        </button>
-
-        @endif
-    @endauth
-
     <div class="row g-4">
         
         {{-- Left Column: Images --}}
         <div class="col-lg-7">
-            <div class="card border-0 shadow-sm">
+            <div class="card border-0 shadow-sm mb-4 overflow-hidden">
                 @if (isset($auction->images) && $auction->images->count())
                     <div id="auctionCarousel" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner rounded">
+                        <div class="carousel-inner bg-light">
                             @foreach ($auction->images as $key => $image)
                                 <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-                                    <img src="{{ $image->getUrl() }}" class="d-block w-100 object-fit-cover" style="height: 400px;" alt="{{ $auction->title }}">
+                                    <div class="d-flex justify-content-center align-items-center" style="height: 500px; background-color: #f8f9fa;">
+                                        <img src="{{ $image->getUrl() }}" class="d-block w-100 h-100 object-fit-contain" alt="{{ $auction->title }}">
+                                    </div>
                                 </div>
                             @endforeach
                         </div>
                         @if($auction->images->count() > 1)
                             <button class="carousel-control-prev" type="button" data-bs-target="#auctionCarousel" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="carousel-control-prev-icon p-3 bg-dark rounded-circle bg-opacity-25" aria-hidden="true"></span>
                                 <span class="visually-hidden">Previous</span>
                             </button>
                             <button class="carousel-control-next" type="button" data-bs-target="#auctionCarousel" data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="carousel-control-next-icon p-3 bg-dark rounded-circle bg-opacity-25" aria-hidden="true"></span>
                                 <span class="visually-hidden">Next</span>
                             </button>
                         @endif
                     </div>
                 @else
-                    {{-- Single Image / Fallback Logic --}}
-                    <div class="bg-light d-flex align-items-center justify-content-center rounded overflow-hidden" style="height: 400px;">
-                        @if ($auction->picture)
-                            <img src="{{ asset('storage/' . $auction->picture) }}" class="d-block w-100 h-100 object-fit-cover" alt="{{ $auction->title }}">
-                        @else
-                            <div class="text-center text-muted">
-                                <i class="bi bi-image display-1"></i>
+                    {{-- Fallback Image --}}
+                    <div class="d-flex align-items-center justify-content-center bg-light text-secondary" style="height: 500px;">
+                        <div class="text-center">
+                            @if ($auction->picture)
+                                <img src="{{ asset('storage/' . $auction->picture) }}" class="img-fluid" style="max-height: 500px;" alt="{{ $auction->title }}">
+                            @else
+                                <i class="bi bi-image display-1 opacity-50"></i>
                                 <p class="mt-2">No image available</p>
-                            </div>
-                        @endif
+                            @endif
+                        </div>
                     </div>
                 @endif
+            </div>
                 
-                <div class="card-body">
-                    <h5 class="fw-bold">Description</h5>
-                    <p class="card-text text-secondary">{{ $auction->description }}</p>
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold mb-3 border-bottom pb-2">Description</h4>
+                    <p class="card-text text-secondary" style="line-height: 1.6;">
+                        {{ $auction->description }}
+                    </p>
                 </div>
             </div>
+
+            @if($auction->latitude && $auction->longitude)
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+                            <h4 class="fw-bold mb-0">Location</h4>
+                            @if($auction->address)
+                                <span class="text-muted small">
+                                    <i class="bi bi-geo-alt-fill text-danger me-1"></i> {{ $auction->address }}
+                                </span>
+                            @endif
+                        </div>
+                        
+                        <div class="ratio ratio-16x9 rounded overflow-hidden border bg-light">
+                            <iframe 
+                                src="https://maps.google.com/maps?q={{ $auction->latitude }},{{ $auction->longitude }}&hl=en&z=15&output=embed"
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
 
 
@@ -95,19 +104,38 @@
         <div class="col-lg-5">
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-body p-4">
-                    <div class="mb-3">
-                        <span class="badge bg-secondary mb-2">{{ $auction->category->name }}</span>
-                        <h1 class="h3 fw-bold mb-1">{{ $auction->title }}</h1>
-                        <p class="text-muted small">
-                            Hosted by <a href="{{ route('users.show', $auction->owner) }}" class="text-decoration-none fw-bold">{{ $auction->owner->name }}</a>
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="badge bg-secondary">{{ $auction->category->name }}</span>
                         @auth
-                        @if(Auth::id() !== $auction->owner_id)
-                            <a href="{{ route('messages.show', $auction->owner) }}" class="btn btn-outline-primary btn-sm rounded-pill px-3 py-0" style="font-size: 0.75rem;">
-                                <i class="bi bi-chat-dots-fill me-1"></i> Message
-                            </a>
-                        @endif
+                            @if(Auth::id() !== $auction->owner_id)
+                                @php
+                                    $isFollowing = $auction->isFollowedBy(Auth::user());
+                                @endphp
+                                
+                                <button type="button" class="btn follow-btn border-0 p-0 d-flex align-items-center {{ $isFollowing ? 'btn-outline-danger' : 'btn-outline-secondary' }}" style="background: none;" data-following="{{ $isFollowing ? 'true' : 'false' }}" data-auction-id="{{ $auction->id }}" data-url="{{ route('auction.follow', $auction) }}"> 
+                                    <i class="bi {{ $isFollowing ? 'bi-heart-fill' : 'bi-heart' }} fs-5"></i>
+                                    <span class="btn-text ms-2 fw-bold small">
+                                        {{ $isFollowing ? 'Unfollow' : 'Follow' }}
+                                    </span>
+                                </button>
+                            @endif
                         @endauth
+                    </div>
+
+                    <h1 class="h3 fw-bold mb-3">{{ $auction->title }}</h1>
+
+                    <div class="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom">
+                        <p class="text-muted small mb-0">
+                            Hosted by <a href="{{ route('users.show', $auction->owner) }}" class="text-decoration-none fw-bold text-primary">{{ $auction->owner->name }}</a>
                         </p>
+                        
+                        @auth
+                            @if(Auth::id() !== $auction->owner_id)
+                                <a href="{{ route('messages.show', $auction->owner) }}" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-chat-dots-fill me-1"></i> Message
+                                </a>
+                            @endif
+                        @endauth
                     </div>
 
                     {{-- Price Section --}}

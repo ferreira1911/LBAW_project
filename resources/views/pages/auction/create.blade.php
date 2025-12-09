@@ -91,7 +91,41 @@
                             <div class="form-text">Set the price at which bidders can buy the item immediately.</div>
                         </div>
 
-                        <div class="mb-4">
+                        <div class="mb-4 border-top pt-3 mt-3">
+                            <h5 class="fw-bold mb-3 text-secondary">
+                                <i class="bi bi-geo-alt-fill text-danger me-1"></i> Location Details
+                            </h5>
+                            
+                            <div class="mb-3">
+                                <label for="address" class="form-label fw-bold">Address / City</label>
+                                <input type="text" class="form-control @error('address') is-invalid @enderror" id="address" name="address" value="{{ old('address') }}" placeholder="e.g. New York, NY">
+                                @error('address')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="latitude" class="form-label fw-bold">Latitude</label>
+                                    <input type="text" class="form-control @error('latitude') is-invalid @enderror" id="latitude" name="latitude" value="{{ old('latitude') }}" placeholder="e.g. 40.7128">
+                                    @error('latitude')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6 mt-3 mt-md-0">
+                                    <label for="longitude" class="form-label fw-bold">Longitude</label>
+                                    <input type="text" class="form-control @error('longitude') is-invalid @enderror" id="longitude" name="longitude" value="{{ old('longitude') }}" placeholder="e.g. -74.0060">
+                                    @error('longitude')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-text text-muted small mt-2">
+                                <i class="bi bi-info-circle me-1"></i> Tip: Right-click on Google Maps to get these coordinates instantly.
+                            </div>
+                        </div>
+
+                        <div class="mb-4 border-top pt-3 mt-3">
                             <label for="images" class="form-label fw-bold">Auction Images</label>
                             <input type="file" class="form-control @error('images') is-invalid @enderror" id="images" name="images[]" accept="image/*" multiple>
                             <div class="form-text">You can select multiple images.</div>
@@ -100,7 +134,7 @@
                             @enderror
                         </div>
 
-                        <div class="card bg-light border-warning mb-4">
+                        <div class="card bg-light border-warning mb-4 ">
                             <div class="card-body">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="1" id="feature_auction" name="should_feature">
