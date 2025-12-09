@@ -33,7 +33,8 @@ CREATE TABLE users (
     is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
     is_admin BOOLEAN DEFAULT FALSE,
     is_blocked BOOLEAN NOT NULL DEFAULT FALSE,
-    password TEXT NOT NULL,
+    password TEXT,
+    google_id TEXT UNIQUE,
     remember_token TEXT,
     url TEXT
 );

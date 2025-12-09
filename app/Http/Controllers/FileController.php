@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User; // Needed for User::find()
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class FileController extends Controller
 {   
@@ -150,6 +151,24 @@ class FileController extends Controller
                     break;
             }
         }
+    }
+
+    public static function saveProfileImageFromUrl($userId, $url) {
+        $contents = @file_get_contents($url);
+        if (!$contents) return null;
+
+        $fileName = Str::random(40) . '.jpg';
+        
+        $path = 'images/profile/' . $fileName;
+        Storage::disk(self::$diskName)->put($path, $contents);
+
+        $user = User::find($userId);
+        if ($user) {
+            $user->url = $fileName;
+            $user->save();
+        }
+        
+        return $fileName;
     }
     
 }
