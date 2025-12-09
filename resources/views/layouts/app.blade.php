@@ -199,23 +199,43 @@
                     const chatReceiverInput = document.querySelector('input[name="receiver_id"]');
                     const chatContainer = document.getElementById('chat-container');
 
-                    // Check if chat is open AND the IDs match (Are we talking to the sender?)
-                    // Note: data.sender_id must be sent from your Laravel Event 'broadcastWith' function
                     const isChattingWithSender = chatReceiverInput && 
                                                  parseInt(chatReceiverInput.value) === parseInt(data.sender_id);
-                    console.log(chatReceiverInput.value);
-                    console.log(data.sender_id);
+                    
                     if (isChattingWithSender && chatContainer) {
-                        // SCENARIO 1: We are in the chat -> Append the message immediately
+                        
                         appendReceivedMessage(data.content, data.timestamp);
                     } else {
-                        // SCENARIO 2: We are elsewhere -> Show a Toast Notification
+                        
                         const notificationText = `New message from ${data.sender_name}: "${data.content.substring(0, 30)}..."`;
-                        displayNotification(notificationText); 
+                        displayNotificationMessage(notificationText, data.sender_id); 
                     }
                 }); 
 
-                // 4. Função para mostrar o Toast
+                
+                function displayNotificationMessage(message,sender) {
+                    const container = document.getElementById('notifications-container');
+                    const notif = document.createElement('div');
+                    notif.className = 'notification';
+
+                    notif.innerHTML = `
+                        <a href="${baseUrl}/messages/${sender}" class="notification-link">
+                            <div class="message">${message}</div>
+                        </a>
+                        <span class="close-btn" onclick="this.parentElement.remove()">&times;</span>
+                    `;
+
+                    container.appendChild(notif);
+
+                    // Auto remover após 6 segundos
+                    setTimeout(() => {
+                        if(notif) {
+                            notif.classList.add('slide-out');
+                            notif.addEventListener('animationend', () => notif.remove());
+                        }
+                    }, 6000);
+                }
+
                 function displayNotification(message) {
                     const container = document.getElementById('notifications-container');
                     const notif = document.createElement('div');
@@ -238,7 +258,7 @@
                         }
                     }, 6000);
                 }
-                //displayNotification("Test");
+
                 function appendReceivedMessage(text, timestamp) {
                     const container = document.getElementById('chat-container');
 
