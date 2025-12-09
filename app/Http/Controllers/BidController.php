@@ -7,6 +7,9 @@ use App\Models\Auction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
 use App\Models\Bid;
+use App\Models\User;
+use App\Events\BidPlaced;
+use App\Listeners\ListenerBidPlaced;
 
 class BidController extends Controller
 {
@@ -18,12 +21,28 @@ class BidController extends Controller
         ]);
 
         try {
-
-            $auction->bids()->create([
+            $bid = [
                 'user_id' => Auth::id(),
                 'amount' => $request->amount,
                 'date' => now(),
-            ]);
+            ];
+            $new_bid = $auction->bids()->create($bid);
+
+            $recipients = $auction->bids()
+                ->select('user_id')
+                ->distinct()
+                ->pluck('user_id');
+            
+            $recipients->push($auction->owner_id);
+
+            $uniqueIds = $recipients->unique()->reject(fn($id) => $id === Auth::user()->id);
+
+            $usersToNotify = User::whereIn('id', $uniqueIds)->get();
+
+            
+            foreach ($usersToNotify as $recipient) {
+                event(new BidPlaced($new_bid->id,Auth::user(), $request->amount, $recipient, $auction));
+            }
 
             return redirect()->route('auctions.show', $auction)->with('success', 'Your bid was placed successfully!');
 

@@ -100,6 +100,13 @@
                         <h1 class="h3 fw-bold mb-1">{{ $auction->title }}</h1>
                         <p class="text-muted small">
                             Hosted by <a href="{{ route('users.show', $auction->owner) }}" class="text-decoration-none fw-bold">{{ $auction->owner->name }}</a>
+                        @auth
+                        @if(Auth::id() !== $auction->owner_id)
+                            <a href="{{ route('messages.show', $auction->owner) }}" class="btn btn-outline-primary btn-sm rounded-pill px-3 py-0" style="font-size: 0.75rem;">
+                                <i class="bi bi-chat-dots-fill me-1"></i> Message
+                            </a>
+                        @endif
+                        @endauth
                         </p>
                     </div>
 

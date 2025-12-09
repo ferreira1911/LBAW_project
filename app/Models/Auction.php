@@ -35,6 +35,7 @@ class Auction extends Model
         'longitude',
         'picture',
         'is_buy_now_active',
+        'status',
     ];
 
     protected $casts = [
@@ -152,5 +153,10 @@ class Auction extends Model
             
             return true;
         });
+    }
+    
+    public function highestBid(): HasOne
+    {
+        return $this->hasOne(Bid::class)->ofMany('amount', 'max');
     }
 }

@@ -19,6 +19,8 @@ use App\Http\Controllers\BidController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\MessageController;
+
 
 // Home
 Route::view('/', 'welcome')->name('home');
@@ -146,3 +148,18 @@ Route::post('/contact', [ContactController::class, 'send'])->name('contact.send'
 
 Route::view('/contact', 'pages.contact')->name('contact');
 
+
+
+Route::controller(MessageController::class)->group(function () {
+    // Inbox: List of all conversations
+    Route::get('/messages', 'index')->name('messages.index');
+    
+    // Chat Window: View conversation with a specific user
+    Route::get('/messages/{user}', 'show')->name('messages.show');
+    
+    // Send Message (AJAX/CSR): Returns JSON
+    Route::post('/messages', 'store')->name('messages.store');
+    
+    // Delete Message
+    Route::delete('/messages/{message}', 'destroy')->name('messages.destroy');
+});

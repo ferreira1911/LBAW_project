@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AuctionCancelled;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Auction;
@@ -245,6 +246,8 @@ class AuctionController extends Controller
 
         $auction->status = 'Cancelled';
         $auction->save();
+
+        event(new AuctionCancelled(Auth::user(),$auction));
 
         return redirect()->route('auctions.show', $auction)->with('success', 'The auction has been successfully cancelled.');
     }
