@@ -20,6 +20,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\GoogleController;
 
 
 // Home
@@ -162,4 +163,9 @@ Route::controller(MessageController::class)->group(function () {
     
     // Delete Message
     Route::delete('/messages/{message}', 'destroy')->name('messages.destroy');
+});
+
+Route::controller(GoogleController::class)->group(function () {
+    Route::get('auth/google', 'redirect')->name('google-auth');
+    Route::get('auth/google/call-back', 'callbackGoogle')->name('google-call-back');
 });

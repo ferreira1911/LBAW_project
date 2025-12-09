@@ -17,7 +17,17 @@ class User extends Authenticatable
     public $timestamps = false;
 
     protected $fillable = [
-        'name', 'email', 'password', 'description', 'url', 'is_deleted', 'is_admin','credit','held_credit','is_blocked',
+        'name', 
+        'email', 
+        'password', 
+        'description', 
+        'url', 
+        'is_deleted', 
+        'is_admin',
+        'credit',
+        'held_credit',
+        'is_blocked',
+        'google_id',
     ];
 
     protected $hidden = [
