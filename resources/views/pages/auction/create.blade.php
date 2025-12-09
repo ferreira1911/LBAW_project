@@ -100,6 +100,20 @@
                             @enderror
                         </div>
 
+                        <div class="card bg-light border-warning mb-4">
+                            <div class="card-body">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="1" id="feature_auction" name="should_feature">
+                                    <label class="form-check-label fw-bold" for="feature_auction">
+                                        <i class="bi bi-star-fill text-warning"></i> Feature this auction on Homepage?
+                                    </label>
+                                    <div class="form-text text-muted">
+                                        Get more visibility for 7 days. Cost: <strong>100.00€</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary btn-lg">
                                 <i class="bi bi-plus-circle me-2"></i>Create Auction

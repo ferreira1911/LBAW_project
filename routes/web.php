@@ -63,6 +63,7 @@ Route::controller(AuctionController::class)->group(function () {
     Route::post('/auctions/{auction}/cancel', 'cancel')->name('auctions.cancel');
     Route::delete('/auctions/{auction}/images/{image}', 'destroyImage')->whereNumber('auction')->name('auctions.images.destroy');
     Route::post('/auctions/{auction}/buy-now', 'buyNow')->name('auctions.buyNow')->middleware('auth');
+    Route::post('/auctions/{auction}/feature', 'feature')->name('auctions.feature');
 });
 
 // Bids

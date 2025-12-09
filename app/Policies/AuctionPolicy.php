@@ -43,4 +43,9 @@ class AuctionPolicy
     public function viewDashboard(User $user){
         return $user->isAdmin();
     }
+
+    public function feature(User $user, Auction $auction): bool
+    {
+        return $user->id === $auction->owner_id && in_array($auction->status, ['Pending', 'Active']);
+    }
 }

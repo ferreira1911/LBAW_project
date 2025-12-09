@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\DB;
+use Exception;
 
 class Auction extends Model
 {
@@ -16,6 +18,8 @@ class Auction extends Model
     public $timestamps = false;
 
     protected $table = 'auction';
+
+    const FEATURE_COST = 100.00;
 
     protected $fillable = [
         'title',
@@ -101,9 +105,9 @@ class Auction extends Model
     }
 
     /** Get the feature payment record for this auction */
-    public function featurePayment(): HasOne
+    public function featurePayments()
     {
-        return $this->hasOne(FeaturePayment::class, 'auction_id');
+        return $this->hasMany(FeaturePayment::class);
     }
 
     public function isFollowedBy(?User $user)
@@ -112,6 +116,45 @@ class Auction extends Model
         return $this->followers()->where('follower_id', $user->id)->exists();
     }
 
+    public function hasActiveFeature(): bool
+    {
+        return $this->is_featured && $this->featured_until && $this->featured_until->isFuture();
+    }
+
+    public function feature(User $user)
+    {
+        if ($user->credit < self::FEATURE_COST) {
+            throw new Exception("Insufficient funds. You need " . self::FEATURE_COST . "€ to feature this auction.");
+        }
+
+        return DB::transaction(function () use ($user) {
+
+            $user->decrement('credit', self::FEATURE_COST);
+
+            $this->is_featured = true;
+            $this->featured_until = now()->addDays(7);
+            $this->save();
+
+            FeaturePayment::create([
+                'auction_id' => $this->id,
+                'user_id' => $user->id,
+                'paid_date' => now(),
+            ]);
+
+            Transaction::create([
+                'amount' => self::FEATURE_COST,
+                'type' => 'feature-payment',
+                'status' => 'Completed',
+                'auction_id' => $this->id,
+                'buyer_id' => $user->id,
+                'seller_id' => null, // Null because it's a payment to the platform
+                'date' => now(),
+            ]);
+            
+            return true;
+        });
+    }
+    
     public function highestBid(): HasOne
     {
         return $this->hasOne(Bid::class)->ofMany('amount', 'max');

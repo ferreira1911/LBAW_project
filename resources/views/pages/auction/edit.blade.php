@@ -96,6 +96,37 @@
                 </div>
             </div>
 
+            <div class="card border-warning shadow-sm mb-5">
+                <div class="card-header bg-warning text-dark fw-bold d-flex align-items-center">
+                    <i class="bi bi-star-fill me-2"></i> Promote Auction
+                </div>
+                <div class="card-body p-4">
+                    @if($auction->hasActiveFeature())
+                        <div class="alert alert-success mb-0">
+                            <i class="bi bi-check-circle-fill me-2"></i>
+                            This auction is currently <strong>Featured</strong> until {{ $auction->featured_until->format('d/m/Y H:i') }}.
+                        </div>
+                    @else
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h5 class="card-title fw-bold">Feature on Homepage</h5>
+                                <p class="card-text text-muted mb-0">
+                                    Boost your visibility! Pay <strong>{{ number_format(100, 2) }}€</strong> to have your auction displayed on the main page for 7 days.
+                                </p>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <form action="{{ route('auctions.feature', $auction) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-warning w-100 fw-bold" onclick="return confirm('Confirm payment of 100€ to feature this auction?')">
+                                        <i class="bi bi-stars me-1"></i> Pay & Feature
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
             {{-- Danger Zone (Cancel Auction) --}}
             @can('cancel', $auction)
                 <div class="card border-danger shadow-sm">
