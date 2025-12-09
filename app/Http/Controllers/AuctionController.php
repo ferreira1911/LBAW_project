@@ -124,6 +124,9 @@ class AuctionController extends Controller
             'buy_now_price' => 'nullable|numeric|min:0',
             'images.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // multiple images
             'should_feature' => 'nullable|boolean',
+            'address' => 'nullable|string|max:255',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
         ]);
 
         // If buy_now_price is provided, enable is_buy_now_active
@@ -141,6 +144,9 @@ class AuctionController extends Controller
             'buy_now_price' => $request->buy_now_price,
             'is_buy_now_active' => $isBuyNowActive,
             'is_featured' => false,
+            'address' => $request->address,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
         ]);
 
         if ($request->hasFile('images')) {
