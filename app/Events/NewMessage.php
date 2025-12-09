@@ -8,6 +8,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Bid;
 
 class NewMessage implements ShouldBroadcast
@@ -25,7 +26,7 @@ class NewMessage implements ShouldBroadcast
     }
 
     public function broadcastOn() {
-        return 'presense-user.' . $this->user_to_be_notified['id'];
+        return new PrivateChannel('user.' . $this->user_to_be_notified['id']);
     }
 
     public function broadcastAs() {
@@ -35,7 +36,10 @@ class NewMessage implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'message' => $this->message,
+            'content' => $this->message,
+            'sender_id' => Auth::user()->id,   
+            'sender_name' => Auth::user()->name, 
+            'timestamp' => now()->toIso8601String(),
         ];
     }
 }
