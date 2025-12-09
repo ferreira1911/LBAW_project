@@ -70,6 +70,9 @@
                             <a href="{{ route('bidding-history.index') }}" class="btn btn-outline-secondary">
                                 <i class="bi bi-receipt me-2"></i>Bidding History
                             </a>
+                            <a href="{{ route('messages.index') }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-people me-2"></i>Contacts
+                            </a>
                         @endif
                         <form action="{{ route('users.destroy', $user) }}" method="POST" 
                             onsubmit="return confirm('Are you sure you want to delete your profile?');" 

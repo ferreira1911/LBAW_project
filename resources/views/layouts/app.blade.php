@@ -193,6 +193,28 @@
                     displayNotification(data.message);
                 });
 
+                channel.bind('new-message', function(data) {
+                    console.log("Message received:", data);
+
+                    const chatReceiverInput = document.querySelector('input[name="receiver_id"]');
+                    const chatContainer = document.getElementById('chat-container');
+
+                    // Check if chat is open AND the IDs match (Are we talking to the sender?)
+                    // Note: data.sender_id must be sent from your Laravel Event 'broadcastWith' function
+                    const isChattingWithSender = chatReceiverInput && 
+                                                 parseInt(chatReceiverInput.value) === parseInt(data.sender_id);
+                    console.log(chatReceiverInput.value);
+                    console.log(data.sender_id);
+                    if (isChattingWithSender && chatContainer) {
+                        // SCENARIO 1: We are in the chat -> Append the message immediately
+                        appendReceivedMessage(data.content, data.timestamp);
+                    } else {
+                        // SCENARIO 2: We are elsewhere -> Show a Toast Notification
+                        const notificationText = `New message from ${data.sender_name}: "${data.content.substring(0, 30)}..."`;
+                        displayNotification(notificationText); 
+                    }
+                }); 
+
                 // 4. Função para mostrar o Toast
                 function displayNotification(message) {
                     const container = document.getElementById('notifications-container');
@@ -217,8 +239,31 @@
                     }, 6000);
                 }
                 //displayNotification("Test");
-            });
-            
+                function appendReceivedMessage(text, timestamp) {
+                    const container = document.getElementById('chat-container');
+
+                    // Format time (assuming timestamp is ISO string or similar)
+                    const dateObj = timestamp ? new Date(timestamp) : new Date();
+                    const timeString = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                    const html = `
+                        <div class="d-flex mb-3 justify-content-start animate-fade-in">
+                            <div class="p-3 rounded-4 shadow-sm bg-light text-dark border rounded-bottom-start-0" 
+                                 style="max-width: 75%;">
+                                <div class="message-content text-break">${text}</div>
+                                <div class="text-end mt-1">
+                                    <small class="text-muted" style="font-size: 0.7rem;">${timeString}</small>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    container.insertAdjacentHTML('beforeend', html);
+                    
+                    // Scroll to bottom to see new message
+                    container.scrollTop = container.scrollHeight;
+                }   
+            }); 
         </script>
     @endauth
     </body>
