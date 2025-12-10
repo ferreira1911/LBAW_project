@@ -139,7 +139,7 @@ class ReportController extends Controller
         return back()->with('success', 'Report was Resolved.');
     }
 
-    function show(Report $report) {
+    public function show(Report $report) {
         $this->authorize('view', $report);
 
         $report = Report::with(['reporter', 'reportedUser', 'auction', 'admin'])

@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\DB;
 class AuctionController extends Controller
 {
 
-    function index(){
+    public function index(){
         $featuredAuctions = Auction::where('status','Active')
                     ->where('is_featured',true)
                     ->where('featured_until', '>', now())
@@ -42,7 +42,7 @@ class AuctionController extends Controller
         ]);
     }
 
-    function show(Auction $auction) {
+    public function show(Auction $auction) {
         $this->authorize('view', $auction);
 
         $highestBid = $auction->bids()
@@ -61,7 +61,7 @@ class AuctionController extends Controller
         ]);
     }
 
-        public function edit(Auction $auction){
+    public function edit(Auction $auction){
         $this->authorize('update', $auction);
         return view('pages.auction.edit', ['auction' => $auction]);
     }
@@ -183,7 +183,7 @@ class AuctionController extends Controller
 
 
 
-    function create(){
+    public function create(){
         $this->authorize('create', Auction::class);
         $categories = Category::all();
         return view('pages.auction.create', [
@@ -191,7 +191,7 @@ class AuctionController extends Controller
     ]);
     }
 
-    function search(Request $request){
+    public function search(Request $request){
         
             $query = $request->input('query');
             $categoryId = $request->input('category');
