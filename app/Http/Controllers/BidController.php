@@ -47,14 +47,13 @@ class BidController extends Controller
             return redirect()->route('auctions.show', $auction)->with('success', 'Your bid was placed successfully!');
 
         } catch (QueryException $e) {
-
-            $cleanMessage = 'An error occurred while placing the bid.';
-
-            if (isset($e->errorInfo[2]) && preg_match('/ERROR:\s*(.*?)(?:\n|$)/', $e->errorInfo[2], $matches)) {
-                $cleanMessage = $matches[1];
+            if ($e->getCode() === 'P0001') { 
+                $message = 'You were unable to place a bid on this auction. Please check your wallet.';
+            } else {
+                $message = 'An Unexpected error has occured. Please try again later';
             }
 
-            return back()->withInput()->withErrors(['amount' => $cleanMessage]);
+            return back()->withInput()->withErrors(['amount' => $message]);
         }
     }
     public function index(Request $request)
