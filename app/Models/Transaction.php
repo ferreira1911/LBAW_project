@@ -26,6 +26,7 @@ class Transaction extends Model
         'auction_id',
         'buyer_id',
         'seller_id',
+        'payment_reference',
     ];
 
     protected $casts = [
