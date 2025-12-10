@@ -45,7 +45,6 @@ Route::controller(RegisterController::class)->group(function () {
 
 // Utilities
 Route::post('/send', [MailController::class, 'send']);
-Route::post('/post/like', [PostController::class, 'like']);
 Route::post('/files/upload', [FileController::class, 'upload'])->name('files.upload');
 
 
@@ -68,7 +67,7 @@ Route::controller(AuctionController::class)->group(function () {
 });
 
 // Bids
-Route::controller(BidController::class)->group(function () {
+Route::controller(BidController::class)->middleware('auth')->group(function () {
     Route::post('/auctions/{auction}/bids', 'store')->name('bids.store')->middleware('auth');
     Route::get('/bidding-history', 'index')->name('bidding-history.index')->middleware('auth');
 });
@@ -105,7 +104,7 @@ Route::controller(TransactionController::class)->middleware('auth')->group(funct
 });
 
 // Notifications
-Route::controller(NotificationController::class)->group(function(){
+Route::controller(NotificationController::class)->middleware('auth')->group(function(){
     Route::get('/notifications','index')->name('notifications.index');
     Route::post('/notifications/{notification}/mark-read', 'markAsRead')->name('notifications.markAsRead');
     Route::post('/notifications/mark-all-read', 'markAllRead')->name('notifications.markAllRead');
@@ -122,12 +121,12 @@ Route::controller(ResetPasswordController::class)->group(function () {
     Route::post('/reset-password', 'reset')->name('password.update');
 });
 
-Route::controller(CategoryController::class)->group(function () {
+Route::controller(CategoryController::class)->middleware('auth')->group(function () {
     Route::get('/categories/create', 'create')->name('categories.create');
     Route::post('/categories/store', 'store')->name('categories.store');
 });
 
-Route::controller(ReportController::class)->group(function () {
+Route::controller(ReportController::class)->middleware('auth')->group(function () {
     
     Route::get('/report/create', 'create')->name('report.create');
     Route::get('/reports/myReports', 'indexAssigned')->name('admin.myReports');
@@ -151,7 +150,7 @@ Route::view('/contact', 'pages.contact')->name('contact');
 
 
 
-Route::controller(MessageController::class)->group(function () {
+Route::controller(MessageController::class)->middleware('auth')->group(function () {
     // Inbox: List of all conversations
     Route::get('/messages', 'index')->name('messages.index');
     

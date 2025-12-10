@@ -10,7 +10,7 @@ RUN apt-get update \
        unzip \
        git \
        cron \
-    && docker-php-ext-install pdo_pgsql \
+    && docker-php-ext-install pdo_pgsql bcmath \
     && rm -rf /var/lib/apt/lists/* \
     && rm -f /etc/nginx/sites-enabled/default
 
