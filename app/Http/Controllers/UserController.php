@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Category;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -194,19 +195,51 @@ class UserController extends Controller
         return back()->with('success', 'User unblocked successfully.');
     }
 
-    public function showWatchlist()
+    public function showWatchlist(Request $request)
     {
         $user = Auth::user();
 
-        
-        $auctions = $user->followedAuctions()
-            ->with(['category', 'bids']) // Eager load for performance
-            ->whereIn('status',['Pending','Active','Ending'])
-            ->orderBy('end_date', 'asc')
-            ->paginate(12);
+        $query = $user->followedAuctions()
+            ->with(['category', 'bids', 'owner']) // Eager load for performance
+            ->whereIn('status', ['Pending', 'Active', 'Ending']);
+
+        if ($request->filled('query')) {
+            $searchTerm = $request->query;
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('name', 'like', "%{$searchTerm}%")
+                ->orWhere('description', 'like', "%{$searchTerm}%");
+            });
+        }
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->category);
+        }
+        if ($request->filled('min_price')) {
+            $query->where('starting_bid', '>=', $request->min_price);
+        }
+        if ($request->filled('max_price')) {
+            $query->where('starting_bid', '<=', $request->max_price);
+        }
+
+        $sortOption = $request->get('sort', 'ending_soon');
+        switch ($sortOption) {
+            case 'price_asc':
+                $query->orderBy('starting_bid', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('starting_bid', 'desc');
+                break;
+            case 'ending_soon':
+            default:
+                $query->orderBy('end_date', 'asc');
+                break;
+        }
+        $auctions = $query->paginate(12)->withQueryString();
+
+        $categories = Category::orderBy('name')->get();
 
         return view('pages.user.watchlist', [
-            'auctions' => $auctions
+            'auctions' => $auctions,
+            'categories' => $categories
         ]);
     }
 

@@ -8,7 +8,7 @@ use App\Models\Auction;
 
 class ReviewPolicy
 {
-    public function viewAny(?User $user): bool
+    public function viewAny(User $user): bool
     {
         return true;
     }
