@@ -53,11 +53,15 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="ms-3">
-                                <a href="{{ route('auctions.show', $auction) }}" class="btn btn-outline-primary">
+                            <div class="ms-3 d-flex flex-column gap-4">
+                                <a href="{{ route('auctions.show', $auction) }}" class="btn btn-outline-primary w-100">
                                     <i class="bi bi-eye me-1"></i>View Details
                                 </a>
+                                @can('create', [App\Models\Review::class, $auction])
+                                    <a href="{{ route('reviews.create', $auction) }}" class="btn btn-outline-warning w-100">
+                                        <i class="bi bi-star me-1"></i>Leave a Review
+                                    </a>
+                                @endcan
                             </div>
                         </div>
                     </div>

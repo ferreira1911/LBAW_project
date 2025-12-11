@@ -22,6 +22,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\GoogleController;
 use Illuminate\Support\Facades\Broadcast;
+use App\Http\Controllers\ReviewController;
 
 // Home
 Route::view('/', 'welcome')->name('home');
@@ -169,3 +170,7 @@ Route::controller(GoogleController::class)->group(function () {
     Route::get('auth/google/call-back', 'callbackGoogle')->name('google-call-back');
 });
 
+Route::controller(ReviewController::class)->middleware('auth')->group(function () {
+    Route::get('/auctions/{auction}/review', 'create')->name('reviews.create');
+    Route::post('/auctions/{auction}/review', 'store')->name('reviews.store');
+});
