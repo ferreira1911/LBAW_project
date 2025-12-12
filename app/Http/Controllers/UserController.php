@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\FileController;
 use App\Models\Auction;
+use App\Models\Message;
 
 
 class UserController extends Controller
@@ -195,68 +196,32 @@ class UserController extends Controller
         return back()->with('success', 'User unblocked successfully.');
     }
 
-    public function showWatchlist(Request $request)
+    public function loadAuctions(User $user)
     {
-        $user = Auth::user();
-
-        $query = $user->followedAuctions()
-            ->with(['category', 'bids', 'owner']) // Eager load for performance
-            ->whereIn('status', ['Pending', 'Active', 'Ending']);
-
-        if ($request->filled('query')) {
-            $searchTerm = $request->query;
-            $query->where(function($q) use ($searchTerm) {
-                $q->where('name', 'like', "%{$searchTerm}%")
-                ->orWhere('description', 'like', "%{$searchTerm}%");
-            });
-        }
-        if ($request->filled('category')) {
-            $query->where('category_id', $request->category);
-        }
-        if ($request->filled('min_price')) {
-            $query->where('starting_bid', '>=', $request->min_price);
-        }
-        if ($request->filled('max_price')) {
-            $query->where('starting_bid', '<=', $request->max_price);
-        }
-
-        $sortOption = $request->get('sort', 'ending_soon');
-        switch ($sortOption) {
-            case 'price_asc':
-                $query->orderBy('starting_bid', 'asc');
-                break;
-            case 'price_desc':
-                $query->orderBy('starting_bid', 'desc');
-                break;
-            case 'ending_soon':
-            default:
-                $query->orderBy('end_date', 'asc');
-                break;
-        }
-        $auctions = $query->paginate(12)->withQueryString();
-
-        $categories = Category::orderBy('name')->get();
-
-        return view('pages.user.watchlist', [
-            'auctions' => $auctions,
-            'categories' => $categories
-        ]);
+        $auctions = $user->auctions()->orderBy('end_date','DESC')->paginate(12);
+        return view('partials.user-auctions', compact('auctions', 'user')); 
     }
 
-    public function showWonAuctions()
+    public function loadWatchlist(User $user)
     {
-        $user = Auth::user();
+        $auctions = $user->followedAuctions()->paginate(12);
+        return view('partials.watchlist', compact('auctions'));
+    }
 
-        $auctions = $user->wonAuctions()
-            ->with(['images', 'owner'])
-            ->orderByDesc('end_date')
-            ->paginate(15);
-
-        return view('pages.user.won-auctions', [
-        'auctions' => $auctions,
-        'user' => $user
-        ]);
+    public function loadWon(User $user)
+    {
+        $auctions = $user->wonAuctions()->paginate(12);
+        return view('partials.won-auctions', compact('auctions'));
     }
 
 
+   public function loadMessages(User $user)
+{
+    $conversations = Message::where('sender_id', $user->id)
+                            ->orWhere('receiver_id', $user->id)
+                            ->orderBy('sent_date', 'desc')
+                            ->get();
+
+    return view('partials.messages', compact('conversations'));
+}
 }

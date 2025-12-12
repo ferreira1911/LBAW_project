@@ -22,7 +22,6 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\GoogleController;
 use Illuminate\Support\Facades\Broadcast;
-use App\Http\Controllers\ReviewController;
 
 // Home
 Route::view('/', 'welcome')->name('home');
@@ -79,9 +78,7 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/users/api', 'getUsers')->name('users.api');
     Route::get('/users/create', 'create')->name('users.create');
     Route::post('/users', 'store')->name('users.store');
-    Route::get('/my-watchlist',  'showWatchlist')->name('user.watchlist');
     Route::get('/users/{user}', 'show')->name('users.show');
-    Route::get('/won-auctions','showWonAuctions')->name('won-auctions.index')->middleware('auth');
     Route::get('/users/{user}/edit', 'edit')->name('users.edit');
     Route::post('/users/{user}', 'update')->name('users.update');
     Route::post('/users/{user}/delete', 'destroy')->name('users.destroy');
@@ -152,9 +149,6 @@ Route::view('/contact', 'pages.contact')->name('contact');
 
 
 Route::controller(MessageController::class)->middleware('auth')->group(function () {
-    // Inbox: List of all conversations
-    Route::get('/messages', 'index')->name('messages.index');
-    
     // Chat Window: View conversation with a specific user
     Route::get('/messages/{user}', 'show')->name('messages.show');
     
@@ -170,7 +164,9 @@ Route::controller(GoogleController::class)->group(function () {
     Route::get('auth/google/call-back', 'callbackGoogle')->name('google-call-back');
 });
 
-Route::controller(ReviewController::class)->middleware('auth')->group(function () {
-    Route::get('/auctions/{auction}/review', 'create')->name('reviews.create');
-    Route::post('/auctions/{auction}/review', 'store')->name('reviews.store');
-});
+
+// Profile AJAX tab routes
+Route::get('/users/{user}/auctions', [UserController::class, 'loadAuctions'])->name('users.load.auctions');
+Route::get('/users/{user}/watchlist', [UserController::class, 'loadWatchlist'])->name('users.load.watchlist');
+Route::get('/users/{user}/won', [UserController::class, 'loadWon'])->name('users.load.won');
+Route::get('/users/{user}/messages', [UserController::class, 'loadMessages'])->name('users.load.messages');
