@@ -1,31 +1,45 @@
 @php
     $status = match($notification->type) {
-        'new-bid' => ['icon' => 'bi-hammer',        'color' => 'primary',   'title' => 'New Bid'],
-        'winner'  => ['icon' => 'bi-trophy-fill',   'color' => 'success',   'title' => 'You Won!'],
-        'ended'   => ['icon' => 'bi-hourglass-bottom', 'color' => 'secondary', 'title' => 'Auction Ended'],
-        'cancel'  => ['icon' => 'bi-x-circle-fill', 'color' => 'danger',    'title' => 'Cancelled'],
-        'review'  => ['icon' => 'bi-star-fill',     'color' => 'warning',   'title' => 'New Review'],
-        default   => ['icon' => 'bi-bell-fill',     'color' => 'info',      'title' => 'Notification'],
+        'new-bid' => ['icon' => 'bi-hammer',          'color' => 'primary',   'title' => 'New Bid!'],
+        'winner'  => ['icon' => 'bi-trophy-fill',     'color' => 'success',   'title' => 'Congratulations! You Won!'],
+        'ending'  => ['icon' => 'bi-alarm',           'color' => 'info',      'title' => 'Ending Soon'],
+        'ended'   => ['icon' => 'bi-hourglass-bottom','color' => 'secondary', 'title' => 'Auction Ended'],
+        'cancel'  => ['icon' => 'bi-x-circle-fill',   'color' => 'danger',    'title' => 'Cancelled'],
+        'review'  => ['icon' => 'bi-star-fill',       'color' => 'warning',   'title' => 'New Review'],
+        default   => ['icon' => 'bi-bell-fill',       'color' => 'dark',      'title' => 'Notification'],
     };
 
     $color = $status['color'];
     $icon  = $status['icon'];
     
-    $bgClass = $notification->is_read ? 'bg-light text-muted' : 'bg-white shadow-sm border-start border-4 border-' . $color;
-    $isOwner = Auth::id() === $notification->auction->owner_id;
+    // Different style if already read
+    $bgClass = $notification->is_read 
+        ? 'bg-light text-muted opacity-75' 
+        : 'bg-white shadow-sm border-start border-4 border-' . $color;
+
+    // Check if owner (for custom messages)
+    // Optional prevents errors if auction was physically deleted from DB
+    $isOwner = optional($notification->auction)->owner_id === Auth::id();
+    $auctionTitle = optional($notification->auction)->title ?? 'Unavailable Auction';
+    $auctionRoute = $notification->auction ? route('auctions.show', $notification->auction) : '#';
 @endphp
 
-<div id="notification-{{ $notification->id }}" data-color="{{ $color }}" class="card mb-3 border-0 transition-all duration-300 {{ $bgClass }}" style="transition: all 0.3s ease;">
+<div id="notification-{{ $notification->id }}" 
+     class="card mb-3 border-0 {{ $bgClass }} position-relative" 
+     style="transition: all 0.3s ease;">
+    
     <div class="card-body p-3">
         <div class="d-flex align-items-start">
             
+            {{-- Circular Icon --}}
             <div class="flex-shrink-0 me-3">
                 <div class="rounded-circle d-flex align-items-center justify-content-center bg-{{ $color }} bg-opacity-10 text-{{ $color }}" 
-                     style="width: 40px; height: 40px;">
+                     style="width: 48px; height: 48px;">
                     <i class="bi {{ $icon }} fs-5"></i>
                 </div>
             </div>
 
+            {{-- Text and Content --}}
             <div class="flex-grow-1">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                     <h6 class="fw-bold mb-0 {{ $notification->is_read ? 'text-secondary' : 'text-dark' }}">
@@ -39,43 +53,41 @@
                     </small>
                 </div>
 
-                <p class="mb-2 small {{ $notification->is_read ? 'text-muted' : 'text-secondary' }}">
+                <p class="mb-2 small {{ $notification->is_read ? 'text-muted' : 'text-secondary' }}" style="line-height: 1.4;">
                     @switch($notification->type)
                         @case('new-bid')
                             @if($isOwner)
-                                Good news! Someone placed a bid of <span class="fw-bold">€{{ number_format($notification->bid->amount ?? 0, 2) }}</span> 
-                                on your auction <a href="{{ route('auctions.show', $notification->auction) }}" class="text-decoration-none fw-bold">{{ $notification->auction->title }}</a>.
+                                Good news! A bid of <span class="fw-bold text-dark">€{{ number_format($notification->bid->amount ?? 0, 2) }}</span> 
+                                was placed on your auction <a href="{{ $auctionRoute }}" class="fw-bold text-decoration-none">{{ $auctionTitle }}</a>.
                             @else
-                                Activity alert! A new bid of <span class="fw-bold">€{{ number_format($notification->bid->amount ?? 0, 2) }}</span> 
-                                was placed on <a href="{{ route('auctions.show', $notification->auction) }}" class="text-decoration-none fw-bold">{{ $notification->auction->title }}</a>.
+                                A new bid of <span class="fw-bold text-dark">€{{ number_format($notification->bid->amount ?? 0, 2) }}</span> 
+                                was placed on the auction <a href="{{ $auctionRoute }}" class="fw-bold text-decoration-none">{{ $auctionTitle }}</a>.
+                            @endif
+                            @break
+
+                        @case('ending')
+                            @if($isOwner)
+                                Attention! Your auction <a href="{{ $auctionRoute }}" class="fw-bold text-decoration-none">{{ $auctionTitle }}</a> ends in less than 15 minutes.
+                            @else
+                                Hurry up! The auction <a href="{{ $auctionRoute }}" class="fw-bold text-decoration-none">{{ $auctionTitle }}</a> is about to end.
                             @endif
                             @break
 
                         @case('winner')
-                            Congratulations! You won the auction <a href="{{ route('auctions.show', $notification->auction) }}" class="text-success text-decoration-none fw-bold">{{ $notification->auction->title }}</a>.
-                            The amount has been deducted from your wallet.
+                            Congratulations! You won the auction <a href="{{ $auctionRoute }}" class="text-success fw-bold text-decoration-none">{{ $auctionTitle }}</a>.
+                            The item is yours.
                             @break
 
                         @case('ended')
-                            @if($isOwner)
-                                Your auction <a href="{{ route('auctions.show', $notification->auction) }}" class="text-dark text-decoration-none fw-bold">{{ $notification->auction->title }}</a> has ended.
-                                Check if it was sold!
-                            @else
-                                The auction <a href="{{ route('auctions.show', $notification->auction) }}" class="text-dark text-decoration-none fw-bold">{{ $notification->auction->title }}</a> has ended.
-                            @endif
+                            The auction <a href="{{ $auctionRoute }}" class="fw-bold text-decoration-none">{{ $auctionTitle }}</a> has ended.
                             @break
 
                         @case('cancel')
-                            @if($isOwner)
-                                Your auction <strong>{{ $notification->auction->title }}</strong> was successfully cancelled.
-                            @else
-                                The auction <strong>{{ $notification->auction->title }}</strong> (which you bid on) was cancelled. 
-                                Your held credit has been refunded.
-                            @endif
+                            The auction <strong>{{ $auctionTitle }}</strong> was cancelled. Any held funds have been refunded.
                             @break
 
                         @case('review')
-                            You received a <strong>{{ $notification->rating ?? 5 }}-star</strong> review on a recent sale.
+                            You received a <strong>{{ $notification->rating ?? 5 }}-star</strong> review.
                             @break
 
                         @default
@@ -83,11 +95,13 @@
                     @endswitch
                 </p>
 
+                {{-- Mark as Read Button (JS) --}}
                 @if(!$notification->is_read)
-                    <div class="text-end">
-                        <button class="btn btn-link btn-sm p-0 text-decoration-none text-muted small"
-                            onclick="markAsRead({{ $notification->id }})">
-                            <i class="bi bi-check2-all me-1"></i>Mark as read
+                    <div class="text-end" id="action-{{ $notification->id }}">
+                        <button type="button" 
+                                class="btn btn-link btn-sm p-0 text-decoration-none text-muted small"
+                                onclick="markAsRead({{ $notification->id }})">
+                            <i class="bi bi-check2-all me-1"></i> Mark as read
                         </button>
                     </div>
                 @endif

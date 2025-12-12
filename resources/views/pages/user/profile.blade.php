@@ -129,7 +129,7 @@
                 {{-- AJAX TABS (Only for own profile) --}}
                 <div class="card shadow-sm border-0">
                     <div class="card-header bg-white border-bottom">
-                        <ul class="nav nav-tabs card-header-tabs" id="profileTabs">
+                        <ul class="nav nav-tabs card-header-tabs" id="profileTabs" data-user-id="{{ $user->id }}">
                             <li class="nav-item">
                                 <button class="nav-link active" data-target="auctions">My Auctions</button>
                             </li>
@@ -217,11 +217,14 @@
     </div>
 </div>
 
-{{-- AJAX LOADER (Only load if viewing own profile) --}}
 @if(Auth::check() && Auth::id() === $user->id)
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    const profileTabs = document.getElementById('profileTabs');
     const contentBox = document.getElementById('tabContent');
+
+    const userId = profileTabs.getAttribute('data-user-id');
+    console.log(userId);
 
     function loadTab(target) {
         contentBox.innerHTML = `
@@ -230,7 +233,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 <p class="mt-3 mb-0 small">Loading...</p>
             </div>`;
 
-        fetch(`/users/{{ $user->id }}/${target}`)
+        const url = `${baseUrl}/users/${userId}/${target}`;
+        
+
+        fetch(url)
             .then(res => res.text())
             .then(html => contentBox.innerHTML = html)
             .catch(() => contentBox.innerHTML = "<p class='text-danger'>Error loading content.</p>");
