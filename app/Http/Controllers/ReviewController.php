@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Review;
 use App\Models\Auction;
+use App\Events\ReviewReceived;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
@@ -32,7 +33,11 @@ class ReviewController extends Controller
         $validated['auction_id'] = $auction->id;
 
         try {
-            Review::create($validated);
+            $review = Review::create($validated);
+
+            $recipient = $auction->owner();
+
+            event(new ReviewReceived($recipient,$auction,$review));
 
             return redirect()->route('auctions.show', $auction)
                 ->with('success', 'Review submitted successfully.');

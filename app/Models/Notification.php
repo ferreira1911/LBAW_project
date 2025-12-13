@@ -36,6 +36,7 @@ class Notification extends Model
         'user_id',
         'auction_id',
         'bid_id',
+        'review_id',
     ];
 
     /**
@@ -70,5 +71,10 @@ class Notification extends Model
     public function bid(): BelongsTo
     {
         return $this->belongsTo(Bid::class, 'bid_id');
+    }
+
+    public function review(): BelongsTo
+    {
+        return $this->belongsTo(Review::class, 'review_id');
     }
 }

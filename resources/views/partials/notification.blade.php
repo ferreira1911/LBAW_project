@@ -87,7 +87,9 @@
                             @break
 
                         @case('review')
-                            You received a <strong>{{ $notification->rating ?? 5 }}-star</strong> review.
+                            You received a 
+                            <strong>{{ $notification->review->rating ?? 5 }}-star</strong> 
+                            review on your auction <strong>{{ $auctionTitle }}</strong>.
                             @break
 
                         @default
