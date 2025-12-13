@@ -18,6 +18,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\BidController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\GoogleController;
@@ -170,3 +171,9 @@ Route::get('/users/{user}/auctions', [UserController::class, 'loadAuctions'])->n
 Route::get('/users/{user}/watchlist', [UserController::class, 'loadWatchlist'])->name('users.load.watchlist');
 Route::get('/users/{user}/won', [UserController::class, 'loadWon'])->name('users.load.won');
 Route::get('/users/{user}/messages', [UserController::class, 'loadMessages'])->name('users.load.messages');
+
+// Reviews
+Route::controller(ReviewController::class)->middleware('auth')->group(function () {
+    Route::get('/auctions/{auction}/review', 'create')->name('reviews.create');
+    Route::post('/auctions/{auction}/review', 'store')->name('reviews.store');
+});
