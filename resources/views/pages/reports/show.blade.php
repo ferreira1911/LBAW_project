@@ -153,9 +153,8 @@ $statusIcon = match($report->status->name) {
                                                     <i class="bi bi-ban me-2"></i>Auction is already Cancelled/Ended
                                                 </div>
                                             @endif
-                                        @endif
 
-                                        @if($report->reportedUser)
+                                        @elseif($report->reportedUser)
                                             @if(!$report->reportedUser->is_blocked) 
                                                 <form action="{{ route('users.block', $report->reportedUser) }}" method="POST">
                                                     @csrf
