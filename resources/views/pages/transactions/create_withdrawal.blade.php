@@ -27,14 +27,14 @@
                     </div>
 
                     <p class="text-muted small mb-4">
-                        Submit a request to withdraw funds. Requests are usually processed within 24 hours.
+                        Submit a request to withdraw funds. Requests are usually processed instantly.
                     </p>
 
                     <form method="POST" action="{{ route('withdrawal.store') }}">
                         @csrf
 
                         {{-- Amount Input --}}
-                        <div class="mb-4">
+                        <div class="mb-3">
                             <label for="amount" class="form-label fw-bold">Amount to Withdraw</label>
                             <div class="input-group">
                                 <span class="input-group-text">€</span>
@@ -45,7 +45,7 @@
                                     name="amount"
                                     value="{{ old('amount') }}"
                                     max="{{ Auth::user()->credit }}"
-                                    min="1"
+                                    min="10"
                                     step="0.01"
                                     placeholder="50.00"
                                     required
@@ -56,8 +56,25 @@
                                 @enderror
                             </div>
                             <div class="form-text text-muted">
-                                Maximum allowed: €{{ number_format(Auth::user()->credit, 2) }}
+                                Minimum withdrawal: €10.00 | Max: €{{ number_format(Auth::user()->credit, 2) }}
                             </div>
+                        </div>
+
+                        {{-- IBAN Input (NOVO) --}}
+                        <div class="mb-4">
+                            <label for="iban" class="form-label fw-bold">IBAN</label>
+                            <input 
+                                id="iban" 
+                                type="text" 
+                                class="form-control @error('iban') is-invalid @enderror" 
+                                name="iban" 
+                                value="{{ old('iban') }}" 
+                                placeholder="PT50..." 
+                                required
+                            >
+                            @error('iban')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         {{-- Actions --}}

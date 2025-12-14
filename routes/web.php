@@ -95,6 +95,9 @@ Route::controller(TransactionController::class)->middleware('auth')->group(funct
     
     Route::get('/wallet/add-credit', 'createCredit')->name('credit.create');
     Route::post('/wallet/add-credit', 'storeCredit')->name('credit.store');
+
+    Route::get('/wallet/add-credit/success', 'successCredit')->name('credit.success');
+    Route::get('/wallet/add-credit/cancel', 'cancelCredit')->name('credit.cancel');
     
     Route::get('/wallet/withdraw', 'createWithdrawal')->name('withdrawal.create');
     Route::post('/wallet/withdraw', 'storeWithdrawal')->name('withdrawal.store');

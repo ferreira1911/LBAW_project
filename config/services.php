@@ -41,4 +41,9 @@ return [
         'redirect' => env('GOOGLE_CALL_BACK_ROUTE'),
     ],
 
+    'stripe' => [
+        'key' => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET'),
+    ],
+
 ];

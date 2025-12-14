@@ -36,7 +36,11 @@ CREATE TABLE users (
     password TEXT,
     google_id TEXT UNIQUE,
     remember_token TEXT,
-    url TEXT
+    url TEXT,
+    stripe_id VARCHAR(255),
+    pm_type VARCHAR(255),
+    pm_last_four VARCHAR(4),
+    trial_ends_at TIMESTAMP
 );
 
 ------------------------------------------------------------
@@ -93,7 +97,8 @@ CREATE TABLE transactions (
     type transaction_type NOT NULL,
     auction_id INTEGER REFERENCES auction(id) ,
     buyer_id INTEGER REFERENCES users(id),
-    seller_id INTEGER REFERENCES users(id)
+    seller_id INTEGER REFERENCES users(id),
+    payment_reference TEXT
 );
 
 ------------------------------------------------------------
@@ -196,6 +201,8 @@ CREATE INDEX idx_bid_auction_id ON bid USING hash (auction_id);
 CREATE INDEX idx_auction_enddate ON auction USING btree (end_date);
 
 CREATE INDEX idx_user_notifications on notifications USING hash (user_id);
+
+CREATE INDEX users_stripe_id_index ON users(stripe_id);
 
 
 -- * ====================================================

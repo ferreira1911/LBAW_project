@@ -9,10 +9,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Http\Controllers\FileController;
 use Illuminate\Support\Facades\DB;
+use Laravel\Cashier\Billable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, Billable;
 
     public $timestamps = false;
 
@@ -28,6 +29,10 @@ class User extends Authenticatable
         'held_credit',
         'is_blocked',
         'google_id',
+        'stripe_id',
+        'pm_type', 
+        'pm_last_four', 
+        'trial_ends_at'
     ];
 
     protected $hidden = [
