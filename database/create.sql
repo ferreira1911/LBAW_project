@@ -101,20 +101,6 @@ CREATE TABLE transactions (
     payment_reference TEXT
 );
 
-
-------------------------------------------------------------
--- NOTIFICATION
-------------------------------------------------------------
-CREATE TABLE notifications (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    type notification_type NOT NULL,
-    is_read BOOLEAN DEFAULT FALSE,
-    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    user_id INTEGER NOT NULL REFERENCES users(id),
-    auction_id INTEGER REFERENCES auction(id),
-    bid_id INTEGER REFERENCES bid(id)
-);
-
 ------------------------------------------------------------
 -- REVIEW
 ------------------------------------------------------------
@@ -126,6 +112,22 @@ CREATE TABLE review (
     user_id INTEGER REFERENCES users(id),
     auction_id INTEGER REFERENCES auction(id)
 );
+
+------------------------------------------------------------
+-- NOTIFICATION
+------------------------------------------------------------
+CREATE TABLE notifications (
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    type notification_type NOT NULL,
+    is_read BOOLEAN DEFAULT FALSE,
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user_id INTEGER NOT NULL REFERENCES users(id),
+    auction_id INTEGER REFERENCES auction(id),
+    bid_id INTEGER REFERENCES bid(id),
+    review_id INTEGER REFERENCES review(id)
+);
+
+
 
 ------------------------------------------------------------
 -- REPORT 

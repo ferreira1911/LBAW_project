@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Category;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\FileController;
 use App\Models\Auction;
+use App\Models\Message;
 
 
 class UserController extends Controller
@@ -194,36 +196,32 @@ class UserController extends Controller
         return back()->with('success', 'User unblocked successfully.');
     }
 
-    public function showWatchlist()
+    public function loadAuctions(User $user)
     {
-        $user = Auth::user();
-
-        
-        $auctions = $user->followedAuctions()
-            ->with(['category', 'bids']) // Eager load for performance
-            ->whereIn('status',['Pending','Active','Ending'])
-            ->orderBy('end_date', 'asc')
-            ->paginate(12);
-
-        return view('pages.user.watchlist', [
-            'auctions' => $auctions
-        ]);
+        $auctions = $user->auctions()->orderBy('end_date','DESC')->paginate(12);
+        return view('partials.user-auctions', compact('auctions', 'user')); 
     }
 
-    public function showWonAuctions()
+    public function loadWatchlist(User $user)
     {
-        $user = Auth::user();
+        $auctions = $user->followedAuctions()->paginate(12);
+        return view('partials.watchlist', compact('auctions'));
+    }
 
-        $auctions = $user->wonAuctions()
-            ->with(['images', 'owner'])
-            ->orderByDesc('end_date')
-            ->paginate(15);
-
-        return view('pages.user.won-auctions', [
-        'auctions' => $auctions,
-        'user' => $user
-        ]);
+    public function loadWon(User $user)
+    {
+        $auctions = $user->wonAuctions()->paginate(12);
+        return view('partials.won-auctions', compact('auctions'));
     }
 
 
+   public function loadMessages(User $user)
+{
+    $conversations = Message::where('sender_id', $user->id)
+                            ->orWhere('receiver_id', $user->id)
+                            ->orderBy('sent_date', 'desc')
+                            ->get();
+
+    return view('partials.messages', compact('conversations'));
+}
 }

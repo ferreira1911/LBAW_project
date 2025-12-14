@@ -11,12 +11,12 @@
                 {{-- Chat Header --}}
                 <div class="card border-0 shadow-sm rounded-top-4 rounded-bottom-0 z-1">
                     <div class="card-header bg-white border-bottom p-3 d-flex align-items-center">
-                        <a href="{{ route('messages.index') }}" class="btn btn-sm btn-light rounded-circle me-3">
+                        <button onclick="window.history.back()" class="btn btn-sm btn-light rounded-circle me-3">
                             <i class="bi bi-arrow-left"></i>
-                        </a>
+                        </button>
                         <div class="d-flex align-items-center">
-                             @if($receiver->url)
-                                <img src="{{ asset('storage/' . $receiver->url) }}" class="rounded-circle object-fit-cover border me-2" width="40" height="40">
+                            @if($receiver->url)
+                                <img src="{{ $receiver->getProfileImage() }}" class="rounded-circle object-fit-cover border me-2" width="40" height="40">
                             @else
                                 <div class="rounded-circle bg-secondary-subtle d-flex align-items-center justify-content-center border me-2" style="width: 40px; height: 40px;">
                                     <i class="bi bi-person-fill text-secondary"></i>
@@ -24,7 +24,7 @@
                             @endif
                             <div>
                                 <h6 class="fw-bold mb-0">{{ $receiver->name }}</h6>
-                                <small class="text-muted">Online</small> {{-- Static for now --}}
+                                <small class="text-muted">Online</small>
                             </div>
                         </div>
                     </div>
