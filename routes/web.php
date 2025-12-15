@@ -179,4 +179,5 @@ Route::get('/users/{user}/messages', [UserController::class, 'loadMessages'])->n
 Route::controller(ReviewController::class)->middleware('auth')->group(function () {
     Route::get('/auctions/{auction}/review', 'create')->name('reviews.create');
     Route::post('/auctions/{auction}/review', 'store')->name('reviews.store');
+    Route::get('/reviews', 'index')->name('reviews.index');
 });
