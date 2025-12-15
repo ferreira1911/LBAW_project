@@ -4,8 +4,12 @@ namespace App\Providers;
 
 use App\Events\AuctionCancelled;
 use App\Events\AuctionWinner;
+use App\Events\AuctionBought;
+use App\Events\ReviewReceived;
 use App\Listeners\ListenerAuctionCancelled;
+use App\Listeners\ListenerReviewReceived;
 use App\Listeners\ListenerAuctionWinner;
+use App\Listeners\ListenerAuctionBought;
 use App\Listeners\ListenerEnded;
 use App\Events\EndedAuction;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -31,6 +35,12 @@ class EventServiceProvider extends ServiceProvider
         ],
         AuctionCancelled::class => [
             ListenerAuctionCancelled::class,
+        ],
+        ReviewReceived::class => [
+            ListenerReviewReceived::class,
+        ],
+        AuctionBought::class => [
+            ListenerAuctionBought::class,
         ],
     ];
 

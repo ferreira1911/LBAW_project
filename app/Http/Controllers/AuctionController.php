@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Events\AuctionCancelled;
+use App\Events\AuctionWinner;
+use App\Events\AuctionBought;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Auction;
@@ -84,7 +86,8 @@ class AuctionController extends Controller
             $validated['is_buy_now_active'] = false;
         }
 
-        $auction->update($validated);
+        try{
+            $auction->update($validated);
 
         if ($request->hasFile('images')) {
             $folderPath = 'images/auction';
@@ -104,9 +107,14 @@ class AuctionController extends Controller
             }
         }
 
-
         return redirect()->route('auctions.show', $auction)
                         ->with('success', 'Auction updated successfully!');
+
+        }catch(QueryException $e){
+            $message = 'An Unexpected error has occured. Please try again later';
+
+            return back()->withInput()->with('failure', $message);
+        }
     }
 
 
@@ -250,12 +258,18 @@ class AuctionController extends Controller
     {
         $this->authorize('cancel', $auction);
 
-        $auction->status = 'Cancelled';
-        $auction->save();
+        try {
+            $auction->status = 'Cancelled';
+            $auction->save();
 
-        event(new AuctionCancelled(Auth::user(),$auction));
+            event(new AuctionCancelled(Auth::user(), $auction));
 
-        return redirect()->route('auctions.show', $auction)->with('success', 'The auction has been successfully cancelled.');
+            return redirect()->route('auctions.show', $auction)
+                ->with('success', 'The auction has been successfully cancelled.');
+
+        } catch (\Exception $e) {
+            return back()->with('failure', 'An error occurred while cancelling the auction. Remainder that you cannot cancel an auction with active bids.');
+        }
     }
 
 
@@ -361,11 +375,14 @@ class AuctionController extends Controller
                 // End the auction
                 $auction->status = 'Ended';
                 $auction->save();
+
+                event(new AuctionBought($auction->owner,$auction));
+
             });
 
             return redirect()->route('auctions.show', $auction)->with('success', 'Item purchased successfully!');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'An error occurred during the purchase. Please try again.');
+            return redirect()->back()->with('failure', 'An error occurred during the purchase. Please try again.');
         }
     }
 
@@ -380,7 +397,7 @@ class AuctionController extends Controller
                 ->with('success', 'Auction featured successfully! 100€ were deducted from your account.');
 
         } catch (\Exception $e) {
-            return back()->with('error', $e->getMessage());
+            return back()->with('failure', "Failure in making the auction featured");
         }
     }
 }

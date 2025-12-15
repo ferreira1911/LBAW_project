@@ -101,7 +101,7 @@
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown">
                                         @if(Auth::user()->url)
-                                            <img src="{{ Auth::user()->getProfileImage() }}" class="rounded-circle object-fit-cover border" width="32" height="32">
+                                            <img src="{{ Auth::user()->getProfileImage() }}" alt="{{ Auth::user()->name }}" class="rounded-circle object-fit-cover border" width="32" height="32">
                                         @else
                                             <div class="rounded-circle bg-secondary-subtle d-flex align-items-center justify-content-center border" style="width: 32px; height: 32px;">
                                                 <i class="bi bi-person-fill text-secondary"></i>
@@ -145,6 +145,20 @@
                 <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
                     <i class="bi bi-check-circle-fill me-2"></i>
                     {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            @if (session('failure'))
+                <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    {{ session('failure') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            @if (session('warning'))
+                <div class="alert alert-warning alert-dismissible fade show shadow-sm" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    {{ session('warning') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
@@ -256,7 +270,7 @@
                             notif.classList.add('slide-out');
                             notif.addEventListener('animationend', () => notif.remove());
                         }
-                    }, 6000);
+                    }, 10000);
                 }
 
                 function appendReceivedMessage(text, timestamp) {

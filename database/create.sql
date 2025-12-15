@@ -17,7 +17,8 @@ CREATE TYPE notification_type AS ENUM (
     'winner',
     'cancel',
     'review',
-    'new-message'
+    'new-message',
+    'auction-bought'
 );
 
 ------------------------------------------------------------
