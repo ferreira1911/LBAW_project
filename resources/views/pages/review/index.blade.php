@@ -11,9 +11,13 @@
             <div class="mb-3 mb-md-0">
                 <h1 class="fw-bold text-dark mb-1">{{ $seller->name }}'s Reviews</h1>
                 <div class="d-flex flex-wrap align-items-center gap-2 small text-muted">
-                    <span class="badge bg-warning text-dark">
+                    <span class="badge bg-warning text-dark fs-6 py-2 px-3">
                         <i class="bi bi-star-fill me-1"></i>
-                        {{ number_format($averageRating, 1) }} / 5.0
+                        @if($reviews->count() > 0)
+                            {{ number_format($averageRating, 1) }} / 5.0
+                        @else
+                            N/A
+                        @endif
                     </span>
                     <span>
                         {{ $reviews->total() }} {{ Str::plural('review', $reviews->total()) }}
