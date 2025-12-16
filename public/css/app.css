@@ -6,7 +6,7 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
-    pointer-events: none; /* evita que interfira com cliques fora da notificação */
+    pointer-events: none; 
 }
 
 .notification {
@@ -17,7 +17,7 @@
     overflow: hidden;
     animation: slideIn 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
     position: relative;
-    pointer-events: auto; /* permite clicar dentro da notificação */
+    pointer-events: auto; 
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
@@ -75,3 +75,104 @@
 .follow-btn:hover i {
     color: #dc3545 !important;
 }
+
+
+.card {
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border: 1px solid rgba(0,0,0,0.05); 
+}
+
+.card:hover {
+    transform: translateY(-5px); 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; 
+    border-color: transparent;
+}
+
+
+.btn {
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.btn:active {
+    transform: translateY(1px); 
+    box-shadow: none;
+}
+
+.rounded-pill {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+}
+
+
+.auction-card-hover .position-relative {
+    overflow: hidden; 
+}
+
+.auction-card-hover img {
+    transition: transform 0.5s ease;
+}
+
+.auction-card-hover:hover img {
+    transform: scale(1.05); 
+}
+
+
+.form-control:focus, .form-select:focus {
+    box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.15);
+}
+
+
+.nav-link {
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 5px; 
+    left: 0;
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after, .nav-link.active::after {
+    width: 100%;
+}
+
+
+.table-hover tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(155, 77, 202, 0.05); 
+}
+
+
+.badge {
+    transition: transform 0.2s ease;
+}
+
+.card:hover .badge {
+    transform: scale(1.1);
+}
+
+.list-group-item-action {
+    transition: background-color 0.2s ease, padding-left 0.2s ease;
+}
+
+.list-group-item-action:hover {
+    background-color: #f8f9fa;
+    padding-left: 1.5rem !important; 
+    border-left: 3px solid #9b4dca; 
+}
+

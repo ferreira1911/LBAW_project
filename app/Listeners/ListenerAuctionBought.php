@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Events\AuctionBought;
 use App\Events\BidPlaced;
 use App\Events\EndedAuction;
 use App\Models\Notification;
@@ -15,7 +16,7 @@ class ListenerAuctionBought implements ShouldQueue
     /**
      * Handle the event.
      */
-    public function handle(EndedAuction $event): void
+    public function handle(AuctionBought $event): void
     {
         $auction = $event->auction;
         
