@@ -210,7 +210,7 @@
                             $isHighestBidder = $highestBidRecord && (int)$highestBidRecord->user_id === (int)Auth::id();
                         @endphp
 
-                        @if ($auction->status === 'Active')
+                        @if (in_array($auction->status, ['Active', 'Ending']))
                             
                             @if(Auth::user()->is_admin)
                                 <div class="alert alert-warning border-0 d-flex align-items-center">

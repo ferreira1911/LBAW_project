@@ -68,7 +68,6 @@ a:hover { color: #0a58ca; }
     color: #606c76;
 }
 
-/* --- 3. Formulários (Inputs & Selects) --- */
 input[type='email'], input[type='number'], input[type='password'], 
 input[type='search'], input[type='tel'], input[type='text'], 
 textarea, select {
@@ -87,7 +86,6 @@ input:focus, textarea:focus, select:focus {
     outline: 0;
 }
 
-/* Select com a seta azul */
 select {
     background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 8" width="30"><path fill="%23d1d1d1" d="M0,0l6,8l6-8"/></svg>') center right no-repeat;
     padding-right: 3.0rem;
@@ -105,19 +103,16 @@ label, legend {
 
 fieldset { border-width: 0; padding: 0; }
 
-/* --- 4. Utilitários e Espaçamento --- */
 .container { margin: 0 auto; max-width: 112.0rem; padding: 0 2.0rem; position: relative; width: 100%; }
 .float-left { float: left; }
 .float-right { float: right; }
 .clearfix:after { clear: both; content: ' '; display: table; }
 
-/* Espaçamentos globais */
 .button, button, dd, dt, li { margin-bottom: 1.0rem; }
 fieldset, input, select, textarea { margin-bottom: 1.5rem; }
 blockquote, dl, figure, form, ol, p, pre, table, ul { margin-bottom: 2.5rem; }
 
-/* --- 5. Grid Flexbox Simplificado (Estilo Milligram) --- */
-/* Mantido porque algumas das tuas views antigas usam 'row' e 'column' sem Bootstrap */
+
 .row {
     display: flex;
     flex-direction: column;
@@ -133,7 +128,6 @@ blockquote, dl, figure, form, ol, p, pre, table, ul { margin-bottom: 2.5rem; }
     width: 100%;
 }
 
-/* Breakpoint para desktop */
 @media (min-width: 40rem) {
     .row {
         flex-direction: row;
@@ -144,7 +138,6 @@ blockquote, dl, figure, form, ol, p, pre, table, ul { margin-bottom: 2.5rem; }
         margin-bottom: inherit;
         padding: 0 1.0rem;
     }
-    /* Classes de tamanho específicas que o Milligram usa */
     .column-20 { flex: 0 0 20%; max-width: 20%; }
     .column-25 { flex: 0 0 25%; max-width: 25%; }
     .column-33 { flex: 0 0 33.3333%; max-width: 33.3333%; }

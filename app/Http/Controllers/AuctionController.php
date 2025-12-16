@@ -207,7 +207,7 @@ class AuctionController extends Controller
             $maxPrice = $request->input('max_price');
             $sort = $request->input('sort');
 
-            $auctionsQuery = Auction::where('status', 'Active');
+            $auctionsQuery = Auction::whereIn('status', ['Active','Ending']);
 
             if ($query) {
                 $auctionsQuery->whereRaw("tsvectors @@ plainto_tsquery('english', ?)", [$query]);
