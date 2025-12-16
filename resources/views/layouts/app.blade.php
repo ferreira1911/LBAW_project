@@ -43,6 +43,9 @@
                                 <a class="nav-link {{ Route::is('auctions.index') ? 'active fw-bold' : '' }}" href="{{ route('auctions.index') }}">Auctions</a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link {{ Route::is('auctions.search') ? 'active fw-bold' : '' }}" href="{{ route('auctions.search') }}">Browse</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link {{ Route::is('about') ? 'active fw-bold' : '' }}" href="{{ route('about') }}"> About us</a>
 
                             <li class="nav-item">

@@ -338,16 +338,14 @@ class AuctionController extends Controller
         $this->authorize('view', $auction);
         $buyer = Auth::user();
 
-        if ($auction->status !== 'Active' || !$auction->is_buy_now_active || !$auction->buy_now_price) {
-            return redirect()->back()->with('error', 'This auction is not available for buy now.');
-        }
+        
 
         if ($buyer->id === $auction->owner_id) {
-            return redirect()->back()->with('error', 'You cannot buy your own auction.');
+            return redirect()->back()->with('failure', 'You cannot buy your own auction.');
         }
 
         if ($buyer->credit < $auction->buy_now_price) {
-            return redirect()->back()->with('error', 'Insufficient credit. Please add funds to your wallet.');
+            return redirect()->back()->with('failure', 'Insufficient credit. Please add funds to your wallet.');
         }
 
         try {
@@ -355,10 +353,6 @@ class AuctionController extends Controller
                 // Lock the auction to prevent race conditions
                 $auction = Auction::lockForUpdate()->findOrFail($auction->id);
                 
-                // Double-check status after locking
-                if ($auction->status !== 'Active') {
-                    throw new \Exception('Auction is no longer active');
-                }
 
                 // Refund all bidders (return held_credit to available credit)
                 $auction->bids()->with('user')->get()->each(function ($bid) {

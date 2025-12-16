@@ -35,6 +35,13 @@ class BidController extends Controller
             ];
             $new_bid = $auction->bids()->create($bid);
 
+            if ($auction->end_date <= now()->addMinutes(15)) {
+                // Estender por 30 minutos
+                $auction->end_date = $auction->end_date->addMinutes(30);
+            }
+
+            $auction->save(); // Guarda o novo preço e a nova data (se mudou)
+
             $recipients = $auction->bids()
                 ->select('user_id')
                 ->distinct()
@@ -67,9 +74,8 @@ class BidController extends Controller
                 $message = 'Your bid cannot equal or exceed the Buy Now price. Please use Buy Now instead.';
             }
 
-            // Use 'error' instead of validation errors
             return redirect()->route('auctions.show', $auction)
-                ->with('error', $message)
+                ->with('failure', $message)
                 ->withInput();
         }
     }

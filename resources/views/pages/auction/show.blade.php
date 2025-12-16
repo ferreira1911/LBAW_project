@@ -163,8 +163,8 @@
                                 @else
                                     <form action="{{ route('auctions.buyNow', $auction) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to buy this item for €' + {{ $auction->buy_now_price }} + '?');">
                                         @csrf
-                                        <button type="submit" class="btn btn-primary btn-sm" {{ $auction->status !== 'Active' ? 'disabled' : '' }}>
-                                            Buy Now
+                                        <button type="submit" class="btn btn-primary btn-sm" {{ !in_array($auction->status, ['Active', 'Ending']) ? 'disabled' : '' }}>
+                                             Buy Now
                                         </button>
                                     </form>
                                 @endif

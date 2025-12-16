@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Review;
 use App\Models\Auction;
+use App\Models\Transaction;
 use App\Events\ReviewReceived;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +24,7 @@ class ReviewController extends Controller
     public function store(Request $request, Auction $auction)
     {
         $this->authorize('create', [Review::class, $auction]);
+        $user = Auth::user();
 
         $validated = $request->validate([
             'rating' => ['required', 'integer', 'min:1', 'max:5'],
@@ -32,10 +34,30 @@ class ReviewController extends Controller
         $validated['user_id'] = Auth::id();
         $validated['auction_id'] = $auction->id;
 
+        if ($auction->owner->id === $user->id) {
+            return back()->with('failure', 'You cannot review your own auction');
+        }
+
+        $alreadyReviewed = Review::where('user_id', $user->id)
+            ->where('auction_id', $auction->id)
+            ->exists();
+
+        if ($alreadyReviewed) {
+            return back()->with('failure', 'You have already reviewed this auction');
+        }
+
+        $hasPurchased = Transaction::where('auction_id', $auction->id)
+            ->where('buyer_id', $user->id)
+            ->exists();
+
+        if (!$hasPurchased) {
+            return back()->with('failure', 'Only the verified buyer of this auction can leave a review.');
+        }
+
         try {
             $review = Review::create($validated);
 
-            $recipient = $auction->owner();
+            $recipient = $auction->owner;
 
             event(new ReviewReceived($recipient,$auction,$review));
 
