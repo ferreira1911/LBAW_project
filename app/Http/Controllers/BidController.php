@@ -24,7 +24,7 @@ class BidController extends Controller
 
         if ($auction->is_buy_now_active && $auction->buy_now_price && $request->amount >= $auction->buy_now_price) {
             return redirect()->route('auctions.show', $auction)
-                ->with('error', 'Your bid of €' . number_format($request->amount, 2) . ' cannot equal or exceed the Buy Now price of €' . number_format($auction->buy_now_price, 2) . '. Please use Buy Now instead.');
+                ->with('failure', 'Your bid cannot equal or exceed the Buy Now price of €' . number_format($auction->buy_now_price, 2) . '. Please use Buy Now instead.');
         }
 
         try {
