@@ -336,55 +336,72 @@ class AuctionController extends Controller
     public function buyNow(Auction $auction)
     {
         $this->authorize('view', $auction);
-
         $buyer = Auth::user();
 
-        // Check if auction is active and buy now is enabled
         if ($auction->status !== 'Active' || !$auction->is_buy_now_active || !$auction->buy_now_price) {
             return redirect()->back()->with('error', 'This auction is not available for buy now.');
         }
 
-        // Check if buyer is the owner
         if ($buyer->id === $auction->owner_id) {
             return redirect()->back()->with('error', 'You cannot buy your own auction.');
         }
 
-        // Check if buyer has enough credit
         if ($buyer->credit < $auction->buy_now_price) {
             return redirect()->back()->with('error', 'Insufficient credit. Please add funds to your wallet.');
         }
 
         try {
             DB::transaction(function () use ($auction, $buyer) {
-                // Create transaction
-                $transaction = Transaction::create([
+                // Lock the auction to prevent race conditions
+                $auction = Auction::lockForUpdate()->findOrFail($auction->id);
+                
+                // Double-check status after locking
+                if ($auction->status !== 'Active') {
+                    throw new \Exception('Auction is no longer active');
+                }
+
+                // Refund all bidders (return held_credit to available credit)
+                $auction->bids()->with('user')->get()->each(function ($bid) {
+                    $bid->user->increment('credit', $bid->amount);
+                    $bid->user->decrement('held_credit', $bid->amount);
+                    // Don't delete - just leave them as history
+                });
+
+                // Charge buyer
+                $buyer->decrement('credit', $auction->buy_now_price);
+
+                // Pay seller
+                $seller = $auction->owner;
+                $seller->increment('credit', $auction->buy_now_price);
+
+                // Create transaction FIRST (so trigger sees it and skips)
+                Transaction::create([
                     'amount' => $auction->buy_now_price,
                     'status' => 'Completed',
                     'type' => 'auction-buy',
                     'auction_id' => $auction->id,
                     'buyer_id' => $buyer->id,
-                    'seller_id' => $auction->owner_id,
+                    'seller_id' => $seller->id,
                 ]);
-
-                // Deduct credit from buyer
-                $buyer->decrement('credit', $auction->buy_now_price);
-
-                // Add credit to seller
-                $auction->owner->increment('credit', $auction->buy_now_price);
 
                 // End the auction
                 $auction->status = 'Ended';
+                $auction->current_price = $auction->buy_now_price;
                 $auction->save();
 
-                event(new AuctionBought($auction->owner,$auction));
-
+                event(new AuctionBought($seller, $auction));
             });
 
-            return redirect()->route('auctions.show', $auction)->with('success', 'Item purchased successfully!');
+            return redirect()->route('auctions.show', $auction)
+                ->with('success', 'Item purchased successfully!');
+
         } catch (\Exception $e) {
+            \Log::error('BuyNow Error: '.$e->getMessage());
             return redirect()->back()->with('failure', 'An error occurred during the purchase. Please try again.');
         }
     }
+
+
 
     public function feature(Request $request, Auction $auction)
     {

@@ -292,7 +292,17 @@ CREATE OR REPLACE FUNCTION handle_auction_end()
 RETURNS TRIGGER AS $$
 DECLARE
     winner_id INT;
+    existing_transaction INT;
 BEGIN
+    -- check if a transaction already exists (Buy Now case)
+    SELECT COUNT(*) INTO existing_transaction
+    FROM transactions
+    WHERE auction_id = NEW.id;
+    
+    -- skip if transaction exists (handled by application)
+    IF existing_transaction > 0 THEN
+        RETURN NEW;
+    END IF;
 
     -- get the winning bid
     SELECT 
@@ -311,10 +321,10 @@ BEGIN
         SET held_credit = held_credit - NEW.current_price
         WHERE id = winner_id;
 
-        INSERT INTO transactions (amount, auction_id, buyer_id, seller_id, status,type)
-        VALUES (NEW.current_price, NEW.id, winner_id, NEW.owner_id, 'Completed','auction-buy');
-
+        INSERT INTO transactions (amount, auction_id, buyer_id, seller_id, status, type)
+        VALUES (NEW.current_price, NEW.id, winner_id, NEW.owner_id, 'Completed', 'auction-buy');
     END IF;
+    
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
