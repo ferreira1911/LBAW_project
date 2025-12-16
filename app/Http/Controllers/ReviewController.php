@@ -70,7 +70,7 @@ class ReviewController extends Controller
             ->orderBy('created_date', 'desc')
             ->paginate(10);
 
-        $averageRating = $seller->average_rating ?? 0;
+        $averageRating = $seller->getAverageRating();
 
         return view('pages.review.index', [
             'seller' => $seller,

@@ -40,10 +40,18 @@
 
                 {{-- Rating Badge --}} 
                 <div class="mb-4"> 
-                    <span class="badge bg-warning text-dark fs-6"> 
-                        <i class="bi bi-star-fill me-1"></i> 
-                        {{ $user->getAverageRating() > 0 ? number_format($user->getAverageRating(), 1) : 'N/A' }} / 5.0 
-                    </span> 
+                    <a href="{{ route('reviews.index', ['seller_id' => $user->id]) }}" 
+                        class="text-decoration-none">
+                        <span class="badge bg-warning text-dark fs-6 hover-shadow" style="cursor: pointer;"> 
+                            <i class="bi bi-star-fill me-1"></i> 
+                            @php $avg = $user->getAverageRating(); @endphp
+                            @if($avg > 0)
+                                {{ number_format($avg, 1) }} / 5.0
+                            @else
+                                N/A
+                            @endif
+                        </span>
+                    </a>
                 </div>
 
                 {{-- Bio --}}
