@@ -166,6 +166,7 @@
                                         <button type="submit" class="btn btn-primary btn-sm" {{ !in_array($auction->status, ['Active', 'Ending']) ? 'disabled' : '' }}>
                                              Buy Now
                                         </button>
+                                        
                                     </form>
                                 @endif
                             @else
