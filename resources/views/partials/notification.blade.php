@@ -6,6 +6,7 @@
         'ended'   => ['icon' => 'bi-hourglass-bottom','color' => 'secondary', 'title' => 'Auction Ended'],
         'cancel'  => ['icon' => 'bi-x-circle-fill',   'color' => 'danger',    'title' => 'Cancelled'],
         'review'  => ['icon' => 'bi-star-fill',       'color' => 'warning',   'title' => 'New Review'],
+        'auction-bought' => ['icon' => 'bi-bag-check-fill', 'color' => 'success', 'title' => 'Item Purchased!'],
         default   => ['icon' => 'bi-bell-fill',       'color' => 'dark',      'title' => 'Notification'],
     };
 
@@ -90,6 +91,11 @@
                             You received a 
                             <strong>{{ $notification->review->rating ?? 5 }}-star</strong> 
                             review on your auction <strong>{{ $auctionTitle }}</strong>.
+                            @break
+                        @case('auction-bought')
+                            @if($isOwner)
+                                Great news! Your auction <a href="{{ $auctionRoute }}" class="fw-bold text-decoration-none text-dark">{{ $auctionTitle }}</a> was purchased instantly via "Buy Now".      
+                            @endif
                             @break
 
                         @default

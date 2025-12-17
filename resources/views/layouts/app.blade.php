@@ -9,6 +9,8 @@
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+        <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
         @auth
             <meta name="user-id" content="{{ Auth::id() }}">
         @endauth
@@ -43,6 +45,9 @@
                                 <a class="nav-link {{ Route::is('auctions.index') ? 'active fw-bold' : '' }}" href="{{ route('auctions.index') }}">Auctions</a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link {{ Route::is('auctions.search') ? 'active fw-bold' : '' }}" href="{{ route('auctions.search') }}">Browse</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link {{ Route::is('about') ? 'active fw-bold' : '' }}" href="{{ route('about') }}"> About us</a>
 
                             <li class="nav-item">
@@ -73,7 +78,7 @@
                                 </li>
 
                                 <li class="nav-item position-relative">
-                                    <a href="{{ route('notifications.index') }}" class="btn btn-light border-0 rounded-circle text-secondary position-relative" title="Notifications">
+                                    <a href="{{ route('notifications.index') }}" class="btn btn-light border-0 rounded-circle text-secondary position-relative" style="overflow: visible;" title="Notifications">
                                         <i class="bi bi-bell-fill fs-5"></i>
                                         
                                         @php
@@ -81,7 +86,7 @@
                                         @endphp
                                         
                                         @if($unreadCount > 0)
-                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light notification-badge-count">
+                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger border border-light notification-badge-count">
                                                 {{ $unreadCount > 99 ? '99+' : $unreadCount }}
                                                 <span class="visually-hidden">unread messages</span>
                                             </span>
@@ -101,7 +106,7 @@
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown">
                                         @if(Auth::user()->url)
-                                            <img src="{{ Auth::user()->getProfileImage() }}" class="rounded-circle object-fit-cover border" width="32" height="32">
+                                            <img src="{{ Auth::user()->getProfileImage() }}" alt="{{ Auth::user()->name }}" class="rounded-circle object-fit-cover border" width="32" height="32">
                                         @else
                                             <div class="rounded-circle bg-secondary-subtle d-flex align-items-center justify-content-center border" style="width: 32px; height: 32px;">
                                                 <i class="bi bi-person-fill text-secondary"></i>
@@ -145,6 +150,20 @@
                 <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
                     <i class="bi bi-check-circle-fill me-2"></i>
                     {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            @if (session('failure'))
+                <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    {{ session('failure') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            @if (session('warning'))
+                <div class="alert alert-warning alert-dismissible fade show shadow-sm" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    {{ session('warning') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
@@ -256,7 +275,7 @@
                             notif.classList.add('slide-out');
                             notif.addEventListener('animationend', () => notif.remove());
                         }
-                    }, 6000);
+                    }, 10000);
                 }
 
                 function appendReceivedMessage(text, timestamp) {

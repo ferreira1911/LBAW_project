@@ -163,9 +163,10 @@
                                 @else
                                     <form action="{{ route('auctions.buyNow', $auction) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to buy this item for €' + {{ $auction->buy_now_price }} + '?');">
                                         @csrf
-                                        <button type="submit" class="btn btn-primary btn-sm" {{ $auction->status !== 'Active' ? 'disabled' : '' }}>
-                                            Buy Now
+                                        <button type="submit" class="btn btn-primary btn-sm" {{ !in_array($auction->status, ['Active', 'Ending']) ? 'disabled' : '' }}>
+                                             Buy Now
                                         </button>
+                                        
                                     </form>
                                 @endif
                             @else
@@ -210,7 +211,7 @@
                             $isHighestBidder = $highestBidRecord && (int)$highestBidRecord->user_id === (int)Auth::id();
                         @endphp
 
-                        @if ($auction->status === 'Active')
+                        @if (in_array($auction->status, ['Active', 'Ending']))
                             
                             @if(Auth::user()->is_admin)
                                 <div class="alert alert-warning border-0 d-flex align-items-center">

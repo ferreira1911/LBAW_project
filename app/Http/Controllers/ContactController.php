@@ -23,9 +23,8 @@ class ContactController extends Controller
             'message' => 'required|string',
         ]);
 
-        // Example: send email (you can also store in DB instead)
         Mail::raw($request->message, function ($mail) use ($request) {
-            $mail->to('support@yourdomain.com') // change to your support email
+            $mail->to('hello@auctionease.com')
                  ->subject($request->subject)
                  ->from($request->email, $request->name);
         });

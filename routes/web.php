@@ -112,6 +112,7 @@ Route::controller(UserController::class)->middleware('auth')->group(function () 
     Route::get('/users/{user}/won', 'loadWon')->name('users.load.won');
     Route::get('/users/{user}/watchlist', 'loadWatchlist')->name('users.load.watchlist');
     Route::get('/users/{user}/messages', 'loadMessages')->name('users.load.messages');
+    Route::get('/users/{user}/active-bids', 'activeBids')->name('users.active-bids');
 });
 
 // Wallet & Transactions
@@ -205,4 +206,5 @@ Route::controller(GoogleController::class)->group(function () {
 Route::controller(ReviewController::class)->middleware('auth')->group(function () {
     Route::get('/auctions/{auction}/review', 'create')->name('reviews.create');
     Route::post('/auctions/{auction}/review', 'store')->name('reviews.store');
+    Route::get('/reviews', 'index')->name('reviews.index');
 });

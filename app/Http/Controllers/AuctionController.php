@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Events\AuctionCancelled;
+use App\Events\AuctionWinner;
+use App\Events\AuctionBought;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Auction;
@@ -18,22 +20,27 @@ class AuctionController extends Controller
 {
 
     public function index(){
-        $featuredAuctions = Auction::where('status','Active')
-                    ->where('is_featured',true)
-                    ->where('featured_until', '>', now())
-                    ->orderBy('end_date','ASC')
-                    ->paginate(9);
+        $featuredAuctions = Auction::whereIn('status', ['Active', 'Ending'])
+            ->where('is_featured', true)
+            ->where('featured_until', '>', now())
+            ->orderBy('end_date', 'ASC')
+            ->paginate(9);
+
 
         $myActiveBids = collect();
         
         if (Auth::check()) {
-            $myActiveBids = Auction::where('status', 'Active')
-                ->whereHas('bids', function($query) {
-                    $query->where('user_id', Auth::id());
-                })
-                ->where('owner_id','!=', Auth::user()->id)
-                ->orderBy('end_date', 'asc')
-                ->get();
+            $myActiveBids = Auction::where(function ($query) {
+                $query->where('status', 'Active')
+                    ->orWhere('status', 'Ending');
+            })
+            ->whereHas('bids', function ($query) {
+                $query->where('user_id', Auth::id());
+            })
+            ->where('owner_id', '!=', Auth::id())
+            ->orderBy('end_date', 'asc')
+            ->get();
+
         }
 
         return view('pages.auction.index', [
@@ -84,7 +91,8 @@ class AuctionController extends Controller
             $validated['is_buy_now_active'] = false;
         }
 
-        $auction->update($validated);
+        try{
+            $auction->update($validated);
 
         if ($request->hasFile('images')) {
             $folderPath = 'images/auction';
@@ -104,9 +112,14 @@ class AuctionController extends Controller
             }
         }
 
-
         return redirect()->route('auctions.show', $auction)
                         ->with('success', 'Auction updated successfully!');
+
+        }catch(QueryException $e){
+            $message = 'An Unexpected error has occured. Please try again later';
+
+            return back()->withInput()->with('failure', $message);
+        }
     }
 
 
@@ -199,7 +212,7 @@ class AuctionController extends Controller
             $maxPrice = $request->input('max_price');
             $sort = $request->input('sort');
 
-            $auctionsQuery = Auction::where('status', 'Active');
+            $auctionsQuery = Auction::whereIn('status', ['Active','Ending']);
 
             if ($query) {
                 $auctionsQuery->whereRaw("tsvectors @@ plainto_tsquery('english', ?)", [$query]);
@@ -250,12 +263,18 @@ class AuctionController extends Controller
     {
         $this->authorize('cancel', $auction);
 
-        $auction->status = 'Cancelled';
-        $auction->save();
+        try {
+            $auction->status = 'Cancelled';
+            $auction->save();
 
-        event(new AuctionCancelled(Auth::user(),$auction));
+            event(new AuctionCancelled(Auth::user(), $auction));
 
-        return redirect()->route('auctions.show', $auction)->with('success', 'The auction has been successfully cancelled.');
+            return redirect()->route('auctions.show', $auction)
+                ->with('success', 'The auction has been successfully cancelled.');
+
+        } catch (\Exception $e) {
+            return back()->with('failure', 'An error occurred while cancelling the auction. Remainder that you cannot cancel an auction with active bids.');
+        }
     }
 
 
@@ -322,52 +341,66 @@ class AuctionController extends Controller
     public function buyNow(Auction $auction)
     {
         $this->authorize('view', $auction);
-
         $buyer = Auth::user();
 
-        // Check if auction is active and buy now is enabled
-        if ($auction->status !== 'Active' || !$auction->is_buy_now_active || !$auction->buy_now_price) {
-            return redirect()->back()->with('error', 'This auction is not available for buy now.');
-        }
+        
 
-        // Check if buyer is the owner
         if ($buyer->id === $auction->owner_id) {
-            return redirect()->back()->with('error', 'You cannot buy your own auction.');
+            return redirect()->back()->with('failure', 'You cannot buy your own auction.');
         }
 
-        // Check if buyer has enough credit
         if ($buyer->credit < $auction->buy_now_price) {
-            return redirect()->back()->with('error', 'Insufficient credit. Please add funds to your wallet.');
+            return redirect()->back()->with('failure', 'Insufficient credit. Please add funds to your wallet.');
         }
 
         try {
             DB::transaction(function () use ($auction, $buyer) {
-                // Create transaction
-                $transaction = Transaction::create([
+                // Lock the auction to prevent race conditions
+                $auction = Auction::lockForUpdate()->findOrFail($auction->id);
+                
+
+                // Refund all bidders (return held_credit to available credit)
+                $auction->bids()->with('user')->get()->each(function ($bid) {
+                    $bid->user->increment('credit', $bid->amount);
+                    $bid->user->decrement('held_credit', $bid->amount);
+                    // Don't delete - just leave them as history
+                });
+
+                // Charge buyer
+                $buyer->decrement('credit', $auction->buy_now_price);
+
+                // Pay seller
+                $seller = $auction->owner;
+                $seller->increment('credit', $auction->buy_now_price);
+
+                // Create transaction FIRST (so trigger sees it and skips)
+                Transaction::create([
                     'amount' => $auction->buy_now_price,
                     'status' => 'Completed',
                     'type' => 'auction-buy',
                     'auction_id' => $auction->id,
                     'buyer_id' => $buyer->id,
-                    'seller_id' => $auction->owner_id,
+                    'seller_id' => $seller->id,
                 ]);
-
-                // Deduct credit from buyer
-                $buyer->decrement('credit', $auction->buy_now_price);
-
-                // Add credit to seller
-                $auction->owner->increment('credit', $auction->buy_now_price);
 
                 // End the auction
                 $auction->status = 'Ended';
+                $auction->current_price = $auction->buy_now_price;
                 $auction->save();
+
+                event(new AuctionBought($seller, $auction));
             });
 
-            return redirect()->route('auctions.show', $auction)->with('success', 'Item purchased successfully!');
+            return redirect()->route('auctions.show', $auction)
+                ->with('success', 'Item purchased successfully!');
+
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'An error occurred during the purchase. Please try again.');
+            \Log::error('BuyNow Error: '.$e->getMessage());
+            return redirect()->back()->with('failure', 'An error occurred during the purchase. Please try again.');
         }
     }
+
+
 
     public function feature(Request $request, Auction $auction)
     {
@@ -380,7 +413,7 @@ class AuctionController extends Controller
                 ->with('success', 'Auction featured successfully! 100€ were deducted from your account.');
 
         } catch (\Exception $e) {
-            return back()->with('error', $e->getMessage());
+            return back()->with('failure', "Failure in making the auction featured");
         }
     }
 }
