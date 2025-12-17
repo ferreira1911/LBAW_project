@@ -126,4 +126,48 @@ class User extends Authenticatable
     {
         return $this->hasMany(Notification::class, 'user_id');
     }
+
+    /**
+     * Checks if the user is currently the highest bidder on any Active/Ending auction.
+     * Returns true if they are winning something.
+     */
+    public function isWinningAnyAuction(): bool
+    {
+        $activeAuctions = Auction::whereIn('status', ['Active', 'Ending'])
+            ->whereHas('bids', function($q) {
+                $q->where('user_id', $this->id);
+            })
+            ->with('highestBid')
+            ->get();
+
+        foreach ($activeAuctions as $auction) {
+            if ($auction->highestBid && $auction->highestBid->user_id === $this->id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Validates if the account can be safely deleted.
+     * Returns an error string if blocked, or NULL if safe.
+     */
+    public function canBeDeleted(): ?string
+    {
+        if ($this->credit > 0) {
+            return 'You still have funds in your wallet. Please withdraw them before deleting your account.';
+        }
+
+        if ($this->isWinningAnyAuction()) {
+            return 'You are currently the highest bidder on active auctions. You cannot delete your account until these auctions end.';
+        }
+
+        $hasActiveAuctions = $this->auctions()->whereIn('status', ['Active', 'Ending'])->exists();
+        if ($hasActiveAuctions) {
+             return 'You have active auctions running. Please cancel them or wait for them to end.';
+        }
+
+        return null;
+    }
 }

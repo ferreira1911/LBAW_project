@@ -137,8 +137,8 @@ $statusIcon = match($report->status->name) {
                             @endif
 
                             {{-- Action Buttons (Only show if is In Review) --}}
-                            @if(in_array($report->status->name, ['InReview']))
-                                @can('resolve', $report)
+                            @can('resolve', $report)
+                                @if(in_array($report->status->name, ['InReview']))
                                     <div class="mb-3">
                                         @if($report->auction)
                                             @if($report->auction->status !== 'Cancelled' && $report->auction->status !== 'Ended') 
@@ -192,12 +192,12 @@ $statusIcon = match($report->status->name) {
                                             </button>
                                         </form>
                                     </div>
-                                @endcan
-                            @else
-                                <div class="text-center mt-3 text-muted fst-italic">
-                                    This report is resolved. No further actions available.
-                                </div>
-                            @endif
+                                    @else
+                                    <div class="text-center mt-3 text-muted fst-italic">
+                                        This report is resolved. No further actions available.
+                                    </div>
+                                @endif  
+                            @endcan
                         </div>
 
                     </div>
