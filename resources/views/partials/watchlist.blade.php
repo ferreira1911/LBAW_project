@@ -76,8 +76,8 @@
                     </div>
 
                     <div class="ms-3 d-flex flex-column justify-content-center" style="min-width: 120px;">
-                        <a href="{{ route('auctions.show', $auction) }}" class="btn btn-outline-primary w-100">
-                            View
+                        <a href="{{ route('auctions.show', $auction) }}" class="btn btn-outline-primary w-100 mb-2">
+                            <i class="bi bi-eye me-1"></i>View Details
                         </a>
                     </div>
 

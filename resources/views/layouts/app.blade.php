@@ -78,7 +78,7 @@
                                 </li>
 
                                 <li class="nav-item position-relative">
-                                    <a href="{{ route('notifications.index') }}" class="btn btn-light border-0 rounded-circle text-secondary position-relative" title="Notifications">
+                                    <a href="{{ route('notifications.index') }}" class="btn btn-light border-0 rounded-circle text-secondary position-relative" style="overflow: visible;" title="Notifications">
                                         <i class="bi bi-bell-fill fs-5"></i>
                                         
                                         @php
@@ -86,7 +86,7 @@
                                         @endphp
                                         
                                         @if($unreadCount > 0)
-                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light notification-badge-count">
+                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger border border-light notification-badge-count">
                                                 {{ $unreadCount > 99 ? '99+' : $unreadCount }}
                                                 <span class="visually-hidden">unread messages</span>
                                             </span>
