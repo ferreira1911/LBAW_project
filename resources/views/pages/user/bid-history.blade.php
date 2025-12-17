@@ -20,7 +20,7 @@
             @foreach($groupedBids as $auctionId => $auctionBids)
                 @php
                     $auction = $auctionBids->first()->auction;
-                    $isActive = $auction->status === 'Active';
+                    $isActive = in_array($auction->status, ['Active', 'Ending']);
                     $highestBid = $auctionBids->sortByDesc('amount')->first();
                     $isWinning = $highestBid->amount == $auction->current_price && $isActive;
                 @endphp

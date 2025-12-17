@@ -224,4 +224,22 @@ class UserController extends Controller
 
     return view('partials.messages', compact('conversations'));
 }
+
+    public function activeBids(User $user)
+    {
+        $myActiveBids = Auction::whereIn('id', function($query) use ($user) {
+            $query->select('auction_id')
+                ->from('bid')
+                ->where('user_id', $user->id);
+        })
+        ->where(function($query) {
+            $query->where('status', 'Active')
+                ->orWhere('status', 'Ending'); 
+        })
+        ->orderBy('end_date', 'asc')
+        ->get();
+
+        return view('partials.active-bids', compact('myActiveBids'));
+    }
+
 }

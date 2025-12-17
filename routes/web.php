@@ -174,6 +174,8 @@ Route::get('/users/{user}/auctions', [UserController::class, 'loadAuctions'])->n
 Route::get('/users/{user}/watchlist', [UserController::class, 'loadWatchlist'])->name('users.load.watchlist');
 Route::get('/users/{user}/won', [UserController::class, 'loadWon'])->name('users.load.won');
 Route::get('/users/{user}/messages', [UserController::class, 'loadMessages'])->name('users.load.messages');
+Route::get('/users/{user}/active-bids', [UserController::class, 'activeBids'])->name('users.active-bids');
+
 
 // Reviews
 Route::controller(ReviewController::class)->middleware('auth')->group(function () {

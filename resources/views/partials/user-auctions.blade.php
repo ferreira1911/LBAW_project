@@ -24,8 +24,15 @@
                             
                             <div class="small text-muted mb-2 mt-2">
                                 Status: 
-                                <span class="fw-bold {{ $auction->status === 'Active' ? 'text-success' : 'text-secondary' }}">
-                                    {{ $auction->status }}
+                                @php
+                                    $statusClass = match($auction->status) {
+                                        'Active' => 'text-success',
+                                        'Ending' => 'text-danger', 
+                                        default => 'text-secondary',
+                                    };
+                                @endphp
+                                <span class="fw-bold {{ $statusClass }}">
+                                    {{ $auction->status === 'Ending' ? 'Ending Soon' : $auction->status }}
                                 </span>
                             </div>
                             

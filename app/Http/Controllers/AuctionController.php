@@ -20,22 +20,27 @@ class AuctionController extends Controller
 {
 
     public function index(){
-        $featuredAuctions = Auction::where('status','Active')
-                    ->where('is_featured',true)
-                    ->where('featured_until', '>', now())
-                    ->orderBy('end_date','ASC')
-                    ->paginate(9);
+        $featuredAuctions = Auction::whereIn('status', ['Active', 'Ending'])
+            ->where('is_featured', true)
+            ->where('featured_until', '>', now())
+            ->orderBy('end_date', 'ASC')
+            ->paginate(9);
+
 
         $myActiveBids = collect();
         
         if (Auth::check()) {
-            $myActiveBids = Auction::where('status', 'Active')
-                ->whereHas('bids', function($query) {
-                    $query->where('user_id', Auth::id());
-                })
-                ->where('owner_id','!=', Auth::user()->id)
-                ->orderBy('end_date', 'asc')
-                ->get();
+            $myActiveBids = Auction::where(function ($query) {
+                $query->where('status', 'Active')
+                    ->orWhere('status', 'Ending');
+            })
+            ->whereHas('bids', function ($query) {
+                $query->where('user_id', Auth::id());
+            })
+            ->where('owner_id', '!=', Auth::id())
+            ->orderBy('end_date', 'asc')
+            ->get();
+
         }
 
         return view('pages.auction.index', [

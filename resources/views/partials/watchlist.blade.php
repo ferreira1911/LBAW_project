@@ -44,7 +44,7 @@
 
                     <div class="d-flex justify-content-between align-items-end border-top pt-3 mt-auto">
                         <div>
-                            <small class="text-muted fw-bold" style="font-size: 0.7rem;">CURRENT BID</small>
+                            <small class="text-muted fw-bold" style="font-size: 0.7rem;">CURRENT PRICE</small>
                             <div class="fs-5 fw-bold text-primary">
                                 €{{ number_format($auction->current_price, 2) }}
                             </div>
