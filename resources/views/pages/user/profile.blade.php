@@ -134,12 +134,15 @@
         <div class="col-md-8">
 
             @if(Auth::check() && Auth::id() === $user->id)
-                {{-- AJAX TABS (Only for own profile) --}}
+                {{-- TABS --}}
                 <div class="card shadow-sm border-0">
                     <div class="card-header bg-white border-bottom">
                         <ul class="nav nav-tabs card-header-tabs" id="profileTabs" data-user-id="{{ $user->id }}">
                             <li class="nav-item">
                                 <button class="nav-link active" data-target="auctions">My Auctions</button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" data-target="active-bids">My Active Bids</button>
                             </li>
                             <li class="nav-item">
                                 <button class="nav-link" data-target="watchlist">Watchlist</button>
@@ -163,7 +166,7 @@
                 </div>
 
             @else
-                {{-- STATIC AUCTION LIST (For viewing other users) --}}
+                {{-- STATIC AUCTION LIST (when viewing other users) --}}
                 @if(!$user->is_admin)
                     <div class="card shadow-sm border-0">
                         <div class="card-header bg-white py-3 border-bottom">

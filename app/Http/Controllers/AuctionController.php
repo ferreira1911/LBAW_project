@@ -32,7 +32,7 @@ class AuctionController extends Controller
         if (Auth::check()) {
             $myActiveBids = Auction::where(function ($query) {
                 $query->where('status', 'Active')
-                    ->orWhere('end_date', '>', now());
+                    ->orWhere('status', 'Ending');
             })
             ->whereHas('bids', function ($query) {
                 $query->where('user_id', Auth::id());
