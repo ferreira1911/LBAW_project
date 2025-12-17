@@ -63,12 +63,15 @@ class TransactionController extends Controller
         $user = Auth::user();
         $amount = $request->amount;
 
-        // CASHIER: Generates a Stripe Checkout Session for a one-off charge.
-        // We multiply by 100 because Stripe expects cents (EUR).
-        return $user->checkoutCharge($amount * 100, 'Wallet Deposit', 1, [
-            'success_url' => route('credit.success') . '?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => route('credit.cancel'),
-        ]);
+        try {
+            // Create a Stripe Checkout Session
+            return $user->checkoutCharge($amount * 100, 'Wallet Deposit', 1, [
+                'success_url' => route('credit.success') . '?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => route('credit.cancel'),
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('failure', 'Unable to connect to payment provider. Please try again later.');
+        }  
     }
 
     /**
@@ -99,7 +102,7 @@ class TransactionController extends Controller
                 $exists = Transaction::where('payment_reference', $sessionId)->exists();
 
                 if (!$exists) {
-                    // 1. Create the Transaction record
+                    
                     Transaction::create([
                         'amount' => $amount,
                         'status' => 'Completed',
@@ -108,7 +111,6 @@ class TransactionController extends Controller
                         'payment_reference' => $sessionId // Store Stripe ID for auditing
                     ]);
 
-                    // 2. Add credit to user wallet
                     $user->increment('credit', $amount);
                 }
             });
