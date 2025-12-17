@@ -37,7 +37,7 @@ class AuctionPolicy
 
     public function cancel(User $user, Auction $auction): bool
     {
-        return ($user->is_admin || $user->id === $auction->owner_id) && in_array($auction->status, ['Active', 'Pending']) && !$auction->bids()->exists();
+        return ($user->is_admin || $user->id === $auction->owner_id) && in_array($auction->status, ['Active', 'Pending', 'Ending']) && !$auction->bids()->exists();
     }
 
     public function viewDashboard(User $user){
@@ -46,6 +46,6 @@ class AuctionPolicy
 
     public function feature(User $user, Auction $auction): bool
     {
-        return $user->id === $auction->owner_id && in_array($auction->status, ['Pending', 'Active']);
+        return $user->id === $auction->owner_id && in_array($auction->status, ['Pending', 'Active', 'Ending']);
     }
 }

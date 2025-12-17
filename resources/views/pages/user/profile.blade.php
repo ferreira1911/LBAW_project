@@ -199,8 +199,15 @@
                                                     </h6>
                                                     <div class="small text-muted">
                                                         Status: 
-                                                        <span class="fw-bold {{ $auction->status === 'Active' ? 'text-success' : 'text-secondary' }}">
-                                                            {{ $auction->status }}
+                                                        @php
+                                                            $statusClass = match($auction->status) {
+                                                                'Active' => 'text-success',
+                                                                'Ending' => 'text-danger', 
+                                                                default => 'text-secondary',
+                                                            };
+                                                        @endphp
+                                                        <span class="fw-bold {{ $statusClass }}">
+                                                            {{ $auction->status === 'Ending' ? 'Ending Soon' : $auction->status }}
                                                         </span>
                                                         • Current Price: €{{ number_format($auction->current_price, 2) }}
                                                     </div>

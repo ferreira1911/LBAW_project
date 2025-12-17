@@ -54,8 +54,9 @@ class User extends Authenticatable
 
     public function auctionsCreated(): HasMany
     {
-        return $this->hasMany(Auction::class, 'owner_id')->where('status', 'Active');
+        return $this->hasMany(Auction::class, 'owner_id');
     }
+
 
     public function getAverageRating(): float
     {
