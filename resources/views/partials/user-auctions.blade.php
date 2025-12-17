@@ -3,7 +3,7 @@
         <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-3">
             <div class="card-body p-4">
                 <div class="d-flex justify-content-between align-items-start">
-                    <a href="{{ route('auctions.show', $auction) }}" class="d-flex align-items-center flex-grow-1 text-decoration-none">
+                    <div class="d-flex align-items-center flex-grow-1">
                         <div class="rounded bg-light me-3 d-flex align-items-center justify-content-center text-secondary" 
                              style="width: 80px; height: 80px; min-width: 80px;">
                             @if(isset($auction->images) && $auction->images->count() > 0)
@@ -22,7 +22,7 @@
                                 @endif
                             </h5>
                             
-                            <div class="small text-muted mb-2 mt-2">
+                            <div class="small text-muted mb-2">
                                 Status: 
                                 @php
                                     $statusClass = match($auction->status) {
@@ -53,16 +53,20 @@
                                 </div>
                             </div>
                         </div>
-                    </a>
-                    
-                    {{-- Edit button (only for own auctions) --}}
-                    @if(Auth::check() && Auth::id() === $auction->owner_id)
-                        <div class="ms-3">
-                            <a href="{{ route('auctions.edit', $auction) }}" class="btn btn-outline-secondary">
+                    </div>
+
+                    <div class="ms-3 d-flex flex-column" style="min-width: 140px;">
+                        <a href="{{ route('auctions.show', $auction) }}" class="btn btn-outline-primary w-100 mb-2">
+                            <i class="bi bi-eye me-1"></i>View Details
+                        </a>
+
+                        @if(Auth::check() && Auth::id() === $auction->owner_id)
+                            <a href="{{ route('auctions.edit', $auction) }}" class="btn btn-outline-secondary w-100">
                                 <i class="bi bi-pencil me-1"></i>Edit
                             </a>
-                        </div>
-                    @endif
+                        @endif
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -74,7 +78,9 @@
             {{ $auctions->links('pagination::bootstrap-5') }}
         </div>
     @endif
+
 @else
+    {{-- Empty State (Consistent Style) --}}
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
         <div class="card-body text-center py-5">
             <i class="bi bi-inbox display-4 opacity-25 mb-3 d-block"></i>
