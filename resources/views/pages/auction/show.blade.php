@@ -307,24 +307,39 @@
                 <div class="card-body p-0">
                     @if ($bids->isNotEmpty())
                         <ul class="list-group list-group-flush">
+                            @if($buyNow)
+                                <li class="list-group-item d-flex justify-content-between align-items-center px-4 py-3 bg-success-subtle">
+                                    <div>
+                                        <span class="fw-bold text-dark">
+                                            {{ $buyNow->buyer->name }}
+                                        </span>
+                                        <div class="text-muted small" style="font-size: 0.75rem;">
+                                            {{ $buyNow->date?->format('M d, H:i') }}
+                                        </div>
+                                        <span class="badge bg-success mt-1">Buy Now</span>
+                                    </div>
+                                    <span class="fw-bold text-success">
+                                        €{{ number_format($buyNow->amount, 2) }}
+                                    </span>
+                                </li>
+                            @endif
                             @foreach ($bids as $bid)
-                                <li class="list-group-item d-flex justify-content-between align-items-center px-4 py-3 {{ ($bids->currentPage() == 1 && $loop->first) ? 'bg-success-subtle' : '' }}">
-                                    <div class="d-flex align-items-center">
-                                        @if($bids->currentPage() == 1 && $loop->first)
-                                            <span class="badge bg-success me-2" title="Current Winner"><i class="bi bi-trophy-fill"></i></span>
-                                        @endif
-                                        <div>
-                                            <span class="fw-bold text-dark">
-                                                {{ $bid->user->name }}
-                                            </span>
-                                            <div class="text-muted small" style="font-size: 0.75rem;">{{ $bid->date->format('M d, H:i') }}</div>
+                                <li class="list-group-item d-flex justify-content-between align-items-center px-4 py-3 {{ (!$buyNow && $bids->currentPage() == 1 && $loop->first) ? 'bg-success bg-opacity-10' : '' }}">
+                                    <div>
+                                        <span class="fw-bold text-dark">
+                                            {{ $bid->user->name }}
+                                        </span>
+                                        <div class="text-muted small" style="font-size: 0.75rem;">
+                                            {{ $bid->date->format('M d, H:i') }}
                                         </div>
                                     </div>
-                                    <span class="fw-bold {{ ($bids->currentPage() == 1 && $loop->first) ? 'text-success' : 'text-dark' }}">
+                                    <span class="fw-bold
+                                        {{ (!$buyNow && $bids->currentPage() == 1 && $loop->first) ? 'text-success' : 'text-dark' }}">
                                         €{{ number_format($bid->amount, 2) }}
                                     </span>
                                 </li>
                             @endforeach
+
                         </ul>
 
                         @if($bids->hasPages())
