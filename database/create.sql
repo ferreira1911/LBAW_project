@@ -254,8 +254,8 @@ CREATE FUNCTION user_search_update() RETURNS TRIGGER AS $$
 BEGIN
  IF TG_OP = 'INSERT' THEN
         NEW.tsvectors = (
-         setweight(to_tsvector('english', NEW.name), 'A') ||
-         setweight(to_tsvector('english', NEW.description), 'B')
+         setweight(to_tsvector('english', COALESCE(NEW.name, '')), 'A') ||
+         setweight(to_tsvector('english', COALESCE(NEW.description, '')), 'B')
         );
  END IF;
  IF TG_OP = 'UPDATE' THEN

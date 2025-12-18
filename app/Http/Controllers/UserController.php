@@ -223,13 +223,21 @@ class UserController extends Controller
 
    public function loadMessages(User $user)
 {
-    $conversations = Message::where('sender_id', $user->id)
-                            ->orWhere('receiver_id', $user->id)
-                            ->orderBy('sent_date', 'desc')
-                            ->get();
+
+    $conversations = Message::select('message.*')
+        ->whereIn('id', function ($query) use ($user) {
+            $query->selectRaw('MAX(id)')
+                ->from('message')
+                ->where('sender_id', $user->id)
+                ->orWhere('receiver_id', $user->id)
+                ->groupByRaw('LEAST(sender_id, receiver_id), GREATEST(sender_id, receiver_id)');
+        })
+        ->with(['sender', 'receiver'])
+        ->orderBy('sent_date', 'desc')
+        ->paginate(10);
 
     return view('partials.messages', compact('conversations'));
-}
+}   
 
     public function activeBids(User $user)
     {
