@@ -61,10 +61,17 @@ class AuctionController extends Controller
             ->orderBy('date', 'DESC')
             ->paginate(5);
 
+        $buyNow = Transaction::where('auction_id', $auction->id)
+            ->where('type', 'auction-buy')
+            ->where('status', 'Completed')
+            ->with('buyer')
+            ->first();
+
         return view('pages.auction.show', [
             'auction' => $auction,
             'bids' => $bids,
-            'highestBid' => $highestBid
+            'highestBid' => $highestBid,
+            'buyNow' => $buyNow,
         ]);
     }
 
