@@ -28,7 +28,15 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return $user->isAdmin() || $user->id === $model->id;
+        if ($user->id === $model->id) {
+            return true;
+        }
+
+        if ($model->isAdmin()) {
+            return false;
+        }
+
+        return $user->isAdmin();
     }
 
     /**
@@ -36,7 +44,15 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        return $user->isAdmin() || $user->id === $model->id;
+        if ($user->id === $model->id) {
+            return true;
+        }
+
+        if ($model->isAdmin()) {
+            return false;
+        }
+
+        return $user->isAdmin();
     }
 
     public function viewBalance(User $currentUser, User $userToView): bool
@@ -65,6 +81,24 @@ class UserPolicy
     public function unblock(User $currentUser, User $targetUser): bool
     {
         return $currentUser->isAdmin();
+    }
+
+    public function message(User $currentUser, User $targetUser): bool
+    {
+        if ($currentUser->isAdmin()) {
+            return false;
+        }
+
+        if ($currentUser->id === $targetUser->id) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function viewPersonalData(User $currentUser, User $targetUser): bool
+    {
+        return $currentUser->id === $targetUser->id && !$currentUser->isAdmin();
     }
 
 }
