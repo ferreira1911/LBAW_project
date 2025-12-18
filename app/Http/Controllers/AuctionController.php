@@ -360,11 +360,14 @@ class AuctionController extends Controller
                 
 
                 // Refund all bidders (return held_credit to available credit)
-                $auction->bids()->with('user')->get()->each(function ($bid) {
-                    $bid->user->increment('credit', $bid->amount);
-                    $bid->user->decrement('held_credit', $bid->amount);
-                    // Don't delete - just leave them as history
-                });
+                $highestBid = $auction->highestBid;
+                if ($highestBid && $highestBid->user_id !== $buyer->id) {
+                    $highestBid->user->increment('credit', $highestBid->amount);
+                    $highestBid->user->decrement('held_credit', $highestBid->amount);
+                } else if ($highestBid && $highestBid->user_id === $buyer->id) {
+                    $highestBid->user->increment('credit', $highestBid->amount);
+                    $highestBid->user->decrement('held_credit', $highestBid->amount);
+                }
 
                 // Charge buyer
                 $buyer->decrement('credit', $auction->buy_now_price);
@@ -385,7 +388,7 @@ class AuctionController extends Controller
 
                 // End the auction
                 $auction->status = 'Ended';
-                $auction->current_price = $auction->buy_now_price;
+                
                 $auction->save();
 
                 event(new AuctionBought($seller, $auction));

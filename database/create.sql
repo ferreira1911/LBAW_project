@@ -68,7 +68,7 @@ CREATE TABLE auction (
     category_id INTEGER REFERENCES category(id),
     is_featured BOOLEAN DEFAULT FALSE,
     featured_until TIMESTAMP,
-    buy_now_price NUMERIC(12,2) CHECK (buy_now_price > 0),
+    buy_now_price NUMERIC(12,2) CHECK (buy_now_price >= starting_price),
     address TEXT,
     latitude TEXT,
     longitude TEXT,

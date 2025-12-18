@@ -7,7 +7,7 @@
                 <a href="{{ route('users.index') }}" 
                    class="nav-link py-3 px-1 fw-bold d-flex align-items-center border-0 border-bottom border-3 
                    {{ request()->routeIs('users.*') ? 'border-transparent text-primary' : 'border-transparent text-secondary hover-text-primary' }}"
-                   style="margin-bottom: -1px; transition: all 0.2s ease;border: transparent !important;">
+                   style="margin-bottom: -1px; transition: all 0.2s ease;border: transparent !important;background: transparent !important;">
                     <i class="bi bi-people-fill me-2 fs-5"></i>
                     User Management
                 </a>
@@ -16,7 +16,7 @@
                 <a href="{{ route('auctions.admin') }}" 
                    class="nav-link py-3 px-1 fw-bold d-flex align-items-center border-0 border-bottom border-3 
                    {{ request()->routeIs('auctions.admin') ? 'border-transparent text-primary' : 'border-transparent text-secondary hover-text-primary' }}"
-                   style="margin-bottom: -1px; transition: all 0.2s ease;border: transparent !important;">
+                   style="margin-bottom: -1px; transition: all 0.2s ease;border: transparent !important;background: transparent !important;">
                     <i class="bi bi-hammer me-2 fs-5"></i>
                     Auction Management
                 </a>
@@ -25,7 +25,7 @@
                 <div class="dropdown">
                     <a href="#" 
                     class="nav-link dropdown-toggle py-3 px-1 fw-bold d-flex align-items-center border-0 border-bottom border-3 
-                    {{ (request()->routeIs('reports.admin') || request()->routeIs('admin.myReports')) ? 'border-transparent text-primary' : 'border-transparent text-secondary hover-text-primary' }}" id="reportsDropdown" role="button"  data-bs-toggle="dropdown"  aria-expanded="false" style="margin-bottom: -1px; transition: all 0.2s ease;border: transparent !important;">
+                    {{ (request()->routeIs('reports.admin') || request()->routeIs('admin.myReports')) ? 'border-transparent text-primary' : 'border-transparent text-secondary hover-text-primary' }}" id="reportsDropdown" role="button"  data-bs-toggle="dropdown"  aria-expanded="false" style="margin-bottom: -1px; transition: all 0.2s ease;border: transparent !important;background: transparent !important;">
                         
                         <i class="bi bi-file-earmark-bar-graph me-2 fs-5"></i>
                         Reports Management
@@ -52,7 +52,7 @@
                 <a href="{{ route('categories.create') }}" 
                    class="nav-link py-3 px-1 fw-bold d-flex align-items-center border-0 border-bottom border-3 
                    {{ request()->routeIs('categories.create') || request()->routeIs('category.*') ? 'border-transparent text-primary' : 'border-transparent text-secondary hover-text-primary' }}"
-                   style="margin-bottom: -1px; transition: all 0.2s ease;border: transparent !important;">
+                   style="margin-bottom: -1px; transition: all 0.2s ease;border: transparent !important;background: transparent !important;">
                     <i class="bi bi-tags-fill me-2 fs-5"></i>
                     Category Management
                 </a>
