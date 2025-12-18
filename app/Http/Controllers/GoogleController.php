@@ -33,6 +33,12 @@ class GoogleController extends Controller
                 FileController::saveProfileImageFromUrl($user->id, $google_user->getAvatar());
             }
 
+            if ($user->isBlocked()) {
+                return redirect()->route('login')->withErrors([
+                    'email' => 'Your Account has been Blocked. Please contact Support.',
+                ]);
+            }
+
             Auth::login($user);
 
             return redirect()->route('home');
