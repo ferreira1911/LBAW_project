@@ -131,74 +131,88 @@ class AuctionController extends Controller
 
 
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $this->authorize('create', Auction::class);
 
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'start_date' => 'required|date',
+            'start_date' => 'required|date|after_or_equal:now',
             'end_date' => 'required|date|after:start_date',
             'starting_price' => 'required|numeric|min:0',
             'category_id' => 'required|exists:category,id',
             'buy_now_price' => 'nullable|numeric|min:0',
-            'images.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // multiple images
+            'images.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
             'should_feature' => 'nullable|boolean',
             'address' => 'nullable|string|max:255',
             'latitude' => 'nullable|numeric|between:-90,90',
             'longitude' => 'nullable|numeric|between:-180,180',
         ]);
 
-        // If buy_now_price is provided, enable is_buy_now_active
-        $isBuyNowActive = $request->filled('buy_now_price') && (float)$request->buy_now_price > 0;
+        try {
+            $auction = DB::transaction(function () use ($request) {
+                
+                $isBuyNowActive = $request->filled('buy_now_price') && (float)$request->buy_now_price > 0;
 
-        $auction = Auction::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'starting_price' => $request->starting_price,
-            'current_price' => $request->starting_price,
-            'owner_id' => auth()->id(),
-            'category_id' => $request->category_id,
-            'buy_now_price' => $request->buy_now_price,
-            'is_buy_now_active' => $isBuyNowActive,
-            'is_featured' => false,
-            'address' => $request->address,
-            'latitude' => $request->latitude,
-            'longitude' => $request->longitude,
-        ]);
-
-        if ($request->hasFile('images')) {
-            $folderPath = 'images/auction';
-            foreach ($request->file('images') as $index => $file) {
-                $fileName = $file->hashName();
-                $file->storeAs($folderPath, $fileName, FileController::$diskName);
-
-                AuctionImage::create([
-                    'auction_id' => $auction->id,
-                    'path' => $fileName,
+                $auction = Auction::create([
+                    'title' => $request->title,
+                    'description' => $request->description,
+                    'start_date' => $request->start_date,
+                    'end_date' => $request->end_date,
+                    'starting_price' => $request->starting_price,
+                    'current_price' => $request->starting_price,
+                    'owner_id' => auth()->id(),
+                    'category_id' => $request->category_id,
+                    'buy_now_price' => $request->buy_now_price,
+                    'is_buy_now_active' => $isBuyNowActive,
+                    'is_featured' => false,
+                    'address' => $request->address,
+                    'latitude' => $request->latitude,
+                    'longitude' => $request->longitude,
                 ]);
 
-                if ($index === 0) {
-                    $auction->picture = $fileName;
-                    $auction->save();
+                if ($request->hasFile('images')) {
+                    $folderPath = 'images/auction';
+                    
+                    foreach ($request->file('images') as $index => $file) {
+                        $fileName = $file->hashName();
+                        
+                        $file->storeAs($folderPath, $fileName, FileController::$diskName);
+
+                        AuctionImage::create([
+                            'auction_id' => $auction->id,
+                            'path' => $fileName,
+                        ]);
+
+                        if ($index === 0) {
+                            $auction->picture = $fileName;
+                            $auction->save();
+                        }
+                    }
+                }
+
+                return $auction;
+            });
+
+            if ($request->boolean('should_feature')) {
+                try {
+                    $auction->feature($request->user());
+                } catch (\Exception $e) {
+                    return redirect()->route('auctions.show', $auction)
+                        ->with('warning', 'Auction created, but featuring failed. Check your wallet balance.');
                 }
             }
+
+            return redirect()->route('auctions.show', $auction)
+                ->with('success', 'Auction created successfully!');
+
+        } catch (\Exception $e) {
+            \Log::error('Auction Creation Error: ' . $e->getMessage());
+
+            return back()->withInput()
+                ->with('failure', 'An unexpected error occurred while creating the auction. Please try again later.');
         }
-
-        if ($request->boolean('should_feature')) {
-             try {
-                 $auction->feature($request->user());
-             } catch (\Exception $e) {
-                 return redirect()->route('auctions.show', $auction)
-                     ->with('warning', 'Auction created, but featuring failed: ' . $e->getMessage());
-             }
-        }
-
-
-        return redirect()->route('auctions.show', $auction)
-                        ->with('success', 'Auction created successfully!');
     }
 
 
@@ -312,7 +326,7 @@ class AuctionController extends Controller
 
 
     public function administration(Request $request) {
-        //$this->authorize('viewDashboard', $request->user());
+        $this->authorize('viewDashboard',Auction::class);
 
         $query = Auction::with(['owner', 'category'])->withCount('bids');
 
@@ -372,8 +386,8 @@ class AuctionController extends Controller
                     $highestBid->user->increment('credit', $highestBid->amount);
                     $highestBid->user->decrement('held_credit', $highestBid->amount);
                 } else if ($highestBid && $highestBid->user_id === $buyer->id) {
-                    $highestBid->user->increment('credit', $highestBid->amount);
-                    $highestBid->user->decrement('held_credit', $highestBid->amount);
+                    Auth::user()->increment('credit', $highestBid->amount);
+                    Auth::user()->decrement('held_credit', $highestBid->amount);
                 }
 
                 // Charge buyer

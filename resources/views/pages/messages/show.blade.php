@@ -23,7 +23,9 @@
                                 </div>
                             @endif
                             <div>
-                                <h6 class="fw-bold mb-0">{{ $receiver->name }}</h6>
+                                <a href="{{ route('users.show', $receiver) }}" class="text-decoration-none text-dark">
+                                    <h6 class="fw-bold mb-0 hover-text-primary">{{ $receiver->name }}</h6>
+                                </a>
                                 <small class="text-muted">Online</small>
                             </div>
                         </div>

@@ -82,7 +82,7 @@ class FileController extends Controller
         ]);
 
         if (!self::isValidType($request->type)) {
-            return redirect()->back()->with('error', 'Error: Unsupported upload type');
+            return redirect()->back()->with('failure', 'Error: Unsupported upload type');
         }
 
         $file = $request->file('file');
@@ -116,11 +116,11 @@ class FileController extends Controller
                 }
                 break;
             default:
-                return redirect()->back()->with('error', 'Error: Unsupported upload object');
+                return redirect()->back()->with('failure', 'Error: Unsupported upload object');
         }
 
         if ($error) {
-            return redirect()->back()->with('error', "Error: {$error}");
+            return redirect()->back()->with('failure', "Error: {$error}");
         }
 
         $folderPath = 'images/' . $type;
