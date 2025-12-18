@@ -4,14 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Auction;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+
 
 class FileController extends Controller
 {   
 
     static $default = 'default.png';
-    static $diskName = 'Tutorial02';
+    static $diskName = 'public';
 
     static $systemTypes = [
         'profile' => ['png', 'jpg', 'jpeg', 'gif'],
@@ -52,7 +54,7 @@ class FileController extends Controller
 
     // --- Public Method ---
 
-    static function get(String $type, int $userId) {
+    public static function get(String $type, int $userId) {
 
         // Validation: upload type
         if (!self::isValidType($type)) {
@@ -71,11 +73,14 @@ class FileController extends Controller
     }
 
 
-    function upload(Request $request) {
+    public function upload(Request $request) {
 
-        if (!$request->hasFile('file')) {
-            return redirect()->back()->with('error', 'Error: File not found');
-        }
+        $request->validate([
+            'file' => 'required|file|mimes:jpeg,png,jpg,gif|max:2048', // Máx 2MB
+            'type' => 'required|string',
+            'id'   => 'required|integer'
+        ]);
+
         if (!self::isValidType($request->type)) {
             return redirect()->back()->with('error', 'Error: Unsupported upload type');
         }
@@ -91,7 +96,7 @@ class FileController extends Controller
         $error = null;
         switch($request->type) {
             case 'profile':
-                $user = User::findOrFail($id);
+                $user = User::find($id);
                 if ($user) {
                     $user->url = $fileName;
                     $user->save();
@@ -102,7 +107,7 @@ class FileController extends Controller
             case 'post':
                 break;
             case 'auction':
-                $auction = \App\Models\Auction::findOrFail($id);
+                $auction = Auction::find($id);
                 if ($auction) {
                     $auction->picture = $fileName;
                     $auction->save();

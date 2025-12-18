@@ -107,12 +107,18 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $this->authorize('delete', $user);
+
+        $error = $user->canBeDeleted();
+
+        if ($error) {
+            return back()->with('failure', "Action Failed: $error");
+        }
         
         $user->deleteUser();
 
-        if (auth()->user()->id === $user->id) {
-            // Log out the user if they are deleting their own profile
-            auth()->logout();
+        if (Auth::id() === $user->id) {
+            Auth::logout();
+            return redirect()->route('home')->with('success', 'Your account has been deleted.');
         }
 
         return back()->with('success', 'User profile deleted successfully.');
