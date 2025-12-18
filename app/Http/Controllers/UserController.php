@@ -33,8 +33,13 @@ class UserController extends Controller
     public function show(User $user)
     {
         $canViewBalance = false;
-        if (Auth::check() && (Auth::id() === $user->id || Auth::user()->is_admin)) {
-            $canViewBalance = true;
+        if (Auth::check()) {
+            $isSelf = Auth::id() === $user->id;
+            $isAdminViewingNonAdmin = Auth::user()->is_admin && !$user->is_admin;
+
+            if ($isSelf || $isAdminViewingNonAdmin) {
+                $canViewBalance = true;
+            }
         }
 
         if (!$user->is_deleted) {

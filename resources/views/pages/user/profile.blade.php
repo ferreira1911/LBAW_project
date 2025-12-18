@@ -100,7 +100,7 @@
                             <i class="bi bi-pencil-square me-2"></i>Edit Profile
                         </a>
 
-                        @if (Auth::id() === $user->id)
+                        @can('viewPersonalData', $user)
                             <a href="{{ route('transactions.index') }}" class="btn btn-outline-secondary">
                                 <i class="bi bi-receipt me-2"></i>Transaction History
                             </a>
@@ -120,6 +120,12 @@
                     </div>
                 @endcan
 
+                @can('message', $user)
+                    <a href="{{ route('messages.show', $user->id) }}" class="btn btn-outline-primary w-100 mt-3 fw-bold">
+                        <i class="bi bi-chat-dots me-2"></i>Chat with User
+                    </a>
+                @endcan
+
                 {{-- REPORT USER (Only for other users) --}}
                 @can('create', [App\Models\Report::class, $user])
                     <a href="{{ route('report.create', ['reported_user_id' => $user->id]) }}"
@@ -133,7 +139,7 @@
         {{-- Right Column: Details & Auctions --}}
         <div class="col-md-8">
 
-            @if(Auth::check() && Auth::id() === $user->id)
+            @can('viewPersonalData', $user)
                 {{-- TABS --}}
                 <div class="card shadow-sm border-0">
                     <div class="card-header bg-white border-bottom">
@@ -166,8 +172,8 @@
                 </div>
 
             @else
+                @if(!$user->isAdmin())
                 {{-- STATIC AUCTION LIST (when viewing other users) --}}
-                @if(!$user->is_admin)
                     <div class="card shadow-sm border-0">
                         <div class="card-header bg-white py-3 border-bottom">
                             <h5 class="fw-bold mb-0">
@@ -228,14 +234,14 @@
                             @endif
                         </div>
                     </div>
-                @endif
-            @endif
+                    @endif
+                @endcan
 
         </div>
     </div>
 </div>
 
-@if(Auth::check() && Auth::id() === $user->id)
+@can('viewPersonalData', $user)
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const profileTabs = document.getElementById('profileTabs');
