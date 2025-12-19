@@ -23,7 +23,7 @@ class EndedAuction implements ShouldBroadcast
         
         $this->auction = $auction;
         $this->user_to_be_notified = $user_to_be_notified;
-        $this->message = $auction->title . 'has ended';
+        $this->message = $auction->title . ' has ended';
     }
 
     public function broadcastOn() {
