@@ -184,8 +184,8 @@
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 
-                // 1. Configurar Pusher com Autenticação
-                Pusher.logToConsole = true; // Descomente para debug
+                
+                Pusher.logToConsole = true; 
 
                 var pusher = new Pusher('{{ config("broadcasting.connections.pusher.key") }}', {
                     cluster: '{{ config("broadcasting.connections.pusher.options.cluster") }}',
@@ -198,22 +198,19 @@
                     }
                 });
 
-                // 2. Subscrever ao Canal Privado
+                
                 var userId = "{{ Auth::id() }}";
                 
                 
                 var channelName = 'private-user.' + userId; 
                 
-                console.log("A conectar a: " + channelName);
-                var channel = pusher.subscribe(channelName);
+                
 
                 channel.bind('notifications', function(data) {
-                    console.log("Evento recebido:", data);
                     displayNotification(data.message);
                 });
 
                 channel.bind('new-message', function(data) {
-                    console.log("Message received:", data);
 
                     const chatReceiverInput = document.querySelector('input[name="receiver_id"]');
                     const chatContainer = document.getElementById('chat-container');
@@ -246,13 +243,13 @@
 
                     container.appendChild(notif);
 
-                    // Auto remover após 6 segundos
+                    
                     setTimeout(() => {
                         if(notif) {
                             notif.classList.add('slide-out');
                             notif.addEventListener('animationend', () => notif.remove());
                         }
-                    }, 6000);
+                    }, 10000);
                 }
 
                 function displayNotification(message) {
@@ -269,7 +266,7 @@
 
                     container.appendChild(notif);
 
-                    // Auto remover após 6 segundos
+                    
                     setTimeout(() => {
                         if(notif) {
                             notif.classList.add('slide-out');
@@ -281,7 +278,7 @@
                 function appendReceivedMessage(text, timestamp) {
                     const container = document.getElementById('chat-container');
 
-                    // Format time (assuming timestamp is ISO string or similar)
+                    
                     const dateObj = timestamp ? new Date(timestamp) : new Date();
                     const timeString = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
@@ -299,7 +296,7 @@
                     
                     container.insertAdjacentHTML('beforeend', html);
                     
-                    // Scroll to bottom to see new message
+                    
                     container.scrollTop = container.scrollHeight;
                 }   
             }); 

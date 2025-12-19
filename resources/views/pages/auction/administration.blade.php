@@ -7,7 +7,6 @@
     
     @include('partials.admin-tabs')
 
-    {{-- Header --}}
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h1 class="fw-bold text-dark mb-0">Auction Management</h1>
@@ -15,7 +14,6 @@
         </div>
     </div>
 
-    {{-- Filter Section (Replaced Search Bar) --}}
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-3">
             <form action="{{ route('auctions.admin') }}" method="GET" class="row g-3 align-items-center">
@@ -44,7 +42,6 @@
                     </select>
                 </div>
 
-                {{-- Filter Button --}}
                 <div class="col-md-2 d-grid align-self-end">
                     <button type="submit" class="btn btn-dark">
                         <i class="bi bi-funnel me-1"></i> Filter
@@ -53,8 +50,7 @@
             </form>
         </div>
     </div>
-
-    {{-- Auctions Table --}}
+    
     <div class="card shadow-sm border-0">
         <div class="card-body p-0">
             <div class="table-responsive">
@@ -76,10 +72,9 @@
                                 <td class="ps-4 fw-bold text-secondary">#{{ $auction->id }}</td>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        {{-- Image Placeholder Logic --}}
                                         <div class="rounded bg-light d-flex align-items-center justify-content-center me-3 border overflow-hidden" style="width: 50px; height: 50px; flex-shrink: 0;">
                                             @if($auction->picture)
-                                                <img src="{{ asset('images/auction/' . $auction->picture) }}" alt="Auction" class="w-100 h-100 object-fit-cover">
+                                                <img src="{{ asset('images/auction/' . $auction->picture->path) }}" alt="Auction" class="w-100 h-100 object-fit-cover">
                                             @else
                                                 <i class="bi bi-image text-secondary"></i>
                                             @endif
@@ -148,7 +143,7 @@
                                             <i class="bi bi-pencil"></i>
                                         </a>
 
-                                        {{-- Cancel Action Logic (US503) --}}
+                                        
                                         @if(in_array($auction->status, ['Active', 'Pending','Ending']))
                                             @can('cancel', $auction)
                                                 <form action="{{ route('auctions.cancel', $auction) }}" method="POST" class="d-inline">

@@ -4,7 +4,6 @@
             <div class="card-body p-4">
                 <div class="d-flex justify-content-between align-items-start">
                     
-                    {{-- Image / Thumbnail --}}
                     <div class="d-flex align-items-center flex-grow-1">
                         <div class="rounded bg-light me-3 d-flex align-items-center justify-content-center text-secondary" 
                              style="width: 80px; height: 80px; min-width: 80px;">
@@ -55,7 +54,6 @@
                                 
                                 <div>
                                     @php
-                                        // Get the user's bid on this auction
                                         $userBid = $auction->bids->where('user_id', auth()->id())->max('amount');
                                     @endphp
                                     <small class="text-muted d-block" style="font-size: 0.7rem;">YOUR BID</small>
