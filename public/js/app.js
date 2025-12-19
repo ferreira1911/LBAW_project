@@ -54,4 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-
+document.addEventListener('DOMContentLoaded', function() {
+    var myModal = new bootstrap.Modal(document.getElementById('createCategoryModal'));
+    myModal.show();
+});
