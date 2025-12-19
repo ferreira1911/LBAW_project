@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingSpinner = document.getElementById('loadingSpinner');
     const loadMoreContainer = document.getElementById('loadMoreContainer');
 
-    // Verifica se estamos na página correta
     if (!searchInput || !searchButton || !usersTableBody || !loadMoreBtn) {
         return; 
     }
@@ -54,12 +53,27 @@ document.addEventListener('DOMContentLoaded', () => {
         users.forEach(user => {
             const row = document.createElement('tr');
 
-            // Lógica para o Badge de Admin
+            let avatarHtml = '';
+
+            if (user.url) {
+                avatarHtml = `
+                    <img src="${baseUrl}/images/profile/${user.url}" 
+                         alt="${user.name}" 
+                         class="rounded-circle me-3 border" 
+                         style="width: 40px; height: 40px; object-fit: cover;">
+                `;
+            } else {
+                avatarHtml = `
+                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-3 border" style="width: 40px; height: 40px;">
+                        <i class="bi bi-person text-secondary"></i>
+                    </div>
+                `;
+            }
+
             const roleBadge = user.is_admin 
                 ? '<span class="badge bg-primary-subtle text-primary rounded-pill">Admin</span>' 
                 : '<span class="badge bg-light text-secondary border rounded-pill">User</span>';
 
-            // Lógica para o Badge de Status (Estilo Auction)
             let statusBadge = '';
             if (user.is_blocked) {
                 statusBadge = '<span class="badge bg-danger-subtle text-danger rounded-pill"><i class="bi bi-x-circle me-1"></i>Blocked</span>';
@@ -103,11 +117,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 <td>
                     <div class="d-flex align-items-center">
-                        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-3 border" style="width: 40px; height: 40px;">
-                            <i class="bi bi-person text-secondary"></i>
-                        </div>
+                        ${avatarHtml}
                         <div>
-                            <a href="${baseUrl}/users/${user.id}" class="fw-bold text-dark text-decoration-none">
+                            <a href= "${baseUrl}/users/${user.id}" class="fw-bold text-dark text-decoration-none">
                                 ${user.name}
                             </a>
                             <div class="small text-muted">${user.email}</div>
