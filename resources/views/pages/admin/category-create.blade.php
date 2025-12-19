@@ -8,15 +8,13 @@
         
         @include('partials.admin-tabs')
 
-        {{-- Header Section --}}
+        {{-- Header --}}
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h2 class="fw-bold text-dark mb-0">Category Management</h2>
-                <p class="text-muted mb-0">Organize your auction categories and view statistics.</p>
+                <h1 class="fw-bold text-dark mb-0">Category Management</h1>
+                <p class="text-muted">Manage all auction categories and their details.</p>
             </div>
-            
-            {{-- Trigger Modal Button --}}
-            <button type="button" class="btn btn-primary btn-lg rounded-pill px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#createCategoryModal">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCategoryModal">
                 <i class="bi bi-plus-lg me-2"></i>New Category
             </button>
         </div>
