@@ -107,7 +107,7 @@
                     <div class="d-flex justify-content-between align-items-start mb-2">
                         <span class="badge bg-secondary">{{ $auction->category->name }}</span>
                         @auth
-                            @if(Auth::id() !== $auction->owner_id)
+                            @can('canFollow',$auction)
                                 @php
                                     $isFollowing = $auction->isFollowedBy(Auth::user());
                                 @endphp
@@ -118,7 +118,7 @@
                                         {{ $isFollowing ? 'Unfollow' : 'Follow' }}
                                     </span>
                                 </button>
-                            @endif
+                            @endcan
                         @endauth
                     </div>
 
@@ -130,11 +130,13 @@
                         </p>
                         
                         @auth
+                            @can('message',$auction->owner)
                             @if(Auth::id() !== $auction->owner_id)
                                 <a href="{{ route('messages.show', $auction->owner) }}" class="btn btn-outline-primary btn-sm">
                                     <i class="bi bi-chat-dots-fill me-1"></i> Message
                                 </a>
                             @endif
+                            @endcan
                         @endauth
                     </div>
 

@@ -48,4 +48,9 @@ class AuctionPolicy
     {
         return $user->id === $auction->owner_id && in_array($auction->status, ['Pending', 'Active', 'Ending']);
     }
+
+    public function canFollow(User $user, Auction $auction): bool
+    {
+        return Auth::id() !== $auction->owner_id && !Auth::user()->is_admin;
+    }
 }

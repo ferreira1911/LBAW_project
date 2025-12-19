@@ -113,20 +113,44 @@ class UserController extends Controller
     {
         $this->authorize('delete', $user);
 
+        // 1. Check if deletion is allowed (No active bids/auctions)
         $error = $user->canBeDeleted();
 
         if ($error) {
             return back()->with('failure', "Action Failed: $error");
         }
         
-        $user->deleteUser();
+        try {
+            DB::transaction(function () use ($user) {
+                
+                // 2. Create Withdrawal Transaction for remaining balance
+                if ($user->credit > 0) {
+                    \App\Models\Transaction::create([
+                        'amount' => $user->credit,
+                        'status' => \App\Enums\TransactionStatus::Completed,
+                        'type'   => \App\Enums\TransactionType::CreditWithdrawal,
+                        'buyer_id' => $user->id, 
+                        'date' => now(),
+                    ]);
+                    
+                    $user->credit = 0;
+                    $user->save();
+                }
+                $user->deleteUser();
+            });
 
-        if (Auth::id() === $user->id) {
-            Auth::logout();
-            return redirect()->route('home')->with('success', 'Your account has been deleted.');
+            // 4. Handle Session for Self-Deletion
+            if (Auth::id() === $user->id) {
+                Auth::logout();
+                return redirect()->route('home')->with('success', 'Your account has been deleted and remaining funds withdrawn.');
+            }
+
+            return back()->with('success', 'User profile deleted successfully.');
+
+        } catch (\Exception $e) {
+            Log::error('User Deletion Failed: ' . $e->getMessage());
+            return back()->with('failure', 'An error occurred while deleting the account.');
         }
-
-        return back()->with('success', 'User profile deleted successfully.');
     }
 
     public function getUsers(Request $request)
@@ -181,12 +205,12 @@ class UserController extends Controller
         } catch (\Exception $e) {
             Log::error('Falha ao criar utilizador (Admin): ' . $e->getMessage());
             return redirect()->back()
-                             ->with('failure', 'Ocorreu um erro ao criar o utilizador.')
+                             ->with('failure', 'An error ocurred while creating the user.')
                              ->withInput(); // Mantém os dados no formulário
         }
 
         return redirect()->route('users.index')
-                         ->with('success', 'Utilizador criado com sucesso!');
+                         ->with('success', 'The user was successfully created!');
     }
 
     public function block(User $user)

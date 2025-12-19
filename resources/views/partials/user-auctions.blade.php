@@ -60,7 +60,7 @@
                             <i class="bi bi-eye me-1"></i>View Details
                         </a>
 
-                        @if(Auth::check() && Auth::id() === $auction->owner_id)
+                        @if(Auth::check() && Auth::id() === $auction->owner_id && $auction->status !== 'Ended')
                             <a href="{{ route('auctions.edit', $auction) }}" class="btn btn-outline-secondary w-100">
                                 <i class="bi bi-pencil me-1"></i>Edit
                             </a>

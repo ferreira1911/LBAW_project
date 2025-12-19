@@ -10,7 +10,7 @@
 
         <div class="row g-4">
             
-            {{-- COLUMN 1: CREATE FORM --}}
+            
             <div class="col-md-4">
                 <div class="card border-0 shadow-sm rounded-4">
                     <div class="card-header bg-white border-0 pt-4 px-4">
@@ -41,9 +41,9 @@
                 </div>
             </div>
 
-            {{-- COLUMN 2: LIST TABLE --}}
+            
             <div class="col-md-8">
-                <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="border-0 shadow-sm rounded-4 h-100 bg-white">
                     <div class="card-header bg-white border-bottom px-4 py-3 d-flex justify-content-between align-items-center">
                         <h5 class="fw-bold text-dark m-0">Existing Categories</h5>
                         <span class="badge bg-light text-dark border">{{ $categories->count() }} Total</span>
@@ -55,7 +55,6 @@
                                     <tr>
                                         <th class="ps-4 py-3 text-secondary small text-uppercase">ID</th>
                                         <th class="py-3 text-secondary small text-uppercase w-100">Name</th>
-                                        <th class="pe-4 py-3 text-end text-secondary small text-uppercase">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
