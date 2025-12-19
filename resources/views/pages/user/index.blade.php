@@ -41,20 +41,42 @@
         </div>
     </div>
 
-    <div id="usersContainer" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        {{-- O estado inicial de carregamento --}}
-        <div class="col-12 text-center py-5">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
+    {{-- Auctions Table Design applied to Users --}}
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4 py-3" style="width: 60px;">ID</th>
+                            <th class="py-3">User</th>
+                            <th class="py-3">Role</th>
+                            <th class="py-3">Status</th>
+                            <th class="py-3 text-end pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        {{-- O JavaScript vai preencher isto --}}
+                    </tbody>
+
+                    <tfoot id="loadMoreContainer" class="d-none">
+                        <tr>
+                            <td colspan="5" class="p-0">
+                                <button id="loadMoreBtn" type="button" class="btn btn-light w-100 py-3 text-primary fw-bold border-0 rounded-0" style="transition: all 0.2s;">
+                                    Load More Users <i class="bi bi-chevron-down ms-1"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
         </div>
     </div>
 
-    {{-- Load More Button --}}
-    <div class="text-center mt-5">
-        <button id="loadMoreBtn" class="btn btn-outline-primary btn-lg px-5 rounded-pill d-none">
-            Load More Users
-        </button>
+    <div id="loadingSpinner" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
     </div>
 
 </div>

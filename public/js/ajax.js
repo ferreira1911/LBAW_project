@@ -10,11 +10,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const searchInput = document.getElementById('searchInput');
     const searchButton = document.getElementById('searchButton');
-    const usersContainer = document.getElementById('usersContainer');
+    const usersTableBody = document.getElementById('usersTableBody');
     const loadMoreBtn = document.getElementById('loadMoreBtn');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const loadMoreContainer = document.getElementById('loadMoreContainer');
 
     // Verifica se estamos na página correta
-    if (!searchInput || !searchButton || !usersContainer || !loadMoreBtn) {
+    if (!searchInput || !searchButton || !usersTableBody || !loadMoreBtn) {
         return; 
     }
 
@@ -36,24 +38,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderUsers(users, append = false) {
-        if (!append) usersContainer.innerHTML = '';
+        if (!append) usersTableBody.innerHTML = '';
 
         if (users.length === 0 && !append) {
-            usersContainer.innerHTML = `<div class="col-12"><div class="text-center text-muted py-5 bg-white shadow-sm rounded-0">Nenhum utilizador encontrado.</div></div>`;
+            usersTableBody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="text-center py-5 text-muted">
+                        <i class="bi bi-search display-6 opacity-25 d-block mb-3"></i>
+                        No users found.
+                    </td>
+                </tr>`;
             return;
         }
 
         users.forEach(user => {
-            const card = document.createElement('div');
-            card.className = 'col';
-            
-            
-            const adminBorderClass = user.is_admin ? 'border-primary border-3' : 'border-0';
+            const row = document.createElement('tr');
 
+            // Lógica para o Badge de Admin
+            const roleBadge = user.is_admin 
+                ? '<span class="badge bg-primary-subtle text-primary rounded-pill">Admin</span>' 
+                : '<span class="badge bg-light text-secondary border rounded-pill">User</span>';
+
+            // Lógica para o Badge de Status (Estilo Auction)
+            let statusBadge = '';
+            if (user.is_blocked) {
+                statusBadge = '<span class="badge bg-danger-subtle text-danger rounded-pill"><i class="bi bi-x-circle me-1"></i>Blocked</span>';
+            } else {
+                statusBadge = '<span class="badge bg-success-subtle text-success rounded-pill"><i class="bi bi-check-circle me-1"></i>Active</span>';
+            }
             
-            const adminBadge = user.is_admin 
-                ? '<span class="badge bg-primary rounded-pill ms-2" style="font-size: 0.7em; vertical-align: middle;">Admin</span>' 
-                : ''; 
             
             let blockBtnHtml = '';
             if (user.is_blocked) {
@@ -68,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 blockBtnHtml = `
                     <form action="${baseUrl}/users/${user.id}/block" method="POST" class="d-inline">
                         <input type="hidden" name="_token" value="${csrfToken}">
-                        <button type="submit" class="btn btn-sm btn-outline-warning rounded-0" title="Block" onclick="return confirm('Block this user?')">
+                        <button type="submit" class="btn btn-sm btn-outline-warning rounded-0" title="Block" onclick="return confirm('Are you sure you want to block this user?')">
                             <i class="bis bi-ban"></i>
                         </button>
                     </form>`;
@@ -76,56 +89,82 @@ document.addEventListener('DOMContentLoaded', () => {
 
             
             
-            deleteBtnHtml = `
+            const deleteBtnHtml = `
                 <form action="${baseUrl}/users/${user.id}/delete" method="POST" class="d-inline">
                     <input type="hidden" name="_token" value="${csrfToken}">
-                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-0" title="Delete" onclick="return confirm('Delete this user?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-0" title="Delete" onclick="return confirm('Are you sure you want to delete this user?')">
                         <i class="bis bi-trash"></i>
                     </button>
                 </form>`;
             
 
-            card.innerHTML = `
-                <div class="card shadow-sm ${adminBorderClass} rounded-0 h-100">
-                    <div class="card-body d-flex flex-column">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <h5 class="card-title fw-bold m-0">
-                                ${user.name}
-                                ${adminBadge}
-                            </h5>
-                            ${user.is_blocked 
-                                ? '<span class="badge bg-danger text-white rounded-0">Blocked</span>' 
-                                : '<span class="badge bg-success text-white rounded-0">Active</span>'}
-                        </div>
-                        
-                        <p class="card-text text-muted small mb-3">${user.email}</p>
+            row.innerHTML = `
+                <td class="ps-4 fw-bold text-secondary">#${user.id}</td>
 
-                        <div class="mt-auto d-flex gap-2 pt-3 border-top">
-                            <a href="${baseUrl}/users/${user.id}" class="btn btn-sm btn-outline-secondary rounded-0" title="View">
-                                <i class="bis bi-eye"></i>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-3 border" style="width: 40px; height: 40px;">
+                            <i class="bi bi-person text-secondary"></i>
+                        </div>
+                        <div>
+                            <a href="${baseUrl}/users/${user.id}" class="fw-bold text-dark text-decoration-none">
+                                ${user.name}
                             </a>
-                            <a href="${baseUrl}/users/${user.id}/edit" class="btn btn-sm btn-outline-primary rounded-0" title="Edit">
-                                <i class="bis bi-pencil"></i>
-                            </a>
-                            ${blockBtnHtml}
-                            ${deleteBtnHtml}
+                            <div class="small text-muted">${user.email}</div>
                         </div>
                     </div>
-                </div>
+                </td>
+
+                <td>${roleBadge}</td>
+
+                <td>${statusBadge}</td>
+
+                <td class="text-end pe-4">
+                    <div class="d-flex justify-content-end gap-1">
+                        <a href="${baseUrl}/users/${user.id}" class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                        
+                        <a href="${baseUrl}/users/${user.id}/edit" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+
+                        ${blockBtnHtml} 
+                        ${deleteBtnHtml}
+                    </div>
+                </td>
             `;
-            usersContainer.appendChild(card);
+            usersTableBody.appendChild(row);
         });
     }
 
     async function loadUsers(reset = true) {
+        if (loadingSpinner) loadingSpinner.classList.remove('d-none');
+
+        if (loadMoreContainer) loadMoreContainer.classList.add('d-none');
+
         if (reset) {
             currentPage = 1;
         }
 
-        const data = await fetchUsers(currentPage, currentSearch);
-        renderUsers(data.data, !reset);
+        try {
+            const data = await fetchUsers(currentPage, currentSearch);
 
-        loadMoreBtn.classList.toggle('d-none', data.current_page >= data.last_page);
+            if (loadingSpinner) loadingSpinner.classList.add('d-none');
+
+            renderUsers(data.data, !reset);
+
+            if (loadMoreContainer) {
+                if (data.current_page >= data.last_page) {
+                    loadMoreContainer.classList.add('d-none');
+                } else {
+                    loadMoreContainer.classList.remove('d-none');
+                }
+            }
+        } catch (error) {
+            console.error("Error loading users:", error);
+            if (loadingSpinner) loadingSpinner.classList.add('d-none');
+        }
     }
 
     searchButton.addEventListener('click', () => {
