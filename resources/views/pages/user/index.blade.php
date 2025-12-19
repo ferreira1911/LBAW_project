@@ -14,27 +14,24 @@
             <p class="text-muted">Manage all registered users, administrators and their permissions.</p>
         </div>
         <a href="{{ route('users.create') }}" class="btn btn-primary">
-            <i class="fas fa-user-plus me-2"></i>Create New User
+            <i class="bi bi-plus-lg me-2"></i>Create New User
         </a>
     </div>
 
-    {{-- Search Bar (Sem tag <form> para não submeter) --}}
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-2">
             <div class="row g-2 align-items-center">
                 <div class="col-md-10">
                     <div class="input-group">
                         <span class="input-group-text bg-white border-0">
-                            <i class="fas fa-search text-muted"></i>
+                            <i class="bi bi-search text-muted"></i>
                         </span>
-                        {{-- ID searchInput para o JS --}}
                         <input type="text" id="searchInput" class="form-control border-0 shadow-none" 
                                placeholder="Search users by name or email..." 
                                autocomplete="off">
                     </div>
                 </div>
                 <div class="col-md-2 d-grid">
-                    {{-- ID searchButton e type="button" --}}
                     <button id="searchButton" type="button" class="btn btn-dark">Search</button>
                 </div>
             </div>

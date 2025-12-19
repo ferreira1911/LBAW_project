@@ -1,4 +1,4 @@
-<form method="GET" action="{{ route('auctions.search') }}" id="filter-form" class="card border-0 shadow-sm sticky-top" style="top: 20px; z-index: 100;">
+<form method="GET" action="{{ route('auctions.search') }}" id="filter-form" class="card border-0 shadow-sm sticky-top" style="top: 90px; z-index: 100;">
     
     <div class="card-header bg-white border-bottom py-3">
         <div class="d-flex align-items-center justify-content-between">

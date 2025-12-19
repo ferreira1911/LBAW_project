@@ -75,13 +75,30 @@ class ReportController extends Controller
         }
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $this->authorize('viewAny', Report::class);
 
-        $reports = Report::with(['reporter', 'reportedUser', 'auction'])
-            ->orderBy('create_date', 'desc')
-            ->paginate(15);
+        $query = Report::with(['reporter', 'reportedUser', 'auction'])
+            ->orderBy('create_date', 'desc');
+
+        if ($search = $request->input('search')) {
+            $query->where(function($q) use ($search) {
+                if (is_numeric($search)) {
+                    $q->orWhere('id', '=', $search);
+                }
+
+                $q->orWhereHas('reportedUser', function($subQuery) use ($search) {
+                    $subQuery->where('name', '=', $search);
+                });
+
+                $q->orWhereHas('auction', function($subQuery) use ($search) {
+                    $subQuery->where('title', '=', $search);
+                });
+            });
+        }
+
+        $reports = $query->paginate(15);
 
         return view('pages.reports.index', compact('reports'));
     }
