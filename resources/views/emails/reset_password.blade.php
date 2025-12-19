@@ -10,7 +10,7 @@
     
     <p>Click the link below to reset your password:</p>
     
-    <a href="{{ $mailData['url'] }}" style="background-color: #9b4dca; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
+    <a href="{{ $mailData['url'] }}" style="background-color: #0f0a12ff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
         Reset Password
     </a>
     

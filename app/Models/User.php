@@ -155,12 +155,8 @@ class User extends Authenticatable
      */
     public function canBeDeleted(): ?string
     {
-        if ($this->credit > 0) {
-            return 'You still have funds in your wallet. Please withdraw them before deleting your account.';
-        }
-
-        if ($this->isWinningAnyAuction()) {
-            return 'You are currently the highest bidder on active auctions. You cannot delete your account until these auctions end.';
+        if ($this->held_credit > 0) {
+            return 'You still have held credit in your wallet. You cannot delete your account while your credit is being held.';
         }
 
         $hasActiveAuctions = $this->auctions()->whereIn('status', ['Active', 'Ending'])->exists();

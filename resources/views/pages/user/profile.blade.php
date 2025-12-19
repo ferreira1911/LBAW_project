@@ -39,7 +39,8 @@
                 <p class="text-muted mb-3">{{ $user->email }}</p>
 
                 {{-- Rating Badge --}} 
-                <div class="mb-4"> 
+                @can('viewPersonalData', $user)
+                    <div class="mb-4"> 
                     <a href="{{ route('reviews.index', ['seller_id' => $user->id]) }}" 
                         class="text-decoration-none">
                         <span class="badge bg-warning text-dark fs-6 hover-shadow" style="cursor: pointer;"> 
@@ -53,7 +54,6 @@
                         </span>
                     </a>
                 </div>
-
                 {{-- Bio --}}
                 <div class="text-start mb-4">
                     <h6 class="fw-bold text-uppercase small text-muted">About</h6>
@@ -61,6 +61,8 @@
                         {{ $user->description ?? 'This user has not added a bio yet.' }}
                     </p>
                 </div>
+                @endcan
+                
 
                 {{-- WALLET SECTION (Only for own profile or admin) --}}
                 @if (!empty($canViewBalance) && $canViewBalance && !$user->is_admin)
