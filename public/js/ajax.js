@@ -316,7 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json', // Importante para JSON
+                    'Content-Type': 'application/json', 
                     'Accept': 'application/json',
                     'X-CSRF-TOKEN': csrfToken,
                     'X-Requested-With': 'XMLHttpRequest'
@@ -329,7 +329,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                console.error("ERRO DO SERVIDOR:", errorData);
                 throw new Error(errorData.message || 'Erro ao enviar');
             }
 
@@ -340,12 +339,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
         } catch (error) {
-            console.error(error);
             alert('Erro: ' + error.message);
             messageInput.value = msgText;
         }
     });
-    // Helper: Append Message HTML
     function appendMessage(text, isMe) {
         const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         
@@ -372,7 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
-    // Security: Basic HTML escape to prevent XSS in the optimistic update
+    
     function escapeHtml(text) {
         const map = {
             '&': '&amp;',
