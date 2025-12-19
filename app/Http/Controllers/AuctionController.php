@@ -328,15 +328,21 @@ class AuctionController extends Controller
     public function administration(Request $request) {
         $this->authorize('viewDashboard',Auction::class);
 
+        $categories = Category::orderBy('name')->get();
         $query = Auction::with(['owner', 'category'])->withCount('bids');
 
-        if ($request->has('search') && $request->get('search') != '') {
-            $query->where('title', 'ilike', '%' . $request->get('search') . '%');
+        if ($request->filled('category')) {
+        $query->where('category_id', $request->get('category'));
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->get('status'));
         }
 
         $auctions = $query->orderBy('id', 'DESC')->paginate(15);
         return view('pages.auction.administration',[
             'auctions' => $auctions,
+            'categories' => $categories,
         ]);
     }
 

@@ -15,22 +15,40 @@
         </div>
     </div>
 
-    {{-- Search Bar --}}
+    {{-- Filter Section (Replaced Search Bar) --}}
     <div class="card shadow-sm border-0 mb-4">
-        <div class="card-body p-2">
-            <form action="{{ route('auctions.admin') }}" method="GET" class="row g-2 align-items-center">
-                <div class="col-md-10">
-                    <div class="input-group">
-                        <span class="input-group-text bg-white border-0">
-                            <i class="bi bi-search text-muted"></i>
-                        </span>
-                        <input type="text" name="search" class="form-control border-0 shadow-none" 
-                               placeholder="Search auctions by title..." 
-                               value="{{ request('search') }}">
-                    </div>
+        <div class="card-body p-3">
+            <form action="{{ route('auctions.admin') }}" method="GET" class="row g-3 align-items-center">
+                
+                <div class="col-md-5">
+                    <label for="category" class="form-label small text-muted fw-bold">Filter by Category</label>
+                    <select name="category" id="category" class="form-select border-0 bg-light shadow-none">
+                        <option value="">All Categories</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
-                <div class="col-md-2 d-grid">
-                    <button type="submit" class="btn btn-dark">Search</button>
+
+                <div class="col-md-5">
+                    <label for="status" class="form-label small text-muted fw-bold">Filter by Status</label>
+                    <select name="status" id="status" class="form-select border-0 bg-light shadow-none">
+                        <option value="">All Statuses</option>
+                        @foreach(['Active', 'Pending','Ending' ,'Ended', 'Cancelled'] as $statusOption)
+                            <option value="{{ $statusOption }}" {{ request('status') == $statusOption ? 'selected' : '' }}>
+                                {{ $statusOption }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                {{-- Filter Button --}}
+                <div class="col-md-2 d-grid align-self-end">
+                    <button type="submit" class="btn btn-dark">
+                        <i class="bi bi-funnel me-1"></i> Filter
+                    </button>
                 </div>
             </form>
         </div>
@@ -86,6 +104,11 @@
                                                 <i class="bi bi-lightning-charge me-1"></i>Active
                                             </span>
                                             @break
+                                        @case('Ending')
+                                            <span class="badge bg-success-subtle text-success rounded-pill">
+                                                <i class="bi bi-bi-hourglass-split me-1"></i>Ending
+                                            </span>
+                                            @break
                                         @case('Pending')
                                             <span class="badge bg-warning-subtle text-warning rounded-pill">
                                                 <i class="bi bi-hourglass-split me-1"></i>Pending
@@ -126,7 +149,7 @@
                                         </a>
 
                                         {{-- Cancel Action Logic (US503) --}}
-                                        @if(in_array($auction->status, ['Active', 'Pending']))
+                                        @if(in_array($auction->status, ['Active', 'Pending','Ending']))
                                             @can('cancel', $auction)
                                                 <form action="{{ route('auctions.cancel', $auction) }}" method="POST" class="d-inline">
                                                     @csrf
@@ -146,8 +169,8 @@
                         @empty
                             <tr>
                                 <td colspan="7" class="text-center py-5 text-muted">
-                                    <i class="bi bi-hammer display-4 opacity-25 d-block mb-3"></i>
-                                    No auctions found matching your criteria.
+                                    <i class="bi bi-filter-circle display-4 opacity-25 d-block mb-3"></i>
+                                    No auctions found matching your filters.
                                 </td>
                             </tr>
                         @endforelse
