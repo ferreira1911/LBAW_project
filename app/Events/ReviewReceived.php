@@ -26,7 +26,7 @@ class ReviewReceived implements ShouldBroadcast
         $this->auction = $auction;
         $this->review = $review;
         $this->user_to_be_notified = $user_to_be_notified;
-        $this->message = $auction->title . 'has received a review';
+        $this->message = $auction->title . ' has received a review';
     }
 
     public function broadcastOn() {

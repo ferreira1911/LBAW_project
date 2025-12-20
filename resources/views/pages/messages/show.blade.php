@@ -3,12 +3,11 @@
 @section('title', 'Chat with ' . $receiver->name)
 
 @section('content')
-<div class="bg-light py-4" style="height: calc(100vh - 70px);"> {{-- Full height minus header --}}
+<div class="bg-light py-4" style="height: calc(100vh - 70px);"> 
     <div class="container h-100">
         <div class="row justify-content-center h-100">
             <div class="col-md-10 col-lg-8 h-100 d-flex flex-column">
 
-                {{-- Chat Header --}}
                 <div class="card border-0 shadow-sm rounded-top-4 rounded-bottom-0 z-1">
                     <div class="card-header bg-white border-bottom p-3 d-flex align-items-center">
                         <button onclick="window.history.back()" class="btn btn-sm btn-light rounded-circle me-3">
@@ -32,7 +31,7 @@
                     </div>
                 </div>
 
-                {{-- Chat Messages Area (Scrollable) --}}
+                
                 <div id="chat-container" class="card-body bg-white border-start border-end overflow-auto flex-grow-1 p-4" style="background-color: #f8f9fa;">
                     @foreach($messages as $message)
                         @php
@@ -52,7 +51,7 @@
                     @endforeach
                 </div>
 
-                {{-- Message Input Form --}}
+                
                 <div class="card border-0 shadow-sm rounded-bottom-4 rounded-top-0">
                     <div class="card-body p-3">
                         <form id="chat-form" data-url="{{ route('messages.store') }}">

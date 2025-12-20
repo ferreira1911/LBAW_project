@@ -23,7 +23,7 @@ class EndingAuction implements ShouldBroadcast
         
         $this->auction = $auction;
         $this->user_to_be_notified = $user_to_be_notified;
-        $this->message = $auction->title . 'is ending in 15 minutes';
+        $this->message = $auction->title . ' is ending in 15 minutes';
     }
 
     public function broadcastOn() {

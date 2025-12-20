@@ -204,7 +204,7 @@
                 
                 var channelName = 'private-user.' + userId; 
                 
-                
+                var channel = pusher.subscribe(channelName);
 
                 channel.bind('notifications', function(data) {
                     displayNotification(data.message);

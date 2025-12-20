@@ -23,7 +23,7 @@ class AuctionCancelled implements ShouldBroadcast
         
         $this->auction = $auction;
         $this->user_to_be_notified = $user_to_be_notified;
-        $this->message = 'You have cancelled' . $auction->title;
+        $this->message = 'You have cancelled ' . $auction->title;
     }
 
     public function broadcastOn() {

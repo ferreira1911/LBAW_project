@@ -84,7 +84,7 @@ class MessageController extends Controller
         $receiverId = $request->input('receiver_id');
 
         if ($senderId == $receiverId) {
-            return response()->json(['error' => 'You cannot talk to yourself.'], 422);
+            return response()->json(['failure' => 'You cannot talk to yourself.'], 422);
         }
 
         $message = Message::create([
