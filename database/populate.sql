@@ -8,55 +8,55 @@ TRUNCATE users, category, auction, bid, transactions, notifications, review, rep
 ------------------------------------------------------------
 INSERT INTO users (email, name, description, credit, password, url, is_admin)
 VALUES
-('jharsent0@marketwatch.com', 'Junette Harsent', 'Phasellus in felis.', 16000.00, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, true),
-('lgarvagh1@baidu.com', 'Leslie Garvagh', 'Morbi quis tortor id nulla ultrices aliquet. Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo.', 19958.77, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('sswiers2@weather.com', 'Sheryl Swiers', 'Morbi non quam nec dui luctus rutrum. Nulla tellus.', 10000.00, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('cland3@networkadvertising.org', 'Cassandry Land', 'Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo.', 62661.95, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('vtongue4@sourceforge.net', 'Vivi Tongue', 'Proin at turpis a pede posuere nonummy. Integer non velit.', 19045.12, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, true),
-('hpallent5@boston.com', 'Heriberto Pallent', 'Morbi porttitor lorem id ligula. Suspendisse ornare consequat lectus.', 15136.06, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('lcorkish6@usnews.com', 'Lind Corkish', 'Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci.', 13810.58, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('dthomlinson7@weather.com', 'Danie Thomlinson', 'Duis bibendum.', 16289.75, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('epeddel8@meetup.com', 'Erskine Peddel', 'Fusce posuere felis sed lacus.', 15888.22, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('onassau9@dion.ne.jp', 'Othilie Nassau', 'Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum.', 13409.82, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('hcollecotta@shinystat.com', 'Humfrey Collecott', 'Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla.', 15807.52, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('sgehrelsb@qq.com', 'Skip Gehrels', 'Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus.', 22460.57, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('sbuggsc@dyndns.org', 'Svend Buggs', 'Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.', 9600.24, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('lrockhilld@domainmarket.com', 'Lyell Rockhill', 'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien.', 46517.36, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('achinnerye@sogou.com', 'Anatollo Chinnery', 'Aliquam erat volutpat.', 15361.07, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('djagelsf@abc.net.au', 'Dougy Jagels', 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio. Curabitur convallis.', 86829.54, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('fvang@youku.com', 'Freeman Van der Son', 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.', 619098709.85, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('hroadnighth@biglobe.ne.jp', 'Helaine Roadnight', 'Proin risus. Praesent lectus.', 17833.71, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('eadamiaki@booking.com', 'Edythe Adamiak', 'Nulla nisl. Nunc nisl.', 15515, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('idenisyukj@ifeng.com', 'Ingamar Denisyuk', 'Maecenas tincidunt lacus at velit.', 15863.48, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, true),
-('wseccombek@cisco.com', 'Wally Seccombe', 'Duis bibendum. Morbi non quam nec dui luctus rutrum.', 18413.39, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('phyronsl@opera.com', 'Poul Hyrons', 'Phasellus sit amet erat.', 15821.06, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('ocheasmanm@trellian.com', 'Olivie Cheasman', 'Aenean lectus. Pellentesque eget nunc.', 13744.00, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('afairsn@123-reg.co.uk', 'Araldo Fairs', 'Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue.', 19362.55, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('lbentono@hibu.com', 'Lukas Benton', 'Fusce consequat. Nulla nisl.', 15149.68, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('fvasnetsovp@dot.gov', 'Fran Vasnetsov', 'Morbi a ipsum. Integer a nibh.', 16370.23, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('gcrushq@so-net.ne.jp', 'Georgie Crush', 'Nulla facilisi. Cras non velit nec nisi vulputate nonummy.', 15329.59, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('lneylonr@who.int', 'Lindsay Neylon', 'Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue.', 16129.56, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('omartignons@weebly.com', 'Odey Martignon', 'In sagittis dui vel nisl. Duis ac nibh.', 11400.32, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('bbeamant@meetup.com', 'Braden Beaman', 'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.', 11192.12, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('mleynhamu@netlog.com', 'Mamie Leynham', 'Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.', 19314.74, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('sbohlinv@lulu.com', 'Shirlene Bohlin', 'Nullam sit amet turpis elementum ligula vehicula consequat.', 19206.26, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('lschiesterlw@timesonline.co.uk', 'Lalo Schiesterl', 'Nulla tellus. In sagittis dui vel nisl.', 14246.74, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('rburkx@google.ru', 'Ramsay Burk', 'Integer ac neque. Duis bibendum.', 11727.56, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('tdriussiy@freewebs.com', 'Tiebold Driussi', 'Duis ac nibh.', 15407.67, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('sleschellez@usnews.com', 'Sherye Leschelle', 'Morbi porttitor lorem id ligula.', 19721.37, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('wbaumert10@phpbb.com', 'Werner Baumert', 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam.', 5518.90, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('mhunnicot11@ucoz.com', 'Melicent Hunnicot', 'Aenean auctor gravida sem. Praesent id massa id nisl venenatis lacinia.', 7963.13, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('slindholm12@soundcloud.com', 'Sidney Lindholm', 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam. Suspendisse potenti.', 81787.18, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('mgrimsley13@webnode.com', 'Mirelle Grimsley', 'Nam tristique tortor eu pede.', 17264.93, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('gscripps14@wisc.edu', 'Giustina Scripps', 'Suspendisse potenti. Nullam porttitor lacus at turpis.', 18298.65, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('astede15@miibeian.gov.cn', 'Annabelle Stede', 'Proin risus.', 17655.70, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('wtreace16@i2i.jp', 'Worthington Treace', 'In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.', 18730.34, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('ro17@whitehouse.gov', 'Rosanna O'' Dooley', 'Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.', 17840.37, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('mmapson18@unblog.fr', 'Mattias Mapson', 'Nullam porttitor lacus at turpis.', 15752.18, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('brisdall19@statcounter.com', 'Beulah Risdall', 'Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim.', 18121.99, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('mcresswell1b@skype.com', 'Misha Cresswell', 'Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci.', 15287.49, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('chatchman1c@tinyurl.com', 'Carey Hatchman', 'Maecenas tincidunt lacus at velit.', 15450.27, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
-('dscandrite1d@scribd.com', 'Dulsea Scandrite', 'Proin risus. Praesent lectus.', 16722.47, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false);
+('jharsent0@marketwatch.com', 'Junette Harsent', 'Phasellus in felis.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, true),
+('lgarvagh1@baidu.com', 'Leslie Garvagh', 'Morbi quis tortor id nulla ultrices aliquet. Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('sswiers2@weather.com', 'Sheryl Swiers', 'Morbi non quam nec dui luctus rutrum. Nulla tellus.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('cland3@networkadvertising.org', 'Cassandry Land', 'Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('vtongue4@sourceforge.net', 'Vivi Tongue', 'Proin at turpis a pede posuere nonummy. Integer non velit.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, true),
+('hpallent5@boston.com', 'Heriberto Pallent', 'Morbi porttitor lorem id ligula. Suspendisse ornare consequat lectus.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('lcorkish6@usnews.com', 'Lind Corkish', 'Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('dthomlinson7@weather.com', 'Danie Thomlinson', 'Duis bibendum.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('epeddel8@meetup.com', 'Erskine Peddel', 'Fusce posuere felis sed lacus.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('onassau9@dion.ne.jp', 'Othilie Nassau', 'Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('hcollecotta@shinystat.com', 'Humfrey Collecott', 'Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('sgehrelsb@qq.com', 'Skip Gehrels', 'Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('sbuggsc@dyndns.org', 'Svend Buggs', 'Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('lrockhilld@domainmarket.com', 'Lyell Rockhill', 'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('achinnerye@sogou.com', 'Anatollo Chinnery', 'Aliquam erat volutpat.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('djagelsf@abc.net.au', 'Dougy Jagels', 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio. Curabitur convallis.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('fvang@youku.com', 'Freeman Van der Son', 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('hroadnighth@biglobe.ne.jp', 'Helaine Roadnight', 'Proin risus. Praesent lectus.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('eadamiaki@booking.com', 'Edythe Adamiak', 'Nulla nisl. Nunc nisl.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('idenisyukj@ifeng.com', 'Ingamar Denisyuk', 'Maecenas tincidunt lacus at velit.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, true),
+('wseccombek@cisco.com', 'Wally Seccombe', 'Duis bibendum. Morbi non quam nec dui luctus rutrum.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('phyronsl@opera.com', 'Poul Hyrons', 'Phasellus sit amet erat.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('ocheasmanm@trellian.com', 'Olivie Cheasman', 'Aenean lectus. Pellentesque eget nunc.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('afairsn@123-reg.co.uk', 'Araldo Fairs', 'Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('lbentono@hibu.com', 'Lukas Benton', 'Fusce consequat. Nulla nisl.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('fvasnetsovp@dot.gov', 'Fran Vasnetsov', 'Morbi a ipsum. Integer a nibh.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('gcrushq@so-net.ne.jp', 'Georgie Crush', 'Nulla facilisi. Cras non velit nec nisi vulputate nonummy.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('lneylonr@who.int', 'Lindsay Neylon', 'Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('omartignons@weebly.com', 'Odey Martignon', 'In sagittis dui vel nisl. Duis ac nibh.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('bbeamant@meetup.com', 'Braden Beaman', 'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('mleynhamu@netlog.com', 'Mamie Leynham', 'Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('sbohlinv@lulu.com', 'Shirlene Bohlin', 'Nullam sit amet turpis elementum ligula vehicula consequat.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('lschiesterlw@timesonline.co.uk', 'Lalo Schiesterl', 'Nulla tellus. In sagittis dui vel nisl.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('rburkx@google.ru', 'Ramsay Burk', 'Integer ac neque. Duis bibendum.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('tdriussiy@freewebs.com', 'Tiebold Driussi', 'Duis ac nibh.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('sleschellez@usnews.com', 'Sherye Leschelle', 'Morbi porttitor lorem id ligula.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('wbaumert10@phpbb.com', 'Werner Baumert', 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('mhunnicot11@ucoz.com', 'Melicent Hunnicot', 'Aenean auctor gravida sem. Praesent id massa id nisl venenatis lacinia.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('slindholm12@soundcloud.com', 'Sidney Lindholm', 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam. Suspendisse potenti.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('mgrimsley13@webnode.com', 'Mirelle Grimsley', 'Nam tristique tortor eu pede.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('gscripps14@wisc.edu', 'Giustina Scripps', 'Suspendisse potenti. Nullam porttitor lacus at turpis.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('astede15@miibeian.gov.cn', 'Annabelle Stede', 'Proin risus.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('wtreace16@i2i.jp', 'Worthington Treace', 'In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('ro17@whitehouse.gov', 'Rosanna O'' Dooley', 'Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('mmapson18@unblog.fr', 'Mattias Mapson', 'Nullam porttitor lacus at turpis.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('brisdall19@statcounter.com', 'Beulah Risdall', 'Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('mcresswell1b@skype.com', 'Misha Cresswell', 'Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('chatchman1c@tinyurl.com', 'Carey Hatchman', 'Maecenas tincidunt lacus at velit.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false),
+('dscandrite1d@scribd.com', 'Dulsea Scandrite', 'Proin risus. Praesent lectus.', 0, '$2y$10$w57GYwc2jCsN7TtHwcVQwOu86d4SffDxhIe2LHh54Jt9iLdr2Lf4m', NULL, false);
 ------------------------------------------------------------
 -- CATEGORIES
 ------------------------------------------------------------
@@ -133,6 +133,42 @@ VALUES
 ('Limited Edition Sneakers', 'Brand new pair of limited-edition Air Jordan sneakers in original box.', NOW() + INTERVAL '5 days', NOW() + INTERVAL '12 days', 400.00, 'Pending', 12, 2, 'Los Angeles, CA', '34.0522', '-118.2437', 800.00, TRUE, TRUE, NOW() + INTERVAL '7 days'),
 ('Photography Workshop', 'Weekend photography workshop by professional photographer. Includes guided sessions and materials.', NOW() + INTERVAL '3 days', NOW() + INTERVAL '7 days', 100.00, 'Pending', 15, 13, 'Portland, OR', '45.5152', '-122.6784', NULL, FALSE, FALSE, NULL),
 ('Classic Vinyl Auction', 'Upcoming sale of rare jazz and blues vinyls from the 1950s. Collectors dream set.', NOW() + INTERVAL '6 days', NOW() + INTERVAL '14 days', 300.00, 'Pending', 19, 5, 'Memphis, TN', '35.1495', '-90.0490', NULL, FALSE, TRUE, NOW() + INTERVAL '7 days');
+
+
+
+INSERT INTO transactions (amount, date, status, type, buyer_id, seller_id)
+SELECT 
+    (floor(random() * 50000) + 20000)::numeric(12,2) as amount, -- Valor entre 20k e 70k
+    NOW() - INTERVAL '1 month' + (random() * (INTERVAL '30 days')) as date, -- Data aleatória no último mês
+    'Completed'::transaction_status, 
+    'add-credit'::transaction_type, 
+    id as buyer_id, 
+    NULL as seller_id
+FROM users 
+WHERE is_admin = FALSE OR id = 20;
+
+UPDATE users u
+SET credit = (
+    SELECT COALESCE(SUM(amount), 0)
+    FROM transactions t
+    WHERE t.buyer_id = u.id 
+    AND t.type = 'add-credit' 
+    AND t.status = 'Completed'
+);
+
+INSERT INTO transactions (amount, date, status, type, auction_id, buyer_id)
+VALUES
+(100.00, NOW() - INTERVAL '4 days', 'Completed', 'feature-payment', 5, 30),
+(100.00, NOW() - INTERVAL '1 day', 'Completed', 'feature-payment', 8, 8),
+(100.00, NOW() - INTERVAL '4 days', 'Completed', 'feature-payment', 17, 17),
+(100.00, NOW() - INTERVAL '1 day', 'Completed', 'feature-payment', 21, 22);
+
+-- Atualizar o saldo dos users após pagarem features
+UPDATE users u
+SET credit = credit - 100.00
+WHERE id IN (30, 8, 17, 22);
+
+
 ------------------------------------------------------------
 -- BIDS
 ------------------------------------------------------------
@@ -270,47 +306,6 @@ WHERE EXISTS (
     SELECT 1 FROM bid b WHERE b.auction_id = a.id
 );
 
-------------------------------------------------------------
--- TRANSACTIONS
-------------------------------------------------------------
-INSERT INTO transactions (amount, date, status, type, auction_id, buyer_id, seller_id)
-VALUES
-(5000.00, NOW() - INTERVAL '7 days', 'Completed', 'add-credit', NULL, 5, NULL),
-(3000.00, NOW() - INTERVAL '6 days', 'Completed', 'add-credit', NULL, 7, NULL),
-(2500.00, NOW() - INTERVAL '6 days', 'Completed', 'add-credit', NULL, 13, NULL),
-(4000.00, NOW() - INTERVAL '5 days', 'Completed', 'add-credit', NULL, 11, NULL),
-(2000.00, NOW() - INTERVAL '5 days', 'Completed', 'add-credit', NULL, 17, NULL),
-(1500.00, NOW() - INTERVAL '4 days', 'Completed', 'add-credit', NULL, 6, NULL),
-(3500.00, NOW() - INTERVAL '4 days', 'Completed', 'add-credit', NULL, 15, NULL),
-(1800.00, NOW() - INTERVAL '3 days', 'Completed', 'add-credit', NULL, 8, NULL),
-(2200.00, NOW() - INTERVAL '3 days', 'Completed', 'add-credit', NULL, 14, NULL),
-(1200.00, NOW() - INTERVAL '2 days', 'Completed', 'add-credit', NULL, 9, NULL),
-(1000.00, NOW() - INTERVAL '2 days', 'Completed', 'add-credit', NULL, 10, NULL),
-(2800.00, NOW() - INTERVAL '1 day', 'Completed', 'add-credit', NULL, 12, NULL),
-(1600.00, NOW() - INTERVAL '1 day', 'Completed', 'add-credit', NULL, 16, NULL),
-(100.00, NOW() - INTERVAL '4 days' + INTERVAL '30 minutes', 'Completed', 'feature-payment', 5, 30, NULL),
-(100.00, NOW() - INTERVAL '1 day' + INTERVAL '30 minutes', 'Completed', 'feature-payment', 8, 8, NULL),
-(100.00, NOW() - INTERVAL '4 days' + INTERVAL '30 minutes', 'Completed', 'feature-payment', 17, 17, NULL),
-(1500.00, NOW() - INTERVAL '2 hours', 'Pending', 'add-credit', NULL, 19, NULL),
-(3000.00, NOW() - INTERVAL '8 days', 'Completed', 'add-credit', NULL, 23, NULL),
-(4500.00, NOW() - INTERVAL '7 days', 'Completed', 'add-credit', NULL, 24, NULL),
-(2000.00, NOW() - INTERVAL '7 days', 'Completed', 'add-credit', NULL, 25, NULL),
-(5000.00, NOW() - INTERVAL '6 days', 'Completed', 'add-credit', NULL, 26, NULL),
-(3500.00, NOW() - INTERVAL '6 days', 'Completed', 'add-credit', NULL, 27, NULL),
-(2500.00, NOW() - INTERVAL '5 days', 'Completed', 'add-credit', NULL, 28, NULL),
-(1500.00, NOW() - INTERVAL '5 days', 'Completed', 'add-credit', NULL, 29, NULL),
-(2000.00, NOW() - INTERVAL '4 days', 'Completed', 'add-credit', NULL, 30, NULL),
-(4000.00, NOW() - INTERVAL '4 days', 'Completed', 'add-credit', NULL, 31, NULL),
-(8000.00, NOW() - INTERVAL '3 days', 'Completed', 'add-credit', NULL, 32, NULL),
-(3000.00, NOW() - INTERVAL '3 days', 'Completed', 'add-credit', NULL, 33, NULL),
-(1500.00, NOW() - INTERVAL '2 days', 'Completed', 'add-credit', NULL, 34, NULL),
-(2000.00, NOW() - INTERVAL '2 days', 'Completed', 'add-credit', NULL, 35, NULL),
-(2500.00, NOW() - INTERVAL '1 day', 'Completed', 'add-credit', NULL, 36, NULL),
-(1800.00, NOW() - INTERVAL '1 day', 'Completed', 'add-credit', NULL, 37, NULL),
-(500.00, NOW() - INTERVAL '3 hours', 'Completed', 'add-credit', NULL, 40, NULL),
-(1000.00, NOW() - INTERVAL '2 days', 'Completed', 'credit-withdrawal', NULL, 11, NULL),
-(500.00, NOW() - INTERVAL '4 days', 'Completed', 'credit-withdrawal', NULL, 17, NULL),
-(1500.00, NOW() - INTERVAL '1 day', 'Pending', 'credit-withdrawal', NULL, 13, NULL);
 ------------------------------------------------------------
 -- REVIEWS
 ------------------------------------------------------------

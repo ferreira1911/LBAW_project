@@ -32,7 +32,7 @@ php artisan optimize
 
 # Build & push image
 docker buildx build \
-  --platform linux/amd64,linux/arm64 \
+  --platform linux/amd64 \
   --push \
   -t "$IMAGE_NAME" \
   .
