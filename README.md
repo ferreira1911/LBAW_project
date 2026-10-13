@@ -2,9 +2,9 @@
 
 Online auction platform developed for the Database and Web Applications Laboratory (LBAW) course at FEUP, University of Porto, in 2025/2026. Sellers create and manage auctions, while buyers discover items, place bids and purchase through Buy Now.
 
-[![AuctionEase demonstration](docs/media/auctionease-preview.jpg)](docs/media/auctionease-demo.mp4)
+[![AuctionEase demonstration](docs/media/auctionease-preview.jpg)](https://raw.githubusercontent.com/ferreira1911/LBAW_project/main/docs/media/auctionease-demo.mp4)
 
-[Watch the two-minute demo](docs/media/auctionease-demo.mp4).
+[Download the two-minute demo (MP4)](https://raw.githubusercontent.com/ferreira1911/LBAW_project/main/docs/media/auctionease-demo.mp4).
 
 ## Features
 
