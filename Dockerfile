@@ -40,7 +40,7 @@ RUN mkdir -p storage/framework/cache/data \
 # 7. Copiar configurações (PHP, Nginx, Env)
 COPY ./etc/php/php.ini /usr/local/etc/php/conf.d/php.ini
 COPY ./etc/nginx/default.conf /etc/nginx/conf.d/default.conf
-COPY .env.production /var/www/.env
+COPY .env.example /var/www/.env
 
 # 8. Configurar Script de Arranque
 COPY docker_run.sh /docker_run.sh

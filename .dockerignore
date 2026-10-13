@@ -15,11 +15,11 @@ storage/framework/*
 storage/logs/*
 public/storage
 
-# Environment files (exclude all but .env.production)
+# Runtime credentials stay outside the build context.
 .env
-.env.local
-.env.*.backup
-!.env.production
+.env.*
+.env_*
+!.env.example
 
 # Docker-related
 docker-compose*.yml

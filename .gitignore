@@ -2,6 +2,11 @@
 .DS_Store
 .env
 .env.backup
+.env.*
+.env_*
+!.env.example
+!.env.testing
+!.env.thingy
 .phpactor.json
 .phpunit.result.cache
 /.fleet
